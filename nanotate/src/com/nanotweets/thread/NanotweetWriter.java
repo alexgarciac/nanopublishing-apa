@@ -6,6 +6,8 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
@@ -39,14 +41,15 @@ public class NanotweetWriter implements Runnable {
 		
 		try {
 			
-			log.debug("Using text: " + text );
-			
-			Annotation annotation = insertNewAnnotation( text, uuid ); 
+			log.info("Using text: " + text );
+			System.out.println("Die");
+			Annotation annotation = insertNewAnnotation( java.net.URLDecoder.decode(text, "UTF-8"), uuid ); 
 			
 			LinkedHashMap<String, Integer> annotations = new LinkedHashMap<String, Integer>();
 			
 			// Query whatizit to all pipelines 
 			for ( String pipeline : Settings.WHATIZIT_PIPELINE ) {
+				log.info("Using pipeline: " + pipeline );
 				String whatizitText = executeWhatizitQuery( pipeline );
 				Matcher matcher = Settings.pattern.matcher( whatizitText );
 		    	
@@ -74,7 +77,7 @@ public class NanotweetWriter implements Runnable {
 				log.debug( "No annotations found across all whatizit pipelines. " );
 			}
 			
-			annotation.setCompleted( new Date() );
+			annotation.setCompleted( new Timestamp(new Date().getTime()) );
 			
 			updateAnnotation( annotation );
 			
@@ -112,14 +115,14 @@ public class NanotweetWriter implements Runnable {
     	annotation.setOriginalText(text);
 		annotation.setAnnotatedText("");
 		annotation.setDocument( uuid );
-    	annotation.setCreation( new Date() );
+    	annotation.setCreation( new Timestamp(new Date().getTime()) );
     	annotation.setStatus( "WORKING" );
      
     	mapper.insert(annotation);
     	
     	session.commit();
     	session.close();
-    	
+    	log.info(annotation.getOriginalText());
 		return annotation;
 	}
 
@@ -153,7 +156,7 @@ public class NanotweetWriter implements Runnable {
 	
 	    	in = connection.getInputStream();
 	
-	    	log.debug("Receiving response...");
+	    	log.info("Receiving response...");
 	    	
 	    	StringWriter writer = new StringWriter();
 	    	IOUtils.copy(in, writer, "UTF-8");
@@ -162,7 +165,7 @@ public class NanotweetWriter implements Runnable {
 	    	
 	    	IOUtils.closeQuietly(in);
 	    	
-	    	log.debug( whatizitText );
+	    	log.info( whatizitText );
 		
 		} catch (MalformedURLException e) {
 			whatizitText = "";

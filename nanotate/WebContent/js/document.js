@@ -25,7 +25,7 @@ function nanotweet() {
     }
 
 	$('body').addClass('loading');
-	$.getJSON( "//nanotate", data,  function(result) {
+	$.getJSON( "nanotate?", data,  function(result) {
 		$('body').removeClass('loading');
 		// TODO: show result message
 	});

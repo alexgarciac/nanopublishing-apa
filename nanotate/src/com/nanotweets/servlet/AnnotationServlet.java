@@ -43,11 +43,14 @@ public class AnnotationServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
         
     	String action = req.getParameter("action");
+    	log.info("AnotateServlet request action= "+action);
 
     	if ( Settings.SERVICE_LIST.equalsIgnoreCase(action) ) {
+    		log.info("AnotateList request");
     		executeListAnnotationsService( req, resp );
     		
     	} else {
+    	
     		executeAnnotateService( req, resp );
     	} 
 
@@ -65,9 +68,11 @@ public class AnnotationServlet extends HttpServlet {
 			AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
 			
 			AnnotationExample example = new AnnotationExample();
+			log.info("Anotate example created");
 			
 			if ( !StringUtils.isEmpty(uuid) ) {
 				example.createCriteria().andDocumentEqualTo(uuid);
+				log.info("This way");
 			} 
 			
 			example.setOrderByClause("creation DESC");
@@ -94,7 +99,7 @@ public class AnnotationServlet extends HttpServlet {
 	private void executeAnnotateService(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
 		
 		JsonResponse r = new JsonResponse();
-		
+		log.info("executeAnnotateService request");
 		String text = servletRequest.getParameter( Settings.PARAM_TEXT );
 		String uuid = servletRequest.getParameter( Settings.PARAM_UUID );
         String comment = servletRequest.getParameter( Settings.PARAM_COMMENT );

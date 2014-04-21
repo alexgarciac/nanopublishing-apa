@@ -11,9 +11,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<transactionManager type="JDBC"/>
 	<dataSource type="UNPOOLED">
         <property name="driver" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql:nanotweets"/>
-        <property name="username" value="johncar"/>
-        <property name="password" value="johncar2013"/>
+        <property name="url" value="jdbc:postgresql:nanotate"/>
+        <property name="username" value="nanotate"/>
+        <property name="password" value="nano7541"/>
         </dataSource>
 	</environment>
 </environments>
