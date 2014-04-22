@@ -5,10 +5,9 @@ import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletResponse;
 
-
 import com.google.gson.Gson;
-import com.nanotweets.Settings;
-import com.nanotweets.message.JsonResponse;
+import com.nanotate.Settings;
+import com.nanotate.message.JsonResponse;
 
 public class JsonEncoder {
 	public static void encode(HttpServletResponse servletResponse, JsonResponse r) {
