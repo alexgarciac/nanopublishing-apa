@@ -44,7 +44,11 @@ public class Settings {
 	public static final String PARAM_ORDER_BY = "sOrderBy";
 	public static final String PARAM_QUERY = "query";
 	public static final String PARAM_UUID = "uuid";
+	public static final String PARAM_USERNAME = "username";
+	public static final String PARAM_PASSWORD = "pass";
 	public static final String SERVICE_LIST = "list";
+	public static final String SERVICE_LOGIN = "login";
+	public static final String SERVICE_LOGOUT = "logout";
     public static final String PARAM_COMMENT = "comment";
 
 	
