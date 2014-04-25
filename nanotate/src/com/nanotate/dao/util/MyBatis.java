@@ -16,7 +16,7 @@ public class MyBatis {
 	public static SqlSession getSession() throws Exception{
 		
 		if( sqlSessionFactory == null ){
-			String resource = "com/nanotweets/dao/xml/mybatis-config.xml";
+			String resource = "com/nanotate/dao/xml/mybatis-config.xml";
 
 			InputStream inputStream = Resources.getResourceAsStream(resource);
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);

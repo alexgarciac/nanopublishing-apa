@@ -2,9 +2,7 @@ package com.nanotate.dao.model;
 
 import com.nanotate.dao.model.Annotation;
 import com.nanotate.dao.model.AnnotationExample;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface AnnotationMapper {
