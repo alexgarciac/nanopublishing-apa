@@ -43,7 +43,7 @@
   </servlet>
   <servlet>
     <servlet-name>twittersignin</servlet-name>
-    <servlet-class>com.nanotate.servlet.TwitterSiginServlet</servlet-class>
+    <servlet-class>com.nanotate.servlet.TwitterSigninServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>twittercallback</servlet-name>

@@ -31,9 +31,12 @@ import twitter4j.TwitterException;
 import twitter4j.auth.RequestToken;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 public class TwitterCallbackServlet extends HttpServlet {
@@ -46,9 +49,16 @@ public class TwitterCallbackServlet extends HttpServlet {
         try {
             twitter.getOAuthAccessToken(requestToken, verifier);
             request.getSession().removeAttribute("requestToken");
+            HttpSession session = request.getSession();
+    		session.setAttribute("user", twitter.getScreenName());
+    		//setting session to expiry in 30 mins
+    		session.setMaxInactiveInterval(30*60);
+    		Cookie userName = new Cookie("user", twitter.getScreenName());
+    		userName.setMaxAge(30*60);
+    		response.addCookie(userName);
         } catch (TwitterException e) {
             throw new ServletException(e);
         }
-        response.sendRedirect(request.getContextPath() + "/");
+        response.sendRedirect(request.getContextPath() + "/index.html");
     }
 }

@@ -55,9 +55,9 @@ public class TwitterSigninServlet extends HttpServlet {
         try {
             StringBuffer callbackURL = request.getRequestURL();
             int index = callbackURL.lastIndexOf("/");
-            callbackURL.replace(index, callbackURL.length(), "").append("/callback");
+            callbackURL.replace(index, callbackURL.length(), "").append("/twittercallback");
             
-            RequestToken requestToken = twitter.getOAuthRequestToken("http://local.host:8080/sign-in-with-twitter/callback");
+            RequestToken requestToken = twitter.getOAuthRequestToken("http://local.host:8080/nanotate/twittercallback");
             request.getSession().setAttribute("requestToken", requestToken);
             response.sendRedirect(requestToken.getAuthenticationURL());
 
