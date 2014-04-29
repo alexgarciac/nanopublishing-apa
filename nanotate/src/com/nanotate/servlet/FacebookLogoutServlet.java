@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LogoutFacebookServlet extends HttpServlet {
+public class FacebookLogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 5357658337449255998L;
 
     @Override

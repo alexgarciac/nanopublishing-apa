@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 
-public class PostServlet extends HttpServlet {
+public class FacebookPostServlet extends HttpServlet {
     private static final long serialVersionUID = 4179545353414298791L;
 
     @Override
