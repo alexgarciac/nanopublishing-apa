@@ -25,9 +25,43 @@
         <load-on-startup>0</load-on-startup>
     </servlet>
     
+    <servlet>
+    <servlet-name>facebooksignin</servlet-name>
+    <servlet-class>com.nanotate.servlet.SignInFacebookServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>callback</servlet-name>
+    <servlet-class>com.nanotate.servlet.CallbackServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>facebooklogout</servlet-name>
+    <servlet-class>com.nanotate.servlet.LogoutFacebookServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>post</servlet-name>
+    <servlet-class>com.nanotate.servlet.PostServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>facebooksignin</servlet-name>
+    <url-pattern>/facebooksignin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>callback</servlet-name>
+    <url-pattern>/callback</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>facebooklogout</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>post</servlet-name>
+    <url-pattern>/post</url-pattern>
+  </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>annotation</servlet-name>
-        <url-pattern>/init</url-pattern>
+        <url-pattern>/nanotate</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>document</servlet-name>

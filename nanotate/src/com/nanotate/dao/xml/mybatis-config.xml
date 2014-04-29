@@ -19,5 +19,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 </environments>
 <mappers>
 	<mapper resource="com/nanotate/dao/xml/AnnotationMapper.xml" />
+	<mapper resource="com/nanotate/dao/xml/UserMapper.xml" />
 </mappers>
 </configuration>

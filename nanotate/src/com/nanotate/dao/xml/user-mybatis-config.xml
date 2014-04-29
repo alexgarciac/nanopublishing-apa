@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+ <!-- Ubicación del JAR JDBC del gestor de Base de datos a usar, en este caso MySQL  -->
+ <!--  <classPathEntry location="/nanotate/WebContent/WEB-INF/lib/postgresql-9.3-1101.jdbc3.jar" />-->
+
+  <!--  Generaremos para MyBatis versión 3 -->
+  <context id="Test" targetRuntime="MyBatis3">
+    
+    <!-- No generamos los comentarios -->
+    <commentGenerator>
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    
+      <!--  Parámetros de conexión a la bd -->
+    <jdbcConnection driverClass="org.postgresql.Driver"
+        connectionURL="jdbc:postgresql:nanotate"
+        userId="nanotate"
+        password="nano7541">
+    </jdbcConnection>
+
+     
+    <javaModelGenerator targetPackage="com.nanotate.dao.model" targetProject="nanotate"/>
+    <!--   <property name="enableSubPackages" value="true" />
+    </javaModelGenerator>-->
+
+    <sqlMapGenerator targetPackage="com.nanotate.dao.xml"  targetProject="nanotate" />
+   <!--    <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>-->
+    
+    
+ <!-- También podríamos indicar el tipo ANNOTATEDMAPPER -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.nanotate.dao.model"  targetProject="nanotate"/>
+     <!--  <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>-->
+  
+    <table schema="public" tableName="user"  domainObjectName="User" >
+      <property name="useActualColumnNames" value="true"/>
+      <generatedKey column="username" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
+    </table>
+    
+    
+  </context>
+  
+</generatorConfiguration>

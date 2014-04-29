@@ -41,8 +41,8 @@
 #Nanotweets ul .icons {
     position: absolute;
     right: 10px;
-    bottom: 10px;
-	background: transparent url(images/social.png) no-repeat; 
+    bottom: 20px;
+	/*background: transparent url(images/social.png) no-repeat;*/ 
 	width: 64px;
 	height: 16px;
 }

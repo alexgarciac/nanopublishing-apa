@@ -35,11 +35,10 @@ public class AuthenticationFilter implements Filter {
 		
 		HttpSession session = req.getSession(false);
 		
-		System.out.println("***********sdasdasd");		
-		if(session == null && !(uri.endsWith("html") || uri.endsWith("login")|| uri.endsWith("css")|| uri.endsWith("js"))){
+		
+		if(session == null && !(uri.endsWith("login.html") || uri.endsWith("login")|| uri.endsWith("signin")||uri.endsWith("css")|| uri.endsWith("js"))){
 			this.context.log("Unauthorized access request");
 			res.sendRedirect("login.html");
-			System.out.println("**********awwwwwwwwwwwwwww");	
 		}else{
 			// pass the request along the filter chain
 

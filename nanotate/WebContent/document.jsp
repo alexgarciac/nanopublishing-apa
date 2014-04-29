@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Nanotweets Document Viewer Demo</title>
+	<title>Nanotate Document Viewer</title>
 	
 	<!--jQuery-->
 	<script src="js/jquery-1.6.4.min.js"></script>
@@ -18,7 +18,7 @@
 	
 	<!--custom CSS-->
   	<link type="text/css" rel="stylesheet" href="css/document.css" />
-	
+	<link rel="stylesheet" type="text/css" href="css/zocial.css">
 	<!-- Biojs tooltip -->
 	<script src="js/Biojs.js"></script>
 	<script src="js/Biojs.Tooltip.js"></script>

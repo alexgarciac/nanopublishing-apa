@@ -36,7 +36,7 @@ function nanotweet() {
 function getNanotweetLink() {
     // TODO: text comment for social networks
 
-    var html = '<textarea id="userComment"></textarea>'
+    var html = '<!--<textarea id="userComment"></textarea>-->'
         + '<a onclick="nanotweet()" class="sb circle no-shadow no-border blue twitter" href="#"></a>'+
           		   '<a onclick="nanotweet()" href="#">Send to Nanotweets</a>';
 	return html;
@@ -72,8 +72,9 @@ function feedNanotweets(){
 						var li = $("<li></li>").appendTo(ul);
 						li.append('<span class="commentnumber">' + 
 							(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
-						li.append("<p>" + formatAnnotations(result.data[i].annotatedText) + "</p>");
-						li.append('<span class="icons"></span>');
+						li.append('<p>' + formatAnnotations(result.data[i].annotatedText) + "</p>");
+						
+						li.append('<span class="icons"><form action="./post" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon facebook" name="post" type="submit">Button label here</button></form></span>');
 					
 					} else if ( result.data[i].status == "WORKING" ) {
 						var li = $("<li></li>").appendTo(ul);

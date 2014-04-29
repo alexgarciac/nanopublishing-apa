@@ -9,6 +9,7 @@
 
 	<!--custom CSS-->
   	<link type="text/css" rel="stylesheet" href="css/thumbnail.css" /> 
+  	<link rel="stylesheet" href="js/sidr/stylesheets/jquery.sidr.light.css">
   	
   	<script>
 	$(document).ready( function() {
@@ -27,7 +28,53 @@
 	</script>
   	
 </head>
-<body style="margin:0;">
+<body >
+
+ <!-- Your stuff -->
+ 
+    <!-- Include jQuery -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Include the Sidr JS -->
+    <script src="js/sidr/jquery.sidr.min.js"></script>
+	
+	<a id="simple-menu" href="#sidr">Toggle menu</a>
+ 
+<div id="sidr">
+  <!-- Your content -->
+  <ul>
+    <li class="active" id="home"><a href="#"><img src="images/home_icon.png" alt="Home" height="52" width="52"/>Home</a></li>
+    <li id="pdf"><a href="#"><img src="images/folder_pdf.jpg" alt="PDF" height="48" width="48"/>PDF</a></li>
+    <li id="upload"><a href="#"><img src="images/up_arrow_blue.png" alt="Upload" height="48" width="48"/>Upload</a></li>
+     <li id="logout"><a href="logout"><img src="images/up_arrow_blue.png" alt="Upload" height="48" width="48"/>Logout</a></li>
+  </ul>
+</div>
+ 
+<script>
+$(document).ready(function() {
+  $('#simple-menu').sidr();
+ 
+});
+
+$( "#home" ).click(function() {
+  $( "#home" ).addClass("active");
+  $( "#upload" ).removeClass("active");
+  $( "#pdf" ).removeClass("active");
+});
+
+$( "#pdf" ).click(function() {
+  $( "#pdf" ).addClass("active");
+  $( "#upload" ).removeClass("active");
+  $( "#home" ).removeClass("active");
+});
+
+$( "#upload" ).click(function() {
+  $( "#upload" ).addClass("active");
+  $( "#pdf" ).removeClass("active");
+   $( "#home" ).removeClass("active");
+});
+
+
+</script>
 
 	<div id="wrapper">
 		<h1>Uploaded Documents</h1>	
