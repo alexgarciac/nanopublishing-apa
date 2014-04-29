@@ -40,13 +40,14 @@ public class TwitterPostServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String text = request.getParameter("text");
+        String text = request.getParameter("message");
         Twitter twitter = (Twitter)request.getSession().getAttribute("twitter");
         try {
             twitter.updateStatus(text);
         } catch (TwitterException e) {
+        	e.printStackTrace();
             throw new ServletException(e);
         }
-        response.sendRedirect(request.getContextPath()+ "/");
+        response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
     }
 }

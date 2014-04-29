@@ -25,7 +25,7 @@ public class FacebookSiginServlet extends HttpServlet {
         request.getSession().setAttribute("facebook", facebook);
         StringBuffer callbackURL = request.getRequestURL();
         int index = callbackURL.lastIndexOf("/");
-        callbackURL.replace(index, callbackURL.length(), "").append("/callback");
+        callbackURL.replace(index, callbackURL.length(), "").append("/facebookcallback");
         response.sendRedirect(facebook.getOAuthAuthorizationURL(callbackURL.toString()));
     }
 }

@@ -5,6 +5,8 @@ function getParameterByName(name) {
     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+
+
 function getSelectedText() {
     var text = "";
     if ( typeof window.getSelection == "function" ) {
@@ -74,8 +76,8 @@ function feedNanotweets(){
 							(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
 						li.append('<p>' + formatAnnotations(result.data[i].annotatedText) + "</p>");
 						
-						li.append('<span class="icons"><form action="./post" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon facebook" name="post" type="submit">Button label here</button></form></span>');
-					
+						li.append('<span class="icons"><form id="tofacebook" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon facebook" name="post" type="submit">Button label here</button></form><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
+			
 					} else if ( result.data[i].status == "WORKING" ) {
 						var li = $("<li></li>").appendTo(ul);
 						li.append('<span class="commentnumber">'+
@@ -91,6 +93,8 @@ function feedNanotweets(){
 
 		}
 	});	
+	
+	
 }
 
 var uuid = getParameterByName("uuid");
@@ -213,7 +217,7 @@ $.getJSON( "document?action=session&uuid=" + uuid, function(result) {
 		    			return getNanotweetLink();
 		    		},
 		    		showOnEvent: 'mouseup',
-		    		hideOnEvent: 'click'
+		    		hideOnEvent: 'mousedown'
 		  	  	});
 			}
 
@@ -222,5 +226,7 @@ $.getJSON( "document?action=session&uuid=" + uuid, function(result) {
 	
 	feedNanotweets();
 });	  
+
+
 
 
