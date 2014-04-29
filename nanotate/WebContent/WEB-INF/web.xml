@@ -27,7 +27,7 @@
     
     <servlet-mapping>
         <servlet-name>annotation</servlet-name>
-        <url-pattern>/anotate</url-pattern>
+        <url-pattern>/init</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>document</servlet-name>
