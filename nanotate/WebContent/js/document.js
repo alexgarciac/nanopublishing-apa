@@ -5,6 +5,16 @@ function getParameterByName(name) {
     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+function formSubmit(){
+
+	 $.ajax({
+	     url:'./facebookpost',
+	     data: $("#tofacebook").serialize(),
+	     success: function (data) {
+	           alert(data);
+	    }
+	});
+}
 
 
 function getSelectedText() {
@@ -76,7 +86,7 @@ function feedNanotweets(){
 							(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
 						li.append('<p>' + formatAnnotations(result.data[i].annotatedText) + "</p>");
 						
-						li.append('<span class="icons"><form id="tofacebook" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon facebook" name="post" type="submit">Button label here</button></form><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
+						li.append('<span class="icons"><form id="tofacebook" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea></form><button onclick="formSubmit();" class="zocial icon facebook" name="post">Button label here</button><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+formatAnnotations(result.data[i].annotatedText)+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
 			
 					} else if ( result.data[i].status == "WORKING" ) {
 						var li = $("<li></li>").appendTo(ul);
@@ -96,6 +106,9 @@ function feedNanotweets(){
 	
 	
 }
+
+
+
 
 var uuid = getParameterByName("uuid");
 var docViewer = undefined;

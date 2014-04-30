@@ -27,7 +27,7 @@ public class FacebookPostServlet extends HttpServlet {
         } catch (FacebookException e) {
             throw new ServletException(e);
         }
-        JsonEncoder.encode(response, r); /*.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));*/
+        response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
     }
     
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
