@@ -27,7 +27,7 @@
     
     <servlet>
     <servlet-name>facebooksignin</servlet-name>
-    <servlet-class>com.nanotate.servlet.FacebookSiginServlet</servlet-class>
+    <servlet-class>com.nanotate.servlet.FacebookSigninServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>facebookcallback</servlet-name>

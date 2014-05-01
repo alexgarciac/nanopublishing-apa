@@ -29,10 +29,13 @@ package com.nanotate.servlet;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 public class TwitterPostServlet extends HttpServlet {
@@ -42,12 +45,26 @@ public class TwitterPostServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String text = request.getParameter("message");
         Twitter twitter = (Twitter)request.getSession().getAttribute("twitter");
-        try {
-            twitter.updateStatus(text);
-        } catch (TwitterException e) {
-        	e.printStackTrace();
-            throw new ServletException(e);
+        if(twitter!=null)
+        {
+	        try {
+	            twitter.updateStatus(text);
+	        } catch (TwitterException e) {
+	        	e.printStackTrace();
+	            throw new ServletException(e);
+	        }
+	        response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
         }
-        response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
+        else
+        {
+        	ServletContext context = this.getServletContext();
+        	RequestDispatcher dispatcher = context.getRequestDispatcher("/twittersignin");
+
+        	// change your request and response accordingly
+
+        	dispatcher.forward(request, response);
+        }
+        	
+       
     }
 }

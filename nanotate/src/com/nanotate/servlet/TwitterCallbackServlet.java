@@ -47,8 +47,9 @@ public class TwitterCallbackServlet extends HttpServlet {
         RequestToken requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
         String verifier = request.getParameter("oauth_verifier");
         try {
+        	System.out.println(verifier+" "+requestToken);
             twitter.getOAuthAccessToken(requestToken, verifier);
-            request.getSession().removeAttribute("requestToken");
+//            request.getSession().removeAttribute("requestToken");
             HttpSession session = request.getSession();
     		session.setAttribute("user", twitter.getScreenName());
     		//setting session to expiry in 30 mins

@@ -11,7 +11,7 @@ import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
 import facebook4j.conf.ConfigurationBuilder;
 
-public class FacebookSiginServlet extends HttpServlet {
+public class FacebookSigninServlet extends HttpServlet {
     private static final long serialVersionUID = -7453606094644144082L;
 
     @Override

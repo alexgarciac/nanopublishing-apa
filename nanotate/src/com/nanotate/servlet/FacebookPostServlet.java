@@ -2,6 +2,8 @@ package com.nanotate.servlet;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,16 +20,27 @@ public class FacebookPostServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        String message = request.getParameter("message");
-        JsonResponse r = new JsonResponse();
-        Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
-        try {
-            facebook.postStatusMessage(message);
-        } catch (FacebookException e) {
-            throw new ServletException(e);
+        if(request.getSession().getAttribute("facebook")!=null){
+        	request.setCharacterEncoding("UTF-8");
+        	 String message = request.getParameter("message");
+             JsonResponse r = new JsonResponse();
+             Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
+             try {
+                 facebook.postStatusMessage(message);
+             } catch (FacebookException e) {
+                 throw new ServletException(e);
+             }
+             response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
         }
-        response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
+        else{
+        	ServletContext context = this.getServletContext();
+        	RequestDispatcher dispatcher = context.getRequestDispatcher("/facebooksignin");
+
+        	// change your request and response accordingly
+
+        	dispatcher.forward(request, response);
+        }
+       
     }
     
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
