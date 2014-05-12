@@ -13,21 +13,7 @@
   	<link rel="stylesheet" href="js/sidr/stylesheets/jquery.sidr.light.css">
   	
   	<script>
-	$(document).ready( function() {
-		$.getJSON( "document?action=list", function(result) {
-			if ( result.code == 0 ) {
-				var imgURL;
-				for ( var i in result.data ) {		
-					imgURL = "document?action=thumbnails&uuid=" + result.data[i];	
-					link = "document.jsp?uuid=" + result.data[i];	
-			    	$('#wrapper').append('<a href="' + link + '" class="mask"><img src="' + imgURL + '" /></a>');
-			    } 
-			}
-		});	
-		
-		
-		
-	});
+	
 	</script>
   	
 </head>
@@ -68,6 +54,21 @@ $( "#pdf" ).click(function() {
   $( "#pdf" ).addClass("active");
   $( "#upload" ).removeClass("active");
   $( "#home" ).removeClass("active");
+
+		$.getJSON( "document?action=list", function(result) {
+			if ( result.code == 0 ) {
+				var imgURL;
+				for ( var i in result.data ) {		
+					imgURL = "document?action=thumbnails&uuid=" + result.data[i];	
+					link = "document.jsp?uuid=" + result.data[i];	
+			    	$('#wrapper').append('<a href="' + link + '" class="mask"><img src="' + imgURL + '" /></a>');
+			    } 
+			}
+		});	
+		
+		
+		
+	
 });
 
 $( "#upload" ).click(function() {
