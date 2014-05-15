@@ -8,14 +8,30 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
 	<script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript" src="js/plupload.full.min.js"></script>
+<script type="text/javascript" src="js/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
+<!--docviewer.js-->
+	<script src="//static-v2.crocodoc.com/core/docviewer.js"></script>
+
+	<!--docviewer.js-->
+
+	
+	<!--custom CSS-->
+  	<link type="text/css" rel="stylesheet" href="css/document.css" />
+	<link rel="stylesheet" type="text/css" href="css/zocial.css">
+	<!-- Biojs tooltip -->
+	<script src="js/Biojs.js"></script>
+	<script src="js/document.js"></script>
+	<script src="js/Biojs.Tooltip.js"></script>
+  	<link type="text/css" rel="stylesheet" href="css/biojs.Tooltip.css" />
 
 	<!--custom CSS-->
   	<link type="text/css" rel="stylesheet" href="css/thumbnail.css" /> 
   	<link rel="stylesheet" href="js/sidr/stylesheets/jquery.sidr.light.css">
+  	<link rel="stylesheet" href="js/jquery.plupload.queue/css/jquery.plupload.queue.css">
   	
-  	<script>
-	
-	</script>
+  	<script type="text/javascript">
+
+</script>
   	
 </head>
 <body >
@@ -23,8 +39,7 @@
  <!-- Your stuff -->
  
     <!-- Include jQuery -->
-    <script src="js/jquery.min.js"></script>
-    <!-- Include the Sidr JS -->
+
     <script src="js/sidr/jquery.sidr.min.js"></script>
 	
 	<a id="simple-menu" href="#sidr">Toggle menu</a>
@@ -35,41 +50,60 @@
     <li class="active" id="home"><a href="#"><img src="images/home_icon.png" alt="Home" height="52" width="52"/>Home</a></li>
     <li id="pdf"><a href="#"><img src="images/folder_pdf.jpg" alt="PDF" height="48" width="48"/>PDF</a></li>
     <li id="upload"><a href="#"><img src="images/up_arrow_blue.png" alt="Upload" height="48" width="48"/>Upload</a></li>
-     <li id="logout"><a href="logout"><img src="images/up_arrow_blue.png" alt="Upload" height="48" width="48"/>Logout</a></li>
+     <li id="logout"><a href="logout"><img src="images/logout.png" alt="Upload" height="48" width="48"/>Logout</a></li>
   </ul>
 </div>
  
 <script>
+
+
 $(document).ready(function() {
   $('#simple-menu').sidr();
+  $('#viewer').hide();
  
-});
+	
 
+ $( "a.mask" ).live( "click", function() {
+	 
+	 $( "#wrapper" ).hide();
+	 $('#wrapper').append('<h1>Document viewer</h1>');
+	 initViewer($(this).attr("id"));
+	 $('#viewer').show();
+	
+ });
 $( "#home" ).click(function() {
+	$('#viewer').hide();
   $( "#home" ).addClass("active");
   $( "#upload" ).removeClass("active");
   $( "#pdf" ).removeClass("active");
   $( "#wrapper" ).empty();
   $('#wrapper').append('<h1>Home</h1>');
+  $('#wrapper').append('<div style="clear:both;"></div>');
   <!-- Cargar avatar e información de usuario-->
   
 });
 
 $( "#pdf" ).click(function() {
-  $( "#pdf" ).addClass("active");
+	$('#viewer').hide();
+	$( "#pdf" ).addClass("active");
   $( "#upload" ).removeClass("active");
   $( "#home" ).removeClass("active");
+  $( "#wrapper" ).empty();
   $('#wrapper').append('<h1>Uploaded documents</h1>');
+  $('#wrapper').append('<div style="clear:both;"></div>');
 		$.getJSON( "document?action=list", function(result) {
 			if ( result.code == 0 ) {
 				var imgURL;
 				for ( var i in result.data ) {		
 					imgURL = "document?action=thumbnails&uuid=" + result.data[i];	
 					link = "document.jsp?uuid=" + result.data[i];	
-			    	$('#wrapper').append('<a href="' + link + '" class="mask"><img src="' + imgURL + '" /></a>');
+			    	$('#wrapper').append('<a id="' + result.data[i] + '" class="mask"><img src="' + imgURL + '" /></a>');
+			    	
 			    } 
 			}
-		});	
+		});
+		
+
 		
 		
 		
@@ -77,108 +111,94 @@ $( "#pdf" ).click(function() {
 });
 
 $( "#upload" ).click(function() {
-  $( "#upload" ).addClass("active");
+	$('#viewer').hide();
+	$( "#upload" ).addClass("active");
   $( "#pdf" ).removeClass("active");
    $( "#home" ).removeClass("active");
    $( "#wrapper" ).empty();
-   $('#wrapper').append('<h1>Upload</h1>');
+   $('#wrapper').append('<h1>Upload</h1>'); 
+   $('#wrapper').append('<div style="clear:both;"></div>');
+	$('#wrapper').append('<div id="uploader"></div>');
+		
+   $('#uploader').pluploadQueue({
+	      // General settings
+	      runtimes : 'html5',
+	      url : 'upload',
+	      chunk_size : '1mb',
+	      unique_names : true,
+	       
+	      filters : {
+	          max_file_size : '10mb',
+	          mime_types: [
+	              {title : 'Document files', extensions : 'pdf'}
+	          ]
+	      },
+
+	      // Resize images on clientside if we can
+	      resize : {width : 320, height : 240, quality : 90}
+	  });
 });
+
+$( "#home" ).trigger( "click" );
+$( "#simple-menu" ).trigger( "click" );
+//Initialize the widget when the DOM is ready
+
+});
+
 
 
 </script>
 
 	<div id="wrapper">
 
-		<div style="clear:both;"></div>	
+	
+
+  
+  <!--div for viewer-->
+  <div id="DocViewer"></div>
+  <div id="Nanotweets" class="nanotweets-feed"></div>
+		
 	</div> <!-- #/wrapper -->
   
-  <div id="uploader">
+  
+<div id="viewer">
+  
+   <div class="toolbar">
+    <!--zoom-->
+    <div class="zoom-btns">
+      <button class="zoom-out">-</button>
+      <button class="zoom-in">+</button>
+    </div>
 
-    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+    <!--page navigation-->
+    <div class="page-nav">
+      <button class="prev">◀</button>
+      <span class="label">Page <span class="num">1</span>/<span class="numpages">1</span></span>
+      <button class="next">▶</button>
+    </div>
+	
+	<!--custom-->
+	<div class="custom-btns">
+		<div class="nanotweets-feed-control" style="width:auto">
+			<a class="sb circle no-shadow no-border blue twitter" href="#"></a>
+			<a class="legend" href="#">Hide Nanotweets</a>
+			<a class="legend" href="#" style="display:none;">Show Nanotweets</a>
+		</div>
+	</div>
+	
+  </div>
+  
+  <!--div for viewer-->
+  <div id="DocViewer"></div>
+  
 
+  
 </div>
-
+  
+<div id="Nanotweets" class="nanotweets-feed"></div>
  
 
-<script type="text/javascript">
 
-// Initialize the widget when the DOM is ready
-
-$(function() {
-
-    // Setup html5 version
-
-    $("#uploader").pluploadQueue({
-
-        // General settings
-
-        runtimes : 'html5,flash,silverlight,html4',
-
-        url : "/upload",
-
-         
-
-        chunk_size : '1mb',
-
-        rename : true,
-
-        dragdrop: true,
-
-         
-
-        filters : {
-
-            // Maximum file size
-
-            max_file_size : '10mb',
-
-            // Specify what files to browse for
-
-            mime_types: [
-
-                {title : "Image files", extensions : "jpg,gif,png"},
-
-                {title : "Zip files", extensions : "zip"}
-
-            ]
-
-        },
-
- 
-
-        // Resize images on clientside if we can
-
-        resize: {
-
-            width : 200,
-
-            height : 200,
-
-            quality : 90,
-
-            crop: true // crop to exact dimensions
-
-        },
-
- 
-
- 
-
-        // Flash settings
-
-        flash_swf_url : '/plupload/js/Moxie.swf',
-
-     
-
-        // Silverlight settings
-
-        silverlight_xap_url : '/plupload/js/Moxie.xap'
-
-    });
-
-});
-
-</script>
 
 
  

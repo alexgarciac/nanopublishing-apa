@@ -78,7 +78,7 @@ public class FileUploadAction extends HttpServlet {
 						}
 
 						File dst = new File(dstFile.getPath()+ "/" + this.name);
-
+						System.out.println("Path: "+dst.getAbsolutePath());
 				        saveUploadFile(input, dst);
 				    }
 				}
@@ -98,6 +98,7 @@ public class FileUploadAction extends HttpServlet {
 	    	System.out.println("User: "+this.user);
 	    	System.out.println("Name: "+this.name);
 	    	System.out.println("Time: "+this.time);
+	    	
 	    }
 
 		resp.setContentType(JSON);

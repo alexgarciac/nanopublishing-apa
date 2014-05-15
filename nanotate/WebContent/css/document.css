@@ -2,17 +2,18 @@
 
 #DocViewer { 
 	position: absolute;
-	top: 40px;
+	top: 50px;
 	bottom: 0;
 	left: 0;
-	right: 20%; 
+	right: 23%; 
+	height:100%;
 }
 
 #Nanotweets {
 	color: rgb(67, 67, 67);
 	font: 90%/130% Georgia,"Times New Roman",Times,serif;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: 50px;
 	bottom: 0;
 	left: 80%;
 	right: 0;
@@ -27,7 +28,7 @@
 	padding: 10px 10px 20px 10px;
 	list-style: none outside none;
 	border-top: 1px solid rgb(204, 204, 204);
-	position: relative;
+	position: absolute;
 }
 
 #Nanotweets ul .commentnumber {
@@ -80,8 +81,8 @@
 
 .zoom-btns { 
 	position:absolute; 
-	left:4px; 
-	top:2px; 
+	left:50px; 
+	top:40px; 
 	width:150px; 
 	z-index:2; 
 }
@@ -93,14 +94,15 @@ button.zoom-out, button.zoom-in, button.prev, button.next {
 
 .page-nav { 
 	position:absolute; 
-	top:2px; 
+	top:40px; 
 	width:100%; 
 	text-align:center; 
+	z-index:2; 
 }
 
 .custom-btns {
 	position:absolute;
-	right:30px;
+	right:100px;
 	top:2px;
 }
 	
@@ -151,7 +153,7 @@ a.sb, .sb a {
     line-height: 100%;
     white-space: nowrap;
     display: inline-block;
-    position: relative;
+    position: absolute;
     vertical-align: middle;
     margin: 0px 2px 5px 0px;
     background-color: rgb(236, 236, 236);

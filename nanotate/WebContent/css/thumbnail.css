@@ -6,7 +6,7 @@ body {
 }
 #wrapper {
 	width:840px; 
-	margin:0 auto; 
+	margin:0 50px; 
 	background:#fff; 
 	border:1px solid #ccc; 
 	padding:25px; 
@@ -47,4 +47,30 @@ body {
 	color:red; 
 	display:none; 
 	font-size:.8em;
+}
+
+#uploader {
+	position:relative;
+	height:350px;
+	width:95%;
+	-webkit-box-shadow:0 0 1px #000;
+	border:5px solid #f6f6f6;
+	overflow:hidden;
+	float:left;
+	margin:15px;
+}
+
+#viewer {
+	width:840px; 
+	height:90%;
+	margin:200px 50px; 
+	border:1px solid #ccc; 
+	padding:25px; 
+	border-top:none;
+	border-radius:0 0 5px 5px;
+	-moz-border-radius:0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px; 
+	box-shadow:0 0 5px #ccc;
+	-moz-box-shadow:0 0 5px #ccc;
+	-webkit-box-shadow:0 0 5px #ccc;
 }
