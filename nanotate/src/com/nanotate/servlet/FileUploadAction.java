@@ -1,3 +1,5 @@
+package com.nanotate.servlet;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -93,9 +95,9 @@ public class FileUploadAction extends HttpServlet {
 		}
 
 		if(this.chunk == this.chunks - 1){
-	    	System.out.println("用户名："+this.user);
-	    	System.out.println("上传的文件："+this.name);
-	    	System.out.println("上传时间："+this.time);
+	    	System.out.println("User: "+this.user);
+	    	System.out.println("Name: "+this.name);
+	    	System.out.println("Time: "+this.time);
 	    }
 
 		resp.setContentType(JSON);
