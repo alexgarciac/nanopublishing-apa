@@ -12,7 +12,7 @@
 #Nanotweets {
 	color: rgb(67, 67, 67);
 	font: 90%/130% Georgia,"Times New Roman",Times,serif;
-	position: relative;
+	position: absolute;
 	top: 50px;
 	bottom: 0;
 	left: 80%;
