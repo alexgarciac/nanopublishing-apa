@@ -58,6 +58,16 @@
     <servlet-class>com.nanotate.servlet.TwitterPostServlet</servlet-class>
   </servlet>
 
+<servlet>
+    <servlet-name>upload</servlet-name>
+    <servlet-class>com.nanotate.servlet.FileUploadAction</servlet-class>
+  </servlet>
+
+<servlet-mapping>
+    <servlet-name>upload</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>facebooksignin</servlet-name>
     <url-pattern>/facebooksignin</url-pattern>
