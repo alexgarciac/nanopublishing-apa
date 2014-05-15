@@ -48,13 +48,16 @@ $( "#home" ).click(function() {
   $( "#home" ).addClass("active");
   $( "#upload" ).removeClass("active");
   $( "#pdf" ).removeClass("active");
+  $( "#wrapper" ).empty();
+  $('#wrapper').append('<h1>Home</h1>');
+  
 });
 
 $( "#pdf" ).click(function() {
   $( "#pdf" ).addClass("active");
   $( "#upload" ).removeClass("active");
   $( "#home" ).removeClass("active");
-
+  $('#wrapper').append('<h1>Uploaded documents</h1>');
 		$.getJSON( "document?action=list", function(result) {
 			if ( result.code == 0 ) {
 				var imgURL;
@@ -75,13 +78,15 @@ $( "#upload" ).click(function() {
   $( "#upload" ).addClass("active");
   $( "#pdf" ).removeClass("active");
    $( "#home" ).removeClass("active");
+   $( "#wrapper" ).empty();
+   $('#wrapper').append('<h1>Upload</h1>');
 });
 
 
 </script>
 
 	<div id="wrapper">
-		<h1>Uploaded Documents</h1>	
+
 		<div style="clear:both;"></div>	
 	</div> <!-- #/wrapper -->
  
