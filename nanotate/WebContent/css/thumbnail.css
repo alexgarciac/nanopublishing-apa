@@ -6,7 +6,7 @@ body {
 }
 #wrapper {
 	width:840px; 
-	margin:0 50px; 
+	margin:15px 30px; 
 	background:#fff; 
 	border:1px solid #ccc; 
 	padding:25px; 
@@ -74,3 +74,8 @@ body {
 	-moz-box-shadow:0 0 5px #ccc;
 	-webkit-box-shadow:0 0 5px #ccc;
 }
+
+#simple-menu{
+	margin-left: 25px;
+}
+
