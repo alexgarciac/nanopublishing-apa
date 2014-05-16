@@ -1,19 +1,18 @@
 @CHARSET "UTF-8";
 
 #DocViewer { 
-	position: absolute;
-	top: 50px;
+	position: relative;
+	top: 40px;
 	bottom: 0;
 	left: 0;
-	right: 23%; 
-	height:100%;
+	right: 20%; 
 }
 
 #Nanotweets {
 	color: rgb(67, 67, 67);
 	font: 90%/130% Georgia,"Times New Roman",Times,serif;
-	position: absolute;
-	top: 50px;
+	position: relative;
+	top: 40px;
 	bottom: 0;
 	left: 80%;
 	right: 0;
@@ -28,11 +27,11 @@
 	padding: 10px 10px 20px 10px;
 	list-style: none outside none;
 	border-top: 1px solid rgb(204, 204, 204);
-	position: absolute;
+	position: relative;
 }
 
 #Nanotweets ul .commentnumber {
-    position: absolute;
+    position: relative;
     right: 5px;
     top: 8px;
     font: 100%/100% Georgia,"Times New Roman",Times,serif;
@@ -40,10 +39,10 @@
 }
 
 #Nanotweets ul .icons {
-    position: absolute;
+    position: relative;
     right: 10px;
-    bottom: 20px;
-	/*background: transparent url(images/social.png) no-repeat;*/ 
+    bottom: 10px;
+	background: transparent url(images/social.png) no-repeat; 
 	width: 64px;
 	height: 16px;
 }
@@ -69,7 +68,7 @@
 
 /* Disable context menu in ipad/iphone */
 .page {
-	
+
 }
 
 .toolbar { 
@@ -80,9 +79,9 @@
 }
 
 .zoom-btns { 
-	position:absolute; 
-	left:50px; 
-	top:40px; 
+	position:relative; 
+	left:4px; 
+	top:2px; 
 	width:150px; 
 	z-index:2; 
 }
@@ -93,19 +92,17 @@ button.zoom-out, button.zoom-in, button.prev, button.next {
 }
 
 .page-nav { 
-	position:absolute; 
-	top:40px; 
+	position:relative; 
+	top:2px; 
 	width:100%; 
 	text-align:center; 
-	z-index:2; 
 }
 
 .custom-btns {
-	position:absolute;
-	right:100px;
-	top:2px;
-}
+	position:relative;
 	
+}
+
 a.sb.text, .sb.text a {
     text-indent: 0px;
     width: auto;
@@ -113,7 +110,7 @@ a.sb.text, .sb.text a {
     padding: 9px 14px 3px 34px;
     background-position: 2px center;
 }
-	
+
 a.sb.circle:before, .sb.circle a:before, a.sb:before, .sb a:before {
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -153,7 +150,7 @@ a.sb, .sb a {
     line-height: 100%;
     white-space: nowrap;
     display: inline-block;
-    position: absolute;
+    position: relative;
     vertical-align: middle;
     margin: 0px 2px 5px 0px;
     background-color: rgb(236, 236, 236);
@@ -169,7 +166,7 @@ a {
     color: rgb(102, 102, 153);
     text-decoration: none;
 }
-		
+
 /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
    with position:fixed. Width, height, top and left speak
@@ -199,5 +196,4 @@ body.loading {
    modal element will be visible */
 body.loading .modal {
     display: block;
-}
-		
+}		
