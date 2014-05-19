@@ -76,11 +76,14 @@ $(document).ready(function() {
 	 $('#wrapper').append('<h1>Document viewer</h1>');
 	 initViewer($(this).attr("id"));
 	 $('#viewer').show();
+	 
 	
  });
 $( "#home" ).click(function() {
-	$('#viewer').hide();
-	 $( "#wrapper" ).show();
+  $('#viewer').hide();
+  $('#DocViewer').empty();
+  $('#Nanotweets').empty();
+  $( "#wrapper" ).show();
   $( "#home" ).addClass("active");
   $( "#upload" ).removeClass("active");
   $( "#pdf" ).removeClass("active");
@@ -93,6 +96,8 @@ $( "#home" ).click(function() {
 
 $( "#pdf" ).click(function() {
 	$('#viewer').hide();
+	$('#DocViewer').empty();
+	$('#Nanotweets').empty();
 	$( "#wrapper" ).show();
 	$( "#pdf" ).addClass("active");
   $( "#upload" ).removeClass("active");
@@ -121,6 +126,8 @@ $( "#pdf" ).click(function() {
 
 $( "#upload" ).click(function() {
 	$('#viewer').hide();
+	$('#DocViewer').empty();
+	$('#Nanotweets').empty();
 	$( "#wrapper" ).show();
 	$( "#upload" ).addClass("active");
   $( "#pdf" ).removeClass("active");
@@ -183,7 +190,7 @@ $( "#simple-menu" ).trigger( "click" );
 		
 			</div>
 			<div id="DocViewer"></div>
-  <div id="Nanotweets" class="nanotweets-feed"></div>
+			<div id="Nanotweets"></div>
 		  </div>
    <!--div for viewer-->
   

@@ -1,3 +1,8 @@
+var docViewer = undefined;
+var simpleTip = undefined;
+var uuid = undefined;
+
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -70,7 +75,7 @@ function formatAnnotations(str) {
 	return result;
 }
 
-function feedNanotweets(uuid){
+function feedNanotweets(){
 	
 	// Get nanotweets feed 
 	$("#Nanotweets").html('');
@@ -109,11 +114,9 @@ function feedNanotweets(uuid){
 
 
 
-function initViewer(uuid){
-
-	var docViewer = undefined;
-	var simpleTip = undefined;
-	
+function initViewer(iduuid){
+	uuid=iduuid;
+		
 	$.getJSON( "document?action=session&uuid=" + uuid, function(result) {
 		
 		// 
