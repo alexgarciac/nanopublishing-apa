@@ -1,7 +1,7 @@
 var docViewer = undefined;
 var simpleTip = undefined;
 var uuid = undefined;
-
+var data = undefined;
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -35,7 +35,7 @@ function getSelectedText() {
 function nanotweet() {
 
     var data = {
-        text: escape( getSelectedText() ),
+        text:  getSelectedText().replace('%', ''),
         uuid: uuid,
         comment: $("#userComment").val()
 
@@ -78,36 +78,51 @@ function formatAnnotations(str) {
 function feedNanotweets(){
 	
 	// Get nanotweets feed 
-	$("#Nanotweets").html('');
-	$.getJSON( "nanotate?action=list&uuid=" + uuid, function(result) {
-		if ( result.code == 0 ) {
-			var ul = $("<ul></ul>").appendTo("#Nanotweets");
-			if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
-				for ( var i in result.data ) {
-					console.log("Hi: "+ result.data[i].tags);
-					if ( result.data[i].status == "COMPLETED" ) {
-						var li = $("<li></li>").appendTo(ul);
-						li.append('<span class="commentnumber">' + 
-							(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
-						li.append('<p>' + result.data[i].tags + "</p>");
-						
-						li.append('<span class="icons"><form id="tofacebook" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea></form><button onclick="formSubmit();" class="zocial icon facebook" name="post">Button label here</button><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
-			
-					} else if ( result.data[i].status == "WORKING" ) {
-						var li = $("<li></li>").appendTo(ul);
-						li.append('<span class="commentnumber">'+
-							(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
-						li.append("<p>Nanotweeting:</p>");
-						li.append('<p class="blockquote" >' + result.data[i].original_text.substring(0,70) + "...</p>");
+		
+		$.getJSON( "nanotate?action=list&uuid=" + uuid, function(result) {
+				if ( result.code == 0 ) {
+					$("#Nanotweets").html('');
+					var ul = $('<ul style="display: initial;"></ul>').appendTo("#Nanotweets");
+					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
+						for ( var i in result.data ) {
+							console.log("Hi: "+ result.data[i].tags);
+							if ( result.data[i].status == "COMPLETED" ) {
+								console.log('timestamp '+result.data[i].creation);
+								var li = $("<li></li>").appendTo(ul);
+								li.append('<span class="commentnumber">' + 
+									result.data[i].creation + '</span>');
+								
+								li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
+								
+		//						li.append('<p>' + result.data[i].tags + "</p>");
+								
+		
+								$("#tagfield"+uuid+"_"+i).tagHandler({
+								    assignedTags: result.data[i].tags.split(","),
+								    availableTags: result.data[i].tags.split(","),
+								    autocomplete: false,
+								    allowAdd: false,
+								    allowEdit: false
+								});
+		
+								
+								li.append('<span class="icons"><form id="tofacebook" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button onclick="formSubmit();" class="zocial icon facebook" name="post">Button label here</button></form><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
+					
+							} else if ( result.data[i].status == "WORKING" ) {
+								var li = $("<li></li>").appendTo(ul);
+								li.append('<span class="commentnumber">'+
+									(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
+								li.append("<p>Nanotweeting:</p>");
+								li.append('<p class="blockquote" >' + result.data[i].original_text.substring(0,70) + "...</p>");
+							}
+		
+					    } 	
+					} else {
+						ul.append("<li>Nanotweets not found.</li>");
 					}
-
-			    } 	
-			} else {
-				ul.append("<li>Nanotweets not found.</li>");
-			}
-
-		}
-	});	
+		
+				}
+		});	
 	
 	
 }
@@ -240,7 +255,7 @@ function initViewer(iduuid){
 			}
 		);
 		
-		feedNanotweets(uuid);
+		feedNanotweets();
 	});	  
 	
 }

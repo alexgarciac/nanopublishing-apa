@@ -9,6 +9,8 @@
 	<script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript" src="js/plupload.full.min.js"></script>
 <script type="text/javascript" src="js/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
+ <link rel="stylesheet" href="css/jquery.taghandler.css" />
+  <script type="text/javascript" src="js/jquery.taghandler.min.js"></script>
 <!--docviewer.js-->
 	<script src="//static-v2.crocodoc.com/core/docviewer.js"></script>
 
@@ -67,13 +69,22 @@
 $(document).ready(function() {
   $('#simple-menu').sidr();
   $('#viewer').hide();
- 
+	
+  setInterval(function() {
+	  if( $('#viewer').is(':visible')){
+		  feedNanotweets();
+	  }
+      
+  }, 3000);
 	
 
  $( "a.mask" ).live( "click", function() {
 	 
 	 $( "#wrapper" ).hide();
 	 $('#wrapper').append('<h1>Document viewer</h1>');
+	 $('#pagebegin').empty();
+	 $('#pagebegin').append('1');
+	 $('#pageend').empty();
 	 initViewer($(this).attr("id"));
 	 $('#viewer').show();
 	 
@@ -182,7 +193,7 @@ $( "#simple-menu" ).trigger( "click" );
 		    <!--page navigation-->
 		    <div class="page-nav">
 		      <button class="prev">◀</button>
-		      <span class="label">Page <span class="num">1</span>/<span class="numpages">1</span></span>
+		      <span class="label">Page <span id="pagebegin" class="num">1</span>/<span id="pageend" class="numpages">1</span></span>
 		      <button class="next">▶</button>
 		    </div>
 			
