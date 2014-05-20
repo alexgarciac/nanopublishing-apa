@@ -12,11 +12,11 @@
 #Nanotweets {
 	color: rgb(67, 67, 67);
 	font: 90%/130% Georgia,"Times New Roman",Times,serif;
-	position: absolute;
 	top: 40px;
 	bottom: 0;
-	right: 0;
-	width: 22%;
+	left: 840px;
+	width: 200px;
+	position: relative;
 }
 
 #Nanotweets ul {
@@ -85,7 +85,7 @@
 }
 
 .zoom-btns { 
-	position:absolute; left:4px; top:3px; width:150px; z-index:2;
+	position:absolute; left:4px; top:3px; width:150px; z-index:4;
 }
 
 button.zoom-out, button.zoom-in, button.prev, button.next {

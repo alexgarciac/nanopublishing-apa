@@ -61,9 +61,10 @@ body {
 }
 
 #viewer {
-	width:80%; 
+	width:1040px; 
 	height:100%;
-	margin:200px 50px; 
+	left: 10px;
+	bottom: 0;
 	border:1px solid #ccc; 
 	padding:25px; 
 	border-top:none;

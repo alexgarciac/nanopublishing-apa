@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -47,7 +48,12 @@ public class NanotweetWriter implements Runnable {
 	String uuid;
 	
 	public NanotweetWriter(String text, String documentUUID ) {
-		this.text = text;
+		try {
+			this.text = URLDecoder.decode(text, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.uuid = documentUUID;
 	}
 	
@@ -58,33 +64,37 @@ public class NanotweetWriter implements Runnable {
 			
 			log.info("Using text: " + text );
 			System.out.println("Die");
-			Annotation annotation = insertNewAnnotation( java.net.URLDecoder.decode(text, "UTF-8"), uuid ); 
+			Annotation annotation = insertNewAnnotation( text, uuid ); 
 			
-			LinkedHashMap<String, Integer> annotations = new LinkedHashMap<String, Integer>();
+//			LinkedHashMap<String, Integer> annotations = new LinkedHashMap<String, Integer>();
 			
 			// Query whatizit to all pipelines 
-			for ( String pipeline : Settings.WHATIZIT_PIPELINE ) {
-				log.info("Using pipeline: " + pipeline );
-				String whatizitText = executeWhatizitQuery( pipeline );
-				Matcher matcher = Settings.pattern.matcher( whatizitText );
-		    	
-				while ( matcher.find() )
-				{
-					if ( !StringUtils.isEmpty( matcher.group() ) ) {
-						annotations.put(matcher.group() , 0);
-					}
-				}
-			}
-			
+//			for ( String pipeline : Settings.WHATIZIT_PIPELINE ) {
+//				log.info("Using pipeline: " + pipeline );
+//				String whatizitText = executeWhatizitQuery( pipeline );
+//				Matcher matcher = Settings.pattern.matcher( whatizitText );
+//		    	
+//				while ( matcher.find() )
+//				{
+//					if ( !StringUtils.isEmpty( matcher.group() ) ) {
+//						annotations.put(matcher.group() , 0);
+//					}
+//				}
+//			}
+//			
 			// Annotations there ??
-			if ( !annotations.isEmpty() ) {
+			
+			String annotationResult = this.getBioportalAnnotations();
+			log.info(annotationResult);
+			if ( !annotationResult.equals("[]") ) {
 				
-				String annotationResult = StringUtils.join(annotations.keySet(), "");
 				
-				log.debug( "annotations: " + annotationResult );
+				
+				log.info( "annotations: " + annotationResult );
 				
 				// Change annotation status and result in database
-				annotation.setAnnotatedText(annotationResult);
+				annotation.setJson_value(annotationResult);
+				annotation.setTags(getTagsFromJSON(annotationResult));
 				annotation.setStatus("COMPLETED");
 				
 			} else {
@@ -108,7 +118,7 @@ public class NanotweetWriter implements Runnable {
 		SqlSession session = MyBatis.getSession();
 
     	AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
-    	
+    	log.info("id:"+annotation.getId());
     	mapper.updateByPrimaryKey(annotation);
     	
     	session.commit();
@@ -127,8 +137,8 @@ public class NanotweetWriter implements Runnable {
     	Integer id = sequenceMapper.getNextValueSeqAnnotation();
     	
     	annotation.setId(id);
-    	annotation.setOriginalText(text);
-		annotation.setAnnotatedText("");
+    	annotation.setOriginal_text(text);
+		annotation.setTags("");
 		annotation.setDocument( uuid );
     	annotation.setCreation( new Timestamp(new Date().getTime()) );
     	annotation.setStatus( "WORKING" );
@@ -137,7 +147,7 @@ public class NanotweetWriter implements Runnable {
     	
     	session.commit();
     	session.close();
-    	log.info(annotation.getOriginalText());
+    	log.info(annotation.getOriginal_text());
 		return annotation;
 	}
 
@@ -196,7 +206,7 @@ public class NanotweetWriter implements Runnable {
 		return whatizitText;
 	}
 	
-	public static String  getBioportalAnnotations(){
+	public String  getBioportalAnnotations(){
 				
 				StringBuffer result = new StringBuffer();
 				
@@ -205,7 +215,7 @@ public class NanotweetWriter implements Runnable {
 	            HttpClient client =  new DefaultHttpClient();
 	                  
 	            
-	            String text = "Schizophrenia is a mental disorder often featuring abnormal social behavior and problems distinguishing what is real from what is not. Common symptoms include distress, hearing voices or noises that are not there, inattention, confused or unclear thinking, inactivity, and reduced emotional expression and social engagement. Diagnosis is based on observed behavior and the person's reported experiences.";
+	           
 	            
 	            
 	            
@@ -257,7 +267,7 @@ public class NanotweetWriter implements Runnable {
 	            			result.append(line);
 	            			result.append("\n");
 	            		}
-	            		
+	            		System.out.println(result);
 	            }
 	        }
 	        catch( Exception e ){
@@ -268,11 +278,10 @@ public class NanotweetWriter implements Runnable {
 		
 	}
 	
-	   public static void main( String[] args ) {
-	   
-		  String result = NanotweetWriter.getBioportalAnnotations();
-		  
-		  JSONParser parser = new JSONParser();
+	public String getTagsFromJSON(String result)
+	{
+				String ret="";
+		 		  JSONParser parser = new JSONParser();
 		  
 			try {
 		 
@@ -287,18 +296,25 @@ public class NanotweetWriter implements Runnable {
 					for (Object annotation : annotations )
 					{
 						JSONObject jsonAnnotation=(JSONObject) annotation;
-						System.out.println(jsonAnnotation.get("text"));
+						String tag = (String) jsonAnnotation.get("text");
+						if(!ret.contains(tag))
+						ret+=tag+",";
 					}
-								 
-				
+					
+					
 				
 				}
 				
+				ret=ret.substring(0, ret.length()-1);
+				System.out.println(ret);
 		 
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-		   
+		   return ret;
 	   }
+	}
+	
+//	   public static void main( String[] args ) {
+//	   
 
-}
