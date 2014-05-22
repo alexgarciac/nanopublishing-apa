@@ -1,11 +1,16 @@
 package com.nanotate.servlet;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -17,6 +22,26 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.PDFTextStripper;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import com.crocodoc.CrocodocDocument;
+import com.crocodoc.CrocodocException;
+import com.nanotate.crocodoc.CrocodocDownload;
+import com.nanotate.dao.model.Document;
+import com.nanotate.dao.model.DocumentMapper;
+import com.nanotate.dao.util.MyBatis;
 
 public class FileUploadAction extends HttpServlet {
 
@@ -117,6 +142,8 @@ public class FileUploadAction extends HttpServlet {
 	 * @param dst The dir of upload
 	 */
 	private void saveUploadFile(InputStream input, File dst) throws IOException {
+		
+		
 		OutputStream out = null;
 		try {
 			if (dst.exists()) {
@@ -150,5 +177,128 @@ public class FileUploadAction extends HttpServlet {
 				}
 			}
 		}
+		try {
+			this.sendToCrocodoc(dst);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void sendToCrocodoc(File file) throws Exception{
+		SqlSession session = MyBatis.getSession();
+		String uuid="";
+		DocumentMapper mapper = session.getMapper(DocumentMapper.class);
+		Document document =  new Document();
+		PDDocument pdDoc = PDDocument.load(file);
+		PDFTextStripper stripper = new PDFTextStripper();
+		stripper.setStartPage(1);
+		stripper.setEndPage(1);
+		String text=stripper.getText(pdDoc);
+		int doi_begin_index=text.indexOf("DOI: ");
+		int doi_end_index=text.indexOf("\n", doi_begin_index);
+		String doi= text.substring(doi_begin_index+5, doi_end_index);
+		
+		
+		
+		 try {
+	        	
+	            System.out.print("  Uploading... ");
+	            uuid = CrocodocDocument.upload(file);
+	            System.out.println("success :)");
+	            System.out.println("  UUID is " + uuid);
+	            document= this.getDoiData(doi);
+	            document.setUuid(uuid);
+	            mapper.insert(document);
+	            session.commit();
+	        	session.close();
+	        } catch (CrocodocException e) {
+	            System.out.println("failed :(");
+	            System.out.println("  Error Code: " + e.getCode());
+	            System.out.println("  Error Message: " + e.getMessage());
+	       }
+	      
+	}
+	
+
+	
+	public Document  getDoiData(String doi){
+		
+			StringBuffer result = new StringBuffer();
+			
+	   try {
+	    	
+	        HttpClient client =  new DefaultHttpClient();
+	              
+	        HttpGet  method = new HttpGet("http://search.crossref.org/dois?q="+doi);
+	        // Execute the POST method
+	       
+	        
+	//        BufferedReader rd = new BufferedReader(
+	//    			new InputStreamReader(method.getEntity().getContent()));
+	//    	 
+	//    		StringBuffer result = new StringBuffer();
+	//    		String line = "";
+	//    		while ((line = rd.readLine()) != null) {
+	//    			result.append(line);
+	//    			result.append("\n");
+	//    		}
+	//    		System.out.println(result);
+	        
+	        HttpResponse statusCode = client.execute(method);
+	       
+	        if( statusCode.getStatusLine().getStatusCode() != -1 ) {
+	        	BufferedReader rd = new BufferedReader(
+	        			new InputStreamReader(statusCode.getEntity().getContent()));
+	        	 
+	        		
+	        		String line = "";
+	        		while ((line = rd.readLine()) != null) {
+	        			result.append(line);
+	        			result.append("\n");
+	        		}
+	        		System.out.println(result);
+	        }
+	    }
+	    catch( Exception e ){
+	        e.printStackTrace();
+	        return new Document();
+	    }
+	   
+	   JSONParser parser = new JSONParser();
+	   
+	   Document ret = new Document();
+		  
+		try {
+	 
+			Object obj = parser.parse(result.toString().replace("\u2019", "'"));
+			
+			JSONArray jsonObjects = (JSONArray) obj;
+			for (Object object : jsonObjects )
+			{
+				
+				JSONObject jsonObject = (JSONObject) object;
+				ret.setDoi((String) jsonObject.get("doi"));
+				ret.setTitle((String) jsonObject.get("title"));
+				String title = ret.getTitle();
+				for(int j=0; j<title.length();j++){
+					char registered = title.charAt(j);
+					System.out.println(registered);
+					System.out.println(String.format("And this is an hexa code: %x", (int) registered));
+					System.out.println(String.format("This is an int-code: %d", (int) registered));
+					System.out.println(String.format("And this is an hexa code: %x", (int) registered));
+				}
+					
+				ret.setFull_citation((String) jsonObject.get("fullCitation"));
+				ret.setYear(Integer.parseInt( (String) jsonObject.get("year")));
+			
+			}
+			
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	return ret;
+	
 	}
 }

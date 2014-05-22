@@ -2,8 +2,10 @@ package com.nanotate.servlet;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -11,6 +13,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -21,6 +24,9 @@ import com.crocodoc.CrocodocException;
 import com.nanotate.Settings;
 import com.nanotate.crocodoc.CrocodocDownload;
 import com.nanotate.crocodoc.CrocodocSession;
+import com.nanotate.dao.model.Document;
+import com.nanotate.dao.model.DocumentMapper;
+import com.nanotate.dao.util.MyBatis;
 import com.nanotate.message.JsonResponse;
 
 import javax.servlet.http.HttpServlet;
@@ -49,15 +55,15 @@ public class DocumentServlet extends HttpServlet {
 		// Crocodoc init
 		Crocodoc.setApiToken(apiToken);
 		
-		uploadedDocuments = new String[]{
-				"105d28c5-cc09-47e9-8450-11261a9ff4e2","b3dc1a3a-3927-465e-a607-7f03305e11a5",
-				"51d7b808-f0ac-4202-a468-b5b71a684a16","d343542f-2b69-41a2-b5c5-e7a1b9e25c1c",
-				"54e9f075-a1f7-4af9-9ad2-4a302748088e","ee556a9d-225a-42fd-bca8-5d869f7d56dc",
-				"7b5da70f-cf3f-42a3-9e92-c46a56e4bc1c","d44bfcfb-22bd-4c2c-b411-b1c602737823",
-				"e1dcc112-e220-4a77-9384-bcddc1bd1be6","8d415bdd-886b-43f6-9892-46739b3bd9f1",
-				"a0659614-2cd9-456b-b707-ab6825e23f2e","346a60fa-8dca-4418-a69d-013d6aca3f30",
-				"546bc026-e50a-424c-967c-dbfe498e0882","68031661-fea2-49c0-bf77-3fbad4713a8c",
-				"ad243d73-92ad-48e0-91fc-e182fa2bf4d7","3eea244e-c4aa-43ca-a145-3f50acb82f51"};
+//		uploadedDocuments = new String[]{
+//				"105d28c5-cc09-47e9-8450-11261a9ff4e2","b3dc1a3a-3927-465e-a607-7f03305e11a5",
+//				"51d7b808-f0ac-4202-a468-b5b71a684a16","d343542f-2b69-41a2-b5c5-e7a1b9e25c1c",
+//				"54e9f075-a1f7-4af9-9ad2-4a302748088e","ee556a9d-225a-42fd-bca8-5d869f7d56dc",
+//				"7b5da70f-cf3f-42a3-9e92-c46a56e4bc1c","d44bfcfb-22bd-4c2c-b411-b1c602737823",
+//				"e1dcc112-e220-4a77-9384-bcddc1bd1be6","8d415bdd-886b-43f6-9892-46739b3bd9f1",
+//				"a0659614-2cd9-456b-b707-ab6825e23f2e","346a60fa-8dca-4418-a69d-013d6aca3f30",
+//				"546bc026-e50a-424c-967c-dbfe498e0882","68031661-fea2-49c0-bf77-3fbad4713a8c",
+//				"ad243d73-92ad-48e0-91fc-e182fa2bf4d7","3eea244e-c4aa-43ca-a145-3f50acb82f51"};
 //				"0ef225cd-e534-4be7-87cd-76676a63b8cc","1e2918cc-7a2c-4afc-b817-c3b6123e01a9",
 //				"2cff5669-2396-4341-a28e-0c64124d215f","d8477b6b-8295-4c21-b235-3aaecda55acd",
 //				"e6616bce-53ca-451c-aa10-1a175da35cb6","d3a88897-b1a1-4b38-ad61-4081973d4e23",
@@ -146,7 +152,26 @@ public class DocumentServlet extends HttpServlet {
 		
 		r.setCode( Settings.RESPONSE_CODE_OK );
 		r.setMessage( Settings.RESPONSE_MSG_OK );
-		r.setData(uploadedDocuments);
+		String[] uuids = {};
+		
+		SqlSession session;
+		try {
+			session = MyBatis.getSession();
+			DocumentMapper mapper = session.getMapper(DocumentMapper.class);
+			List<Document> docs = mapper.selectByExample(null);
+			uuids = new String[docs.size()];
+			
+			for(int i=0; i<docs.size();i++)
+				uuids[i]=docs.get(i).getUuid();
+			session.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		r.setData(uuids);
 			
 		JsonEncoder.encode(servletResponse, r);
 	}
@@ -213,7 +238,7 @@ public class DocumentServlet extends HttpServlet {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		String mydata = "Bla blablablabkabl�alkj <z:go ids=\"GO:0043037\" onto=\"biological_process\">translation</z:go> piospodjlksjdlka sadkjh asd <z:chebi ids=\"GO:0043037\" onto=\"biological_process\">translation</z:chebi>";
+		String mydata = "Bla blablablabkabl���alkj <z:go ids=\"GO:0043037\" onto=\"biological_process\">translation</z:go> piospodjlksjdlka sadkjh asd <z:chebi ids=\"GO:0043037\" onto=\"biological_process\">translation</z:chebi>";
 		Pattern pattern = Pattern.compile("<z:(.*?)</z:(.*?)>");
 		Matcher matcher = pattern.matcher(mydata);
 		while (matcher.find())

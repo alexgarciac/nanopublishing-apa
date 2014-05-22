@@ -20,5 +20,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <mappers>
 	<mapper resource="com/nanotate/dao/xml/AnnotationMapper.xml" />
 	<mapper resource="com/nanotate/dao/xml/UserMapper.xml" />
+	<mapper resource="com/nanotate/dao/xml/DocumentMapper.xml" />
 </mappers>
 </configuration>
