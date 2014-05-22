@@ -35,7 +35,7 @@ function getSelectedText() {
 function nanotweet() {
 
     var data = {
-        text:  getSelectedText().replace('%', ''),
+        text:  encodeURI(getSelectedText()),
         uuid: uuid,
         comment: $("#userComment").val()
 

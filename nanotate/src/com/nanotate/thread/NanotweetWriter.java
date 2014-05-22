@@ -49,7 +49,10 @@ public class NanotweetWriter implements Runnable {
 	
 	public NanotweetWriter(String text, String documentUUID ) {
 		try {
+//			text = text.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
+//			text = text.replaceAll("+", "%2B");
 			this.text = URLDecoder.decode(text, "UTF-8");
+			log.info(text);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
