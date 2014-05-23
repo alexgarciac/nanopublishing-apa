@@ -280,14 +280,14 @@ public class FileUploadAction extends HttpServlet {
 				JSONObject jsonObject = (JSONObject) object;
 				ret.setDoi((String) jsonObject.get("doi"));
 				ret.setTitle((String) jsonObject.get("title"));
-				String title = ret.getTitle();
-				for(int j=0; j<title.length();j++){
-					char registered = title.charAt(j);
-					System.out.println(registered);
-					System.out.println(String.format("And this is an hexa code: %x", (int) registered));
-					System.out.println(String.format("This is an int-code: %d", (int) registered));
-					System.out.println(String.format("And this is an hexa code: %x", (int) registered));
-				}
+//				String title = ret.getTitle();
+//				for(int j=0; j<title.length();j++){
+//					char registered = title.charAt(j);
+//					System.out.println(registered);
+//					System.out.println(String.format("And this is an hexa code: %x", (int) registered));
+//					System.out.println(String.format("This is an int-code: %d", (int) registered));
+//					System.out.println(String.format("And this is an hexa code: %x", (int) registered));
+//				}
 					
 				ret.setFull_citation((String) jsonObject.get("fullCitation"));
 				ret.setYear(Integer.parseInt( (String) jsonObject.get("year")));

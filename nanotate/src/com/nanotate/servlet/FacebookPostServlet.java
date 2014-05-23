@@ -23,14 +23,15 @@ public class FacebookPostServlet extends HttpServlet {
         if(request.getSession().getAttribute("facebook")!=null){
         	request.setCharacterEncoding("UTF-8");
         	 String message = request.getParameter("message");
+        	 System.out.println("Message: " +message);
              JsonResponse r = new JsonResponse();
              Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
              try {
-                 facebook.postStatusMessage(message);
+                r.setData( facebook.postStatusMessage(message));
              } catch (FacebookException e) {
                  throw new ServletException(e);
              }
-             response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
+             JsonEncoder.encode(response, r);
         }
         else{
         	ServletContext context = this.getServletContext();

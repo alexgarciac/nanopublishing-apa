@@ -82,7 +82,7 @@ public class AnnotationServlet extends HttpServlet {
 			r.setData( annotations );
 			r.setCode( Settings.RESPONSE_CODE_OK );
 			r.setMessage( Settings.RESPONSE_MSG_OK );
-			
+			session.close();
 		} catch (Exception e) {
 			r.setCode( Settings.RESPONSE_CODE_TECHNICAL_ERROR );
 			r.setMessage( "Sorry, we're having a technical issue with our database" );
@@ -113,7 +113,7 @@ public class AnnotationServlet extends HttpServlet {
 			r.setMessage( "Document uuid parameter is missing" );
 			
 		} else {
-			NanotweetWriter nanotweetWriter = new NanotweetWriter( text, uuid );
+			NanotweetWriter nanotweetWriter = new NanotweetWriter( text, uuid, (String) servletRequest.getSession().getAttribute("user"));
             //FacebookWriter facebookWriter = new FacebookWriter( text, uuid, comment );
 
 			( new Thread( nanotweetWriter ) ).start();

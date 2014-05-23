@@ -640,6 +640,146 @@ public class AnnotationExample {
 			addCriterion("json_value not between", value1, value2, "json_value");
 			return (Criteria) this;
 		}
+
+		public Criteria andDoiIsNull() {
+			addCriterion("doi is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiIsNotNull() {
+			addCriterion("doi is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiEqualTo(String value) {
+			addCriterion("doi =", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiNotEqualTo(String value) {
+			addCriterion("doi <>", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiGreaterThan(String value) {
+			addCriterion("doi >", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiGreaterThanOrEqualTo(String value) {
+			addCriterion("doi >=", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiLessThan(String value) {
+			addCriterion("doi <", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiLessThanOrEqualTo(String value) {
+			addCriterion("doi <=", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiLike(String value) {
+			addCriterion("doi like", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiNotLike(String value) {
+			addCriterion("doi not like", value, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiIn(List<String> values) {
+			addCriterion("doi in", values, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiNotIn(List<String> values) {
+			addCriterion("doi not in", values, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiBetween(String value1, String value2) {
+			addCriterion("doi between", value1, value2, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andDoiNotBetween(String value1, String value2) {
+			addCriterion("doi not between", value1, value2, "doi");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameIsNull() {
+			addCriterion("user_name is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameIsNotNull() {
+			addCriterion("user_name is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameEqualTo(String value) {
+			addCriterion("user_name =", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameNotEqualTo(String value) {
+			addCriterion("user_name <>", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameGreaterThan(String value) {
+			addCriterion("user_name >", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameGreaterThanOrEqualTo(String value) {
+			addCriterion("user_name >=", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameLessThan(String value) {
+			addCriterion("user_name <", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameLessThanOrEqualTo(String value) {
+			addCriterion("user_name <=", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameLike(String value) {
+			addCriterion("user_name like", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameNotLike(String value) {
+			addCriterion("user_name not like", value, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameIn(List<String> values) {
+			addCriterion("user_name in", values, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameNotIn(List<String> values) {
+			addCriterion("user_name not in", values, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameBetween(String value1, String value2) {
+			addCriterion("user_name between", value1, value2, "user_name");
+			return (Criteria) this;
+		}
+
+		public Criteria andUser_nameNotBetween(String value1, String value2) {
+			addCriterion("user_name not between", value1, value2, "user_name");
+			return (Criteria) this;
+		}
 	}
 
 	public static class Criteria extends GeneratedCriteria {
@@ -727,6 +867,9 @@ public class AnnotationExample {
 			this(condition, value, secondValue, null);
 		}
 	}
+
+	
+	
 
 	
 	

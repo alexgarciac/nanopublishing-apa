@@ -13,6 +13,8 @@ public class Annotation implements Serializable {
 	private Date creation;
 	private Date completed;
 	private String json_value;
+	private String doi;
+	private String user_name;
 
 	public Integer getId() {
 		return id;
@@ -78,5 +80,22 @@ public class Annotation implements Serializable {
 		this.json_value = json_value;
 	}
 
+	public String getDoi() {
+		return doi;
+	}
+
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+
+	
 	
 }

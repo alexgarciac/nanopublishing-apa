@@ -36,6 +36,8 @@ import com.nanotate.Settings;
 import com.nanotate.dao.custom.SequenceMapper;
 import com.nanotate.dao.model.Annotation;
 import com.nanotate.dao.model.AnnotationMapper;
+import com.nanotate.dao.model.Document;
+import com.nanotate.dao.model.DocumentMapper;
 import com.nanotate.dao.util.MyBatis;
 
 
@@ -46,12 +48,14 @@ public class NanotweetWriter implements Runnable {
 	
 	String text;
 	String uuid;
+	String user;
 	
-	public NanotweetWriter(String text, String documentUUID ) {
+	public NanotweetWriter(String text, String documentUUID, String user ) {
 		try {
 //			text = text.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
 //			text = text.replaceAll("+", "%2B");
 			this.text = URLDecoder.decode(text, "UTF-8");
+			this.user=user;
 			log.info(text);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -67,7 +71,7 @@ public class NanotweetWriter implements Runnable {
 			
 			log.info("Using text: " + text );
 			System.out.println("Die");
-			Annotation annotation = insertNewAnnotation( text, uuid ); 
+			Annotation annotation = insertNewAnnotation( text, uuid , user); 
 			
 //			LinkedHashMap<String, Integer> annotations = new LinkedHashMap<String, Integer>();
 			
@@ -128,13 +132,17 @@ public class NanotweetWriter implements Runnable {
     	session.close();
 	}
 
-	private Annotation insertNewAnnotation(String text, String uuid) throws Exception {
+	private Annotation insertNewAnnotation(String text, String uuid, String user) throws Exception {
 		// Create a new entry in database
 		SqlSession session = MyBatis.getSession();
     	
 		SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
 		
     	AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
+    	DocumentMapper docMapper = session.getMapper(DocumentMapper.class);
+    	
+    	Document document = docMapper.selectByPrimaryKey(uuid);
+    	
     	Annotation annotation = new Annotation();
     	
     	Integer id = sequenceMapper.getNextValueSeqAnnotation();
@@ -144,7 +152,9 @@ public class NanotweetWriter implements Runnable {
 		annotation.setTags("");
 		annotation.setDocument( uuid );
     	annotation.setCreation( new Timestamp(new Date().getTime()) );
+    	annotation.setDoi(document.getDoi());
     	annotation.setStatus( "WORKING" );
+    	annotation.setUser_name(user);
      
     	mapper.insert(annotation);
     	
