@@ -230,7 +230,7 @@ public class FileUploadAction extends HttpServlet {
 	    	
 	        HttpClient client =  new DefaultHttpClient();
 	              
-	        HttpGet  method = new HttpGet("http://search.crossref.org/dois?q="+doi);
+	        HttpGet  method = new HttpGet("http://search.crossref.org/dois?q="+URLEncoder.encode(doi,"UTF-8"));
 	        // Execute the POST method
 	       
 	        

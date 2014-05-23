@@ -88,21 +88,21 @@ public class NanotweetWriter implements Runnable {
 			// Annotations there ??
 			
 			String annotationResult = this.getBioportalAnnotations();
-			log.info(annotationResult);
-			if ( !annotationResult.equals("[]") ) {
+			log.info(annotationResult );
+			if ( annotationResult.equals("[]\n")) {
 				
+				annotation.setStatus("EMPTY");
+				log.debug( "No annotations found across all whatizit pipelines. " );
 				
+			
 				
+			} else {
 				log.info( "annotations: " + annotationResult );
 				
 				// Change annotation status and result in database
 				annotation.setJson_value(annotationResult);
 				annotation.setTags(getTagsFromJSON(annotationResult));
 				annotation.setStatus("COMPLETED");
-				
-			} else {
-				annotation.setStatus("EMPTY");
-				log.debug( "No annotations found across all whatizit pipelines. " );
 			}
 			
 			annotation.setCompleted( new Timestamp(new Date().getTime()) );
@@ -307,7 +307,7 @@ public class NanotweetWriter implements Runnable {
 					
 				
 				}
-				
+				if(ret!="")
 				ret=ret.substring(0, ret.length()-1);
 				System.out.println(ret);
 		 

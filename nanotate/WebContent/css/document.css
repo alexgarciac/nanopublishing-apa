@@ -30,10 +30,11 @@
 /* } */
 
 #Nanotweets ul li {
-/* 	padding: 0; */
+
 	list-style: none outside none;
 	border-top: 1px solid rgb(204, 204, 204);
 	position: relative;
+
 }
 
 #Nanotweets ul .commentnumber {
@@ -107,7 +108,7 @@ button.zoom-out, button.zoom-in, button.prev, button.next {
 .custom-btns {
 	position:relative;
 	float:right;
-	width:180px;
+	width:200px;
 	
 }
 

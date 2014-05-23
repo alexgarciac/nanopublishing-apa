@@ -115,7 +115,7 @@ function feedNanotweets(){
 								li.append("<p>Nanotweeting:</p>");
 								li.append('<p class="blockquote" >' + result.data[i].original_text.substring(0,70) + "...</p>");
 							}
-		
+							
 					    } 	
 					} else {
 						ul.append("<li>Nanotweets not found.</li>");
