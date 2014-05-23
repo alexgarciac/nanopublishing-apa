@@ -28,6 +28,7 @@ public class FacebookPostServlet extends HttpServlet {
              Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
              try {
                 r.setData( facebook.postStatusMessage(message));
+                
              } catch (FacebookException e) {
                  throw new ServletException(e);
              }
