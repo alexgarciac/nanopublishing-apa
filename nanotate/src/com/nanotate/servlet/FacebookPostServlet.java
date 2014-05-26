@@ -9,6 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.ibatis.session.SqlSession;
+
+import com.nanotate.dao.model.Annotation;
+import com.nanotate.dao.model.AnnotationExample;
+import com.nanotate.dao.model.AnnotationMapper;
+import com.nanotate.dao.util.MyBatis;
 import com.nanotate.message.JsonResponse;
 
 import utils.JsonEncoder;
@@ -27,9 +34,31 @@ public class FacebookPostServlet extends HttpServlet {
              JsonResponse r = new JsonResponse();
              Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
              try {
-                r.setData( facebook.postStatusMessage(message));
+                String data = facebook.postStatusMessage(message);
                 
-             } catch (FacebookException e) {
+                if(!data.equals(""))
+                {
+                	SqlSession session = MyBatis.getSession();
+                	
+                	
+                	AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
+                	AnnotationExample example = new AnnotationExample();
+                	example.createCriteria().andDoiEqualTo(request.getParameter("doi"));
+                	example.setDistinct(true);
+                	String facebook_post =  (String) mapper.selectByExample(example).get(0).getFacebook_posts();
+                	if(facebook_post!=null)
+                		facebook_post = facebook_post.concat(","+data);
+                	else
+                		facebook_post=data;
+                	Annotation annotation = new Annotation();
+                	annotation.setFacebook_posts(facebook_post);
+                	mapper.updateByExampleSelective(annotation, example);
+                
+                	session.commit();
+                	session.close();
+                }
+                
+             } catch (Exception e) {
                  throw new ServletException(e);
              }
              JsonEncoder.encode(response, r);

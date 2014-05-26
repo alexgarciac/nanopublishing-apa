@@ -61,7 +61,7 @@ public class AnnotationServlet extends HttpServlet {
 	private void executeListAnnotationsService(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) {
 		
 		JsonResponse r = new JsonResponse();
-		String uuid = servletRequest.getParameter( Settings.PARAM_UUID );
+		String doi = servletRequest.getParameter( Settings.PARAM_DOI );
 
 		try {
 			SqlSession session = MyBatis.getSession();
@@ -70,8 +70,8 @@ public class AnnotationServlet extends HttpServlet {
 			AnnotationExample example = new AnnotationExample();
 			log.info("Anotate example created");
 			
-			if ( !StringUtils.isEmpty(uuid) ) {
-				example.createCriteria().andDocumentEqualTo(uuid);
+			if ( !StringUtils.isEmpty(doi) ) {
+				example.createCriteria().andDoiEqualTo(doi);
 				log.info("This way");
 			} 
 			

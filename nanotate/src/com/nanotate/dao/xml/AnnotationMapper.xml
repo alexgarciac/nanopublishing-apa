@@ -12,6 +12,7 @@
     <result column="json_value" property="json_value" jdbcType="VARCHAR" />
     <result column="doi" property="doi" jdbcType="VARCHAR" />
     <result column="user_name" property="user_name" jdbcType="VARCHAR" />
+    <result column="facebook_posts" property="facebook_posts" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, original_text, tags, document, status, creation, completed, json_value, doi, 
-    user_name
+    user_name, facebook_posts
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.nanotate.dao.model.AnnotationExample" >
     select
@@ -109,11 +110,11 @@
     insert into public.annotation (id, original_text, tags, 
       document, status, creation, 
       completed, json_value, doi, 
-      user_name)
+      user_name, facebook_posts)
     values (#{id,jdbcType=INTEGER}, #{original_text,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
       #{document,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{creation,jdbcType=TIMESTAMP}, 
       #{completed,jdbcType=TIMESTAMP}, #{json_value,jdbcType=VARCHAR}, #{doi,jdbcType=VARCHAR}, 
-      #{user_name,jdbcType=VARCHAR})
+      #{user_name,jdbcType=VARCHAR}, #{facebook_posts,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.nanotate.dao.model.Annotation" >
     insert into public.annotation
@@ -148,6 +149,9 @@
       <if test="user_name != null" >
         user_name,
       </if>
+      <if test="facebook_posts != null" >
+        facebook_posts,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -179,6 +183,9 @@
       </if>
       <if test="user_name != null" >
         #{user_name,jdbcType=VARCHAR},
+      </if>
+      <if test="facebook_posts != null" >
+        #{facebook_posts,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +228,9 @@
       <if test="record.user_name != null" >
         user_name = #{record.user_name,jdbcType=VARCHAR},
       </if>
+      <if test="record.facebook_posts != null" >
+        facebook_posts = #{record.facebook_posts,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +247,8 @@
       completed = #{record.completed,jdbcType=TIMESTAMP},
       json_value = #{record.json_value,jdbcType=VARCHAR},
       doi = #{record.doi,jdbcType=VARCHAR},
-      user_name = #{record.user_name,jdbcType=VARCHAR}
+      user_name = #{record.user_name,jdbcType=VARCHAR},
+      facebook_posts = #{record.facebook_posts,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +283,9 @@
       <if test="user_name != null" >
         user_name = #{user_name,jdbcType=VARCHAR},
       </if>
+      <if test="facebook_posts != null" >
+        facebook_posts = #{facebook_posts,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -285,7 +299,8 @@
       completed = #{completed,jdbcType=TIMESTAMP},
       json_value = #{json_value,jdbcType=VARCHAR},
       doi = #{doi,jdbcType=VARCHAR},
-      user_name = #{user_name,jdbcType=VARCHAR}
+      user_name = #{user_name,jdbcType=VARCHAR},
+      facebook_posts = #{facebook_posts,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

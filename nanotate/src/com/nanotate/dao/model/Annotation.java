@@ -15,6 +15,7 @@ public class Annotation implements Serializable {
 	private String json_value;
 	private String doi;
 	private String user_name;
+	private String facebook_posts;
 
 	public Integer getId() {
 		return id;
@@ -96,6 +97,13 @@ public class Annotation implements Serializable {
 		this.user_name = user_name;
 	}
 
-	
+	public String getFacebook_posts() {
+		return facebook_posts;
+	}
+
+	public void setFacebook_posts(String facebook_posts) {
+		this.facebook_posts = facebook_posts;
+	}
+
 	
 }

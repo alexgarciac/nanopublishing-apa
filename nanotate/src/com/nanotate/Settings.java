@@ -67,6 +67,7 @@ public class Settings {
 		"whatizitChemicals","whatizitOPB","whatizitSwissprotGo2","whatizitGODict","whatizitProteinDiseaseUMLS"};
 	
 	public static final Pattern pattern = Pattern.compile("<z:(.*?)</z:(.*?)>");
+	public static final String PARAM_DOI = "doi";
 
 
 

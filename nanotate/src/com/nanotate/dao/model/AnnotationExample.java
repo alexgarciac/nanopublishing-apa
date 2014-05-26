@@ -780,6 +780,78 @@ public class AnnotationExample {
 			addCriterion("user_name not between", value1, value2, "user_name");
 			return (Criteria) this;
 		}
+
+		public Criteria andFacebook_postsIsNull() {
+			addCriterion("facebook_posts is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsIsNotNull() {
+			addCriterion("facebook_posts is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsEqualTo(String value) {
+			addCriterion("facebook_posts =", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsNotEqualTo(String value) {
+			addCriterion("facebook_posts <>", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsGreaterThan(String value) {
+			addCriterion("facebook_posts >", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsGreaterThanOrEqualTo(String value) {
+			addCriterion("facebook_posts >=", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsLessThan(String value) {
+			addCriterion("facebook_posts <", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsLessThanOrEqualTo(String value) {
+			addCriterion("facebook_posts <=", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsLike(String value) {
+			addCriterion("facebook_posts like", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsNotLike(String value) {
+			addCriterion("facebook_posts not like", value, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsIn(List<String> values) {
+			addCriterion("facebook_posts in", values, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsNotIn(List<String> values) {
+			addCriterion("facebook_posts not in", values, "facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsBetween(String value1, String value2) {
+			addCriterion("facebook_posts between", value1, value2,
+					"facebook_posts");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_postsNotBetween(String value1, String value2) {
+			addCriterion("facebook_posts not between", value1, value2,
+					"facebook_posts");
+			return (Criteria) this;
+		}
 	}
 
 	public static class Criteria extends GeneratedCriteria {
@@ -867,11 +939,6 @@ public class AnnotationExample {
 			this(condition, value, secondValue, null);
 		}
 	}
-
 	
 	
-
-	
-	
-   
 }

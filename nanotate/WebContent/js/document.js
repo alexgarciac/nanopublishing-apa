@@ -156,7 +156,7 @@ function feedNanotweets(){
 								});
 		
 								
-								li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
+								li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
 								$("#tofacebook_"+result.data[i].id).submit(function() { 
 							        // inside event callbacks 'this' is the DOM element so we first 
 							        // wrap it in a jQuery object and then invoke ajaxSubmit 

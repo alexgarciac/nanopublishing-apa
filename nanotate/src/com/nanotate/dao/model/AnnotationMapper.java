@@ -29,14 +29,4 @@ public interface AnnotationMapper {
 
 	int updateByPrimaryKeySelective(Annotation record);
 
-	int updateByPrimaryKey(Annotation record);
-
-	
-
-	
-
-
-	
-
-	
-}
+	int updateByPrimaryKey(Annotation record);}
