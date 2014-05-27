@@ -68,6 +68,7 @@ public class Settings {
 	
 	public static final Pattern pattern = Pattern.compile("<z:(.*?)</z:(.*?)>");
 	public static final String PARAM_DOI = "doi";
+	public static final String SERVICE_PERSONALIST = "personallist";
 
 
 

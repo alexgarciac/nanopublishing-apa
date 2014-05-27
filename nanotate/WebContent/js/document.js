@@ -2,6 +2,8 @@ var docViewer = undefined;
 var simpleTip = undefined;
 var uuid = undefined;
 var data = undefined;
+var doi= undefined;
+var global = false;
 var options = { 
         target:        '#notification',   // target element(s) to be updated with server response 
         beforeSubmit:  showRequest,  // pre-submit callback 
@@ -128,16 +130,22 @@ function formatAnnotations(str) {
 function feedNanotweets(){
 	
 	// Get nanotweets feed 
-		
-		$.getJSON( "nanotate?action=list&uuid=" + uuid, function(result) {
+	
+	var url="";
+	if(global)
+		url="nanotate?action=list&doi=";
+	else
+		url="nanotate?action=personallist&doi=";
+	
+		$.getJSON( url + doi, function(result) {
 				if ( result.code == 0 ) {
 					$("#Nanotweets").html('');
 					var ul = $('<ul style="display: initial;"></ul>').appendTo("#Nanotweets");
 					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
 						for ( var i in result.data ) {
-							console.log("Hi: "+ result.data[i].tags);
+//							console.log("Hi: "+ result.data[i].tags);
 							if ( result.data[i].status == "COMPLETED" ) {
-								console.log('timestamp '+result.data[i].creation);
+//								console.log('timestamp '+result.data[i].creation);
 								var li = $("<li></li>").appendTo(ul);
 								li.append('<span class="commentnumber">' + 
 									result.data[i].creation + '</span>');
@@ -190,7 +198,7 @@ function feedNanotweets(){
 
 function initViewer(iduuid){
 	uuid=iduuid;
-		
+	$('#Nanotweets').empty();	
 	$.getJSON( "document?action=session&uuid=" + uuid, function(result) {
 		
 		// 
@@ -205,8 +213,9 @@ function initViewer(iduuid){
 			}
 		});
 		
-		$.getScript( "//crocodoc.com/webservice/document.js?session=" + result.data, 
+		$.getScript( "//crocodoc.com/webservice/document.js?session=" + result.data.sessionKey, 
 			function( data, textStatus, jqxhr ) {
+			doi=result.data.doi;
 		  	    //creates a document viewer using the "DocViewer" div
 		  	    docViewer = new DocViewer({ "id": "DocViewer" });
 	

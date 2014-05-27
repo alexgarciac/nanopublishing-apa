@@ -17,6 +17,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import utils.DocumentSession;
 import utils.JsonEncoder;
 
 import com.crocodoc.Crocodoc;
@@ -24,7 +25,10 @@ import com.crocodoc.CrocodocException;
 import com.nanotate.Settings;
 import com.nanotate.crocodoc.CrocodocDownload;
 import com.nanotate.crocodoc.CrocodocSession;
+import com.nanotate.dao.model.AnnotationExample;
+import com.nanotate.dao.model.AnnotationMapper;
 import com.nanotate.dao.model.Document;
+import com.nanotate.dao.model.DocumentExample;
 import com.nanotate.dao.model.DocumentMapper;
 import com.nanotate.dao.util.MyBatis;
 import com.nanotate.message.JsonResponse;
@@ -133,10 +137,18 @@ public class DocumentServlet extends HttpServlet {
 		        params.put("isDemo", false);
 				
 				sessionKey = CrocodocSession.create(uuid, params);
+				DocumentSession doc = new DocumentSession();
+				
+				SqlSession session = MyBatis.getSession();
+				DocumentMapper mapper = session.getMapper(DocumentMapper.class);
+				
+				doc.setDoi(mapper.selectByPrimaryKey(uuid).getDoi());
+				doc.setSessionKey(sessionKey);
+				log.info("doc doi:"+doc.getDoi());
 				r.setCode(Settings.RESPONSE_CODE_OK);
-			    r.setData(sessionKey);
+			    r.setData(doc);
 			    
-			} catch (CrocodocException e) {	        	
+			} catch (Exception e) {	        	
 				r.setCode( Settings.RESPONSE_CODE_QUERY_EXEC_FAILURE );
 				r.setMessage( e.getMessage() );
 				
@@ -159,10 +171,7 @@ public class DocumentServlet extends HttpServlet {
 			session = MyBatis.getSession();
 			DocumentMapper mapper = session.getMapper(DocumentMapper.class);
 			List<Document> docs = mapper.selectByExample(null);
-			uuids = new String[docs.size()];
-			
-			for(int i=0; i<docs.size();i++)
-				uuids[i]=docs.get(i).getUuid();
+			r.setData(docs);
 			session.close();
 
 		} catch (Exception e) {
@@ -171,7 +180,6 @@ public class DocumentServlet extends HttpServlet {
 		}
 		
 		
-		r.setData(uuids);
 			
 		JsonEncoder.encode(servletResponse, r);
 	}

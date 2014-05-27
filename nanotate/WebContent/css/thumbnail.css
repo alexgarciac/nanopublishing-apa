@@ -21,26 +21,24 @@ body {
 .mask {
 	position:relative;
 	height:180px;
-	width:240px;
+	width:800px;
 	-webkit-box-shadow:0 0 1px #000;
 	border:5px solid #f6f6f6;
 	overflow:hidden;
 	float:left;
-	margin:15px;
+	margin:10px;
 }
 .mask img {
 	position:absolute;
 	height:300px;
-	width:400px;
-	-webkit-transform: rotate(35deg);
-	-moz-transform:rotate(35deg);
-	-o-transform:rotate(35deg);
-	-ms-transform:rotate(35deg);
-	transform:rotate(35deg);
-	top:50%;
-	left:20%;
-	margin-top:-150px; /* half the height */
-	margin-left:-200px; /*half the width */
+	width:330px;
+/* 	-webkit-transform: rotate(35deg); */
+/* 	-moz-transform:rotate(35deg); */
+/* 	-o-transform:rotate(35deg); */
+/* 	-ms-transform:rotate(35deg); */
+/* 	transform:rotate(35deg); */
+	margin-top:0px; /* half the height */
+	margin-left:0px; /*half the width */
 }
 .mask:hover {border-color:#ddd;}
 #error_message {

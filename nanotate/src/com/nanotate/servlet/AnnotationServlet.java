@@ -49,7 +49,14 @@ public class AnnotationServlet extends HttpServlet {
     		log.info("AnotateList request");
     		executeListAnnotationsService( req, resp );
     		
-    	} else {
+    	} else if(Settings.SERVICE_PERSONALIST.equalsIgnoreCase(action)){
+    		
+    		log.info("AnotatPersonalList request");
+    		executePersonalListAnnotationsService( req, resp );
+
+    		
+    	}
+    	else {
     	
     		executeAnnotateService( req, resp );
     	} 
@@ -78,6 +85,49 @@ public class AnnotationServlet extends HttpServlet {
 			example.setOrderByClause("creation DESC");
 			
 			List<Annotation> annotations = mapper.selectByExample( example );
+			
+			r.setData( annotations );
+			r.setCode( Settings.RESPONSE_CODE_OK );
+			r.setMessage( Settings.RESPONSE_MSG_OK );
+			session.close();
+		} catch (Exception e) {
+			r.setCode( Settings.RESPONSE_CODE_TECHNICAL_ERROR );
+			r.setMessage( "Sorry, we're having a technical issue with our database" );
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		JsonEncoder.encode(servletResponse, r);
+		
+	}
+	
+	private void executePersonalListAnnotationsService(HttpServletRequest servletRequest, HttpServletResponse servletResponse ) {
+		
+		JsonResponse r = new JsonResponse();
+		String doi = servletRequest.getParameter( Settings.PARAM_DOI );
+		String username = (String) servletRequest.getSession().getAttribute("user");
+
+		try {
+			SqlSession session = MyBatis.getSession();
+			AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
+			
+			AnnotationExample example = new AnnotationExample();
+			log.info("Anotate example created, doi:" +doi);
+			log.info("Anotate example created, user:" +username);
+			
+			if ( !StringUtils.isEmpty(doi) ) {
+				example.createCriteria().andDoiEqualTo(doi).andUser_nameEqualTo(username);
+				log.info("This way");
+			} 
+			
+			example.setOrderByClause("creation DESC");
+			
+			List<Annotation> annotations = mapper.selectByExample( example );
+			
+			for(Annotation annotation: annotations){
+				log.info(annotation.getUser_name());
+			}
 			
 			r.setData( annotations );
 			r.setCode( Settings.RESPONSE_CODE_OK );

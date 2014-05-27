@@ -25,6 +25,20 @@
 $(document).ready(function() {
   $('#simple-menu').sidr();
   $('#viewer').hide();
+  $('#myonoffswitch').click(function() {
+	  $('#Nanotweets').slideToggle(600, function () {
+	        global=!global;
+	        console.log(global);
+	        $('#Nanotweets').empty();
+	        feedNanotweets();
+	        $('#Nanotweets').slideToggle(600, function () {
+		
+		        
+		    });
+	    });
+		
+	 });
+  
 	
   setInterval(function() {
 	  if( $('#viewer').is(':visible')){
@@ -38,9 +52,11 @@ $(document).ready(function() {
 	 
 	 $( "#wrapper" ).hide();
 	 $('#wrapper').append('<h1>Document viewer</h1>');
+	 $('#Nanotweets').empty();
 	 $('#pagebegin').empty();
 	 $('#pagebegin').append('1');
 	 $('#pageend').empty();
+	 $('#pagebeend').append('1');
 	 initViewer($(this).attr("id"));
 	 $('#viewer').show();
 	 
@@ -76,9 +92,9 @@ $( "#pdf" ).click(function() {
 			if ( result.code == 0 ) {
 				var imgURL;
 				for ( var i in result.data ) {		
-					imgURL = "document?action=thumbnails&uuid=" + result.data[i];	
-					link = "document.jsp?uuid=" + result.data[i];	
-			    	$('#wrapper').append('<a id="' + result.data[i] + '" class="mask"><img src="' + imgURL + '" /></a>');
+					imgURL = "document?action=thumbnails&uuid=" + result.data[i].uuid;	
+					link = "document.jsp?uuid=" + result.data[i].uuid;	
+			    	$('#wrapper').append('<a id="' + result.data[i].uuid + '" class="mask"><img src="' + imgURL + '" /><span>'+result.data[i].full_citation+'</span></a>');
 			    	
 			    } 
 			}
@@ -203,11 +219,19 @@ $( "#simple-menu" ).trigger( "click" );
 			<!--custom-->
 		
 			</div>
+			<div class="onoffswitch">
+    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+    <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
 			<div id="DocViewer"></div>
 			<div id="Nanotweets"></div>
 		  </div>
    <!--div for viewer-->
-  
+ 
+ 
 
  
 
