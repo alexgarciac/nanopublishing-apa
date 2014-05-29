@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign up</title>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.min.js" /></script>
+	<script type="text/javascript" src="js/jquery.validate.js" /></script>
+	<script type="text/javascript" src="js/jquery-validate.bootstrap-tooltip.js" /></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$("#signup").validate({
+			rules: {     
+				email: {email:true,required: true},
+				user: {required: true},
+				password: {
+					required: true,
+					minlength: 5
+				},
+				confpwd: {
+					required: true,
+					minlength: 5,
+					equalTo: "#password"
+				}
+			},
+			messages: {
+				example5: "Just check the box<h5 class='text-error'>You aren't going to read the EULA</h5>"
+			},
+			tooltip_options: {
+				email: {placement:'right'},
+				user: {placement:'right'}
+			},
+			submitHandler: function(form) { 
+				$("#signup").submit();
+			},
+			invalidHandler: function(form, validator) {
+				$("#validity_label").html('<div class="alert alert-error">There be '+validator.numberOfInvalids()+' error'+(validator.numberOfInvalids()>1?'s':'')+' here.  OH NOES!!!!!</div>');
+			}
+		});
+		
+		
+	});
+	
+
+	</script>
+<script type="text/javascript">
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i].trim();
+			if (c.indexOf(name) == 0)
+				return c.substring(name.length, c.length);
+		}
+		return "";
+	}
+	function GetURLParameter(sParam)
+	{
+	    var sPageURL = window.location.search.substring(1);
+	    var sURLVariables = sPageURL.split('&');
+	    for (var i = 0; i < sURLVariables.length; i++) 
+	    {
+	        var sParameterName = sURLVariables[i].split('=');
+	        if (sParameterName[0] == sParam) 
+	        {
+	            return sParameterName[1];
+	        }
+	    }
+	}
+	$(document).ready(function() {
+		$("#name").val(decodeURI(GetURLParameter("name")).replace("+", " "));
+		$("#username").val(GetURLParameter("username"));
+		$("#email").val(GetURLParameter("email"));
+		if (getCookie("user") != "") {
+			
+			document.getElementById("signup").style.visibility = "hidden";
+			window.location.replace("/nanotate/index.html");
+		}
+		
+		
+	});
+</script>
+<meta name="robots" content="noindex,follow" />
+</head>
+<body>
+  <div class="container">
+    <div class="login">
+      <h1>Sing up!</h1>
+      <form method="post" action="signup" id="signup">
+        <p><input type="text" name="user" value="" placeholder="username" autocomplete="off" id="username"></p>
+        <p><input type="text" name="name" value="" placeholder="name" autocomplete="off" id="name"></p>
+        <p><input type="text" name="email" value="" placeholder="email" autocomplete="off" id="email"></p>
+        <p><input type="password" name="pwd" value="" placeholder="password" id="password" autocomplete="off"></p>
+        <p><input type="password" name="confpwd" value="" placeholder="confirm password" autocomplete="off"></p>
+        <p class="submit"><input type="submit"  value="signup" ></p>
+      </form>
+	  
+    </div>
+    
+  </div>
+</body>
+</html>

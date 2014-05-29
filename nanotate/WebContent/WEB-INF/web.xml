@@ -62,6 +62,16 @@
     <servlet-name>upload</servlet-name>
     <servlet-class>com.nanotate.servlet.FileUploadAction</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>signup</servlet-name>
+    <servlet-class>com.nanotate.servlet.SignupServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>signup</servlet-name>
+    <url-pattern>/signup</url-pattern>
+  </servlet-mapping>
 
 <servlet-mapping>
     <servlet-name>upload</servlet-name>

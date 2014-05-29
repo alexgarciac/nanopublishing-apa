@@ -147,6 +147,7 @@ public class DocumentServlet extends HttpServlet {
 				log.info("doc doi:"+doc.getDoi());
 				r.setCode(Settings.RESPONSE_CODE_OK);
 			    r.setData(doc);
+			    session.close();
 			    
 			} catch (Exception e) {	        	
 				r.setCode( Settings.RESPONSE_CODE_QUERY_EXEC_FAILURE );

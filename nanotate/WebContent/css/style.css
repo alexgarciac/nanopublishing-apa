@@ -33,7 +33,7 @@ input[type=radio] {
 }
 
 input[type=checkbox]:checked::after {
-content:"✔";
+content:"âœ”";
 display:block;
 text-align: center;
 font-size: 16px;
@@ -42,7 +42,7 @@ line-height: 18px;
 }
 
 input[type=radio]:checked::after {
-content:"●";
+content:"â—�";
 display:block;
 height: 16px;
 line-height: 15px;

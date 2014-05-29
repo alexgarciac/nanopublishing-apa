@@ -73,8 +73,4 @@ public class User {
 
 	public void setTwitter_token(String twitter_token) {
 		this.twitter_token = twitter_token;
-	}
-
-	
-   
-}
+	}}

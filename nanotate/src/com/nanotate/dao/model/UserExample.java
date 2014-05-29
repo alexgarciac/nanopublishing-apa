@@ -766,5 +766,4 @@ public class UserExample {
 		}
 	}
 
-	
-   }
+	   }
