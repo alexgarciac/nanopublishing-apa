@@ -10,8 +10,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<environment id="development">
 	<transactionManager type="JDBC"/>
 	<dataSource type="UNPOOLED">
-        <property name="driver" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql:nanotate"/>
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/nanotate"/>
         <property name="username" value="nanotate"/>
         <property name="password" value="nano7541"/>
         </dataSource>

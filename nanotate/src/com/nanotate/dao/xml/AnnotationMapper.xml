@@ -3,16 +3,18 @@
 <mapper namespace="com.nanotate.dao.model.AnnotationMapper" >
   <resultMap id="BaseResultMap" type="com.nanotate.dao.model.Annotation" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="original_text" property="original_text" jdbcType="VARCHAR" />
     <result column="tags" property="tags" jdbcType="VARCHAR" />
     <result column="document" property="document" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="creation" property="creation" jdbcType="TIMESTAMP" />
     <result column="completed" property="completed" jdbcType="TIMESTAMP" />
-    <result column="json_value" property="json_value" jdbcType="VARCHAR" />
     <result column="doi" property="doi" jdbcType="VARCHAR" />
     <result column="user_name" property="user_name" jdbcType="VARCHAR" />
-    <result column="facebook_posts" property="facebook_posts" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.nanotate.dao.model.AnnotationWithBLOBs" extends="BaseResultMap" >
+    <result column="original_text" property="original_text" jdbcType="LONGVARCHAR" />
+    <result column="facebook_posts" property="facebook_posts" jdbcType="LONGVARCHAR" />
+    <result column="json_value" property="json_value" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,16 +75,20 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, original_text, tags, document, status, creation, completed, json_value, doi, 
-    user_name, facebook_posts
+    id, tags, document, status, creation, completed, doi, user_name
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.nanotate.dao.model.AnnotationExample" >
+  <sql id="Blob_Column_List" >
+    original_text, facebook_posts, json_value
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.nanotate.dao.model.AnnotationExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from public.annotation
+    ,
+    <include refid="Blob_Column_List" />
+    from annotation
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,40 +96,53 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.nanotate.dao.model.AnnotationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from annotation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from public.annotation
+    ,
+    <include refid="Blob_Column_List" />
+    from annotation
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from public.annotation
+    delete from annotation
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.nanotate.dao.model.AnnotationExample" >
-    delete from public.annotation
+    delete from annotation
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.nanotate.dao.model.Annotation" >
-    insert into public.annotation (id, original_text, tags, 
-      document, status, creation, 
-      completed, json_value, doi, 
-      user_name, facebook_posts)
-    values (#{id,jdbcType=INTEGER}, #{original_text,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
-      #{document,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{creation,jdbcType=TIMESTAMP}, 
-      #{completed,jdbcType=TIMESTAMP}, #{json_value,jdbcType=VARCHAR}, #{doi,jdbcType=VARCHAR}, 
-      #{user_name,jdbcType=VARCHAR}, #{facebook_posts,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
+    insert into annotation (id, tags, document, 
+      status, creation, completed, 
+      doi, user_name, original_text, 
+      facebook_posts, json_value)
+    values (#{id,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR}, #{document,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{creation,jdbcType=TIMESTAMP}, #{completed,jdbcType=TIMESTAMP}, 
+      #{doi,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{original_text,jdbcType=LONGVARCHAR}, 
+      #{facebook_posts,jdbcType=LONGVARCHAR}, #{json_value,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.nanotate.dao.model.Annotation" >
-    insert into public.annotation
+  <insert id="insertSelective" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
+    insert into annotation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
-      </if>
-      <if test="original_text != null" >
-        original_text,
       </if>
       <if test="tags != null" >
         tags,
@@ -140,25 +159,25 @@
       <if test="completed != null" >
         completed,
       </if>
-      <if test="json_value != null" >
-        json_value,
-      </if>
       <if test="doi != null" >
         doi,
       </if>
       <if test="user_name != null" >
         user_name,
       </if>
+      <if test="original_text != null" >
+        original_text,
+      </if>
       <if test="facebook_posts != null" >
         facebook_posts,
+      </if>
+      <if test="json_value != null" >
+        json_value,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
-      </if>
-      <if test="original_text != null" >
-        #{original_text,jdbcType=VARCHAR},
       </if>
       <if test="tags != null" >
         #{tags,jdbcType=VARCHAR},
@@ -175,34 +194,34 @@
       <if test="completed != null" >
         #{completed,jdbcType=TIMESTAMP},
       </if>
-      <if test="json_value != null" >
-        #{json_value,jdbcType=VARCHAR},
-      </if>
       <if test="doi != null" >
         #{doi,jdbcType=VARCHAR},
       </if>
       <if test="user_name != null" >
         #{user_name,jdbcType=VARCHAR},
       </if>
+      <if test="original_text != null" >
+        #{original_text,jdbcType=LONGVARCHAR},
+      </if>
       <if test="facebook_posts != null" >
-        #{facebook_posts,jdbcType=VARCHAR},
+        #{facebook_posts,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="json_value != null" >
+        #{json_value,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.nanotate.dao.model.AnnotationExample" resultType="java.lang.Integer" >
-    select count(*) from public.annotation
+    select count(*) from annotation
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update public.annotation
+    update annotation
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.original_text != null" >
-        original_text = #{record.original_text,jdbcType=VARCHAR},
       </if>
       <if test="record.tags != null" >
         tags = #{record.tags,jdbcType=VARCHAR},
@@ -219,46 +238,60 @@
       <if test="record.completed != null" >
         completed = #{record.completed,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.json_value != null" >
-        json_value = #{record.json_value,jdbcType=VARCHAR},
-      </if>
       <if test="record.doi != null" >
         doi = #{record.doi,jdbcType=VARCHAR},
       </if>
       <if test="record.user_name != null" >
         user_name = #{record.user_name,jdbcType=VARCHAR},
       </if>
+      <if test="record.original_text != null" >
+        original_text = #{record.original_text,jdbcType=LONGVARCHAR},
+      </if>
       <if test="record.facebook_posts != null" >
-        facebook_posts = #{record.facebook_posts,jdbcType=VARCHAR},
+        facebook_posts = #{record.facebook_posts,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.json_value != null" >
+        json_value = #{record.json_value,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
-    update public.annotation
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update annotation
     set id = #{record.id,jdbcType=INTEGER},
-      original_text = #{record.original_text,jdbcType=VARCHAR},
       tags = #{record.tags,jdbcType=VARCHAR},
       document = #{record.document,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       creation = #{record.creation,jdbcType=TIMESTAMP},
       completed = #{record.completed,jdbcType=TIMESTAMP},
-      json_value = #{record.json_value,jdbcType=VARCHAR},
       doi = #{record.doi,jdbcType=VARCHAR},
       user_name = #{record.user_name,jdbcType=VARCHAR},
-      facebook_posts = #{record.facebook_posts,jdbcType=VARCHAR}
+      original_text = #{record.original_text,jdbcType=LONGVARCHAR},
+      facebook_posts = #{record.facebook_posts,jdbcType=LONGVARCHAR},
+      json_value = #{record.json_value,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.nanotate.dao.model.Annotation" >
-    update public.annotation
+  <update id="updateByExample" parameterType="map" >
+    update annotation
+    set id = #{record.id,jdbcType=INTEGER},
+      tags = #{record.tags,jdbcType=VARCHAR},
+      document = #{record.document,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      creation = #{record.creation,jdbcType=TIMESTAMP},
+      completed = #{record.completed,jdbcType=TIMESTAMP},
+      doi = #{record.doi,jdbcType=VARCHAR},
+      user_name = #{record.user_name,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
+    update annotation
     <set >
-      <if test="original_text != null" >
-        original_text = #{original_text,jdbcType=VARCHAR},
-      </if>
       <if test="tags != null" >
         tags = #{tags,jdbcType=VARCHAR},
       </if>
@@ -274,33 +307,47 @@
       <if test="completed != null" >
         completed = #{completed,jdbcType=TIMESTAMP},
       </if>
-      <if test="json_value != null" >
-        json_value = #{json_value,jdbcType=VARCHAR},
-      </if>
       <if test="doi != null" >
         doi = #{doi,jdbcType=VARCHAR},
       </if>
       <if test="user_name != null" >
         user_name = #{user_name,jdbcType=VARCHAR},
       </if>
+      <if test="original_text != null" >
+        original_text = #{original_text,jdbcType=LONGVARCHAR},
+      </if>
       <if test="facebook_posts != null" >
-        facebook_posts = #{facebook_posts,jdbcType=VARCHAR},
+        facebook_posts = #{facebook_posts,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="json_value != null" >
+        json_value = #{json_value,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.nanotate.dao.model.Annotation" >
-    update public.annotation
-    set original_text = #{original_text,jdbcType=VARCHAR},
-      tags = #{tags,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
+    update annotation
+    set tags = #{tags,jdbcType=VARCHAR},
       document = #{document,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       creation = #{creation,jdbcType=TIMESTAMP},
       completed = #{completed,jdbcType=TIMESTAMP},
-      json_value = #{json_value,jdbcType=VARCHAR},
       doi = #{doi,jdbcType=VARCHAR},
       user_name = #{user_name,jdbcType=VARCHAR},
-      facebook_posts = #{facebook_posts,jdbcType=VARCHAR}
+      original_text = #{original_text,jdbcType=LONGVARCHAR},
+      facebook_posts = #{facebook_posts,jdbcType=LONGVARCHAR},
+      json_value = #{json_value,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nanotate.dao.model.Annotation" >
+    update annotation
+    set tags = #{tags,jdbcType=VARCHAR},
+      document = #{document,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      creation = #{creation,jdbcType=TIMESTAMP},
+      completed = #{completed,jdbcType=TIMESTAMP},
+      doi = #{doi,jdbcType=VARCHAR},
+      user_name = #{user_name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

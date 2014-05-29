@@ -35,8 +35,10 @@ public class SignupServlet extends HttpServlet {
 		// get request parameters for userID and password
 		String username = request.getParameter("user");
 		System.out.println(username);
+		
 		String pwd = request.getParameter("pwd");
 		String name = request.getParameter("name");
+		System.out.println(name);
 		String email = request.getParameter("email");
 		String imgurl=(String) session.getAttribute("imglurl");
 		 

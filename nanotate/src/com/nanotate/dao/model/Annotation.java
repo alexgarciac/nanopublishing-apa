@@ -6,16 +6,13 @@ import java.util.Date;
 public class Annotation implements Serializable {
 
 	private Integer id;
-	private String original_text;
 	private String tags;
 	private String document;
 	private String status;
 	private Date creation;
 	private Date completed;
-	private String json_value;
 	private String doi;
 	private String user_name;
-	private String facebook_posts;
 
 	public Integer getId() {
 		return id;
@@ -23,14 +20,6 @@ public class Annotation implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getOriginal_text() {
-		return original_text;
-	}
-
-	public void setOriginal_text(String original_text) {
-		this.original_text = original_text;
 	}
 
 	public String getTags() {
@@ -73,14 +62,6 @@ public class Annotation implements Serializable {
 		this.completed = completed;
 	}
 
-	public String getJson_value() {
-		return json_value;
-	}
-
-	public void setJson_value(String json_value) {
-		this.json_value = json_value;
-	}
-
 	public String getDoi() {
 		return doi;
 	}
@@ -95,15 +76,4 @@ public class Annotation implements Serializable {
 
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
-	}
-
-	public String getFacebook_posts() {
-		return facebook_posts;
-	}
-
-	public void setFacebook_posts(String facebook_posts) {
-		this.facebook_posts = facebook_posts;
-	}
-
-	
-}
+	}}

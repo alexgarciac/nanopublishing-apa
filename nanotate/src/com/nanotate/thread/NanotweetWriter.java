@@ -36,6 +36,7 @@ import com.nanotate.Settings;
 import com.nanotate.dao.custom.SequenceMapper;
 import com.nanotate.dao.model.Annotation;
 import com.nanotate.dao.model.AnnotationMapper;
+import com.nanotate.dao.model.AnnotationWithBLOBs;
 import com.nanotate.dao.model.Document;
 import com.nanotate.dao.model.DocumentMapper;
 import com.nanotate.dao.util.MyBatis;
@@ -71,7 +72,7 @@ public class NanotweetWriter implements Runnable {
 			
 			log.info("Using text: " + text );
 			System.out.println("Die");
-			Annotation annotation = insertNewAnnotation( text, uuid , user); 
+			AnnotationWithBLOBs annotation = insertNewAnnotation( text, uuid , user); 
 			
 //			LinkedHashMap<String, Integer> annotations = new LinkedHashMap<String, Integer>();
 			
@@ -132,7 +133,7 @@ public class NanotweetWriter implements Runnable {
     	session.close();
 	}
 
-	private Annotation insertNewAnnotation(String text, String uuid, String user) throws Exception {
+	private AnnotationWithBLOBs insertNewAnnotation(String text, String uuid, String user) throws Exception {
 		// Create a new entry in database
 		SqlSession session = MyBatis.getSession();
     	
@@ -143,11 +144,11 @@ public class NanotweetWriter implements Runnable {
     	
     	Document document = docMapper.selectByPrimaryKey(uuid);
     	
-    	Annotation annotation = new Annotation();
+    	AnnotationWithBLOBs annotation = new AnnotationWithBLOBs();
     	
-    	Integer id = sequenceMapper.getNextValueSeqAnnotation();
-    	
-    	annotation.setId(id);
+//    	Integer id = sequenceMapper.getNextValueSeqAnnotation();
+//    	
+//    	annotation.setId(id);
     	annotation.setOriginal_text(text);
 		annotation.setTags("");
 		annotation.setDocument( uuid );

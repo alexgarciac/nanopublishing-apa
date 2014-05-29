@@ -15,6 +15,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.nanotate.dao.model.Annotation;
 import com.nanotate.dao.model.AnnotationExample;
 import com.nanotate.dao.model.AnnotationMapper;
+import com.nanotate.dao.model.AnnotationWithBLOBs;
 import com.nanotate.dao.util.MyBatis;
 import com.nanotate.message.JsonResponse;
 
@@ -45,12 +46,13 @@ public class FacebookPostServlet extends HttpServlet {
                 	AnnotationExample example = new AnnotationExample();
                 	example.createCriteria().andDoiEqualTo(request.getParameter("doi"));
                 	example.setDistinct(true);
-                	String facebook_post =  (String) mapper.selectByExample(example).get(0).getFacebook_posts();
+                	AnnotationWithBLOBs an = (AnnotationWithBLOBs) mapper.selectByExample(example).get(0);
+                	String facebook_post =  (String) an.getFacebook_posts();
                 	if(facebook_post!=null)
                 		facebook_post = facebook_post.concat(","+data);
                 	else
                 		facebook_post=data;
-                	Annotation annotation = new Annotation();
+                	AnnotationWithBLOBs annotation = new AnnotationWithBLOBs();
                 	annotation.setFacebook_posts(facebook_post);
                 	mapper.updateByExampleSelective(annotation, example);
                 

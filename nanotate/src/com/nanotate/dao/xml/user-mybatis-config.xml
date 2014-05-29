@@ -16,8 +16,8 @@
     </commentGenerator>
     
       <!--  Parámetros de conexión a la bd -->
-    <jdbcConnection driverClass="org.postgresql.Driver"
-        connectionURL="jdbc:postgresql:nanotate"
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://localhost:3306/nanotate"
         userId="nanotate"
         password="nano7541">
     </jdbcConnection>
@@ -37,15 +37,15 @@
      <!--  <property name="enableSubPackages" value="true" />
     </javaClientGenerator>-->
   
-    <table schema="public" tableName="user"  domainObjectName="User" >
-      <property name="useActualColumnNames" value="true"/>
-<!--       <generatedKey column="username" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" /> -->
-    </table>
-    
-<!--     <table schema="public" tableName="annotation"  domainObjectName="Annotation" > -->
+<!--     <table schema="public" tableName="user"  domainObjectName="User" > -->
 <!--       <property name="useActualColumnNames" value="true"/> -->
- <!--       <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" /> --> 
+<!--        <generatedKey column="username" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />  -->
 <!--     </table> -->
+    
+    <table schema="public" tableName="annotation"  domainObjectName="Annotation" >
+      <property name="useActualColumnNames" value="true"/>
+<!--         <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />   -->
+    </table>
     
 <!--      <table schema="public" tableName="document"  domainObjectName="Document" > -->
 <!--       <property name="useActualColumnNames" value="true"/> -->

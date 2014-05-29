@@ -8,6 +8,7 @@ import com.nanotate.Settings;
 import com.nanotate.dao.model.Annotation;
 import com.nanotate.dao.model.AnnotationExample;
 import com.nanotate.dao.model.AnnotationMapper;
+import com.nanotate.dao.model.AnnotationWithBLOBs;
 import com.nanotate.dao.util.MyBatis;
 import com.nanotate.message.JsonResponse;
 import com.nanotate.thread.FacebookWriter;
@@ -84,7 +85,7 @@ public class AnnotationServlet extends HttpServlet {
 			
 			example.setOrderByClause("creation DESC");
 			
-			List<Annotation> annotations = mapper.selectByExample( example );
+			List<AnnotationWithBLOBs> annotations = mapper.selectByExampleWithBLOBs(example);
 			
 			r.setData( annotations );
 			r.setCode( Settings.RESPONSE_CODE_OK );
@@ -123,7 +124,7 @@ public class AnnotationServlet extends HttpServlet {
 			
 			example.setOrderByClause("creation DESC");
 			
-			List<Annotation> annotations = mapper.selectByExample( example );
+			List<AnnotationWithBLOBs> annotations = mapper.selectByExampleWithBLOBs(example);
 			
 			for(Annotation annotation: annotations){
 				log.info(annotation.getUser_name());

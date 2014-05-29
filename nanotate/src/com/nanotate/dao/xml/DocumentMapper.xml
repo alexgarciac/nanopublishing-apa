@@ -75,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from public.document
+    from document
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,27 +86,27 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from public.document
+    from document
     where uuid = #{uuid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from public.document
+    delete from document
     where uuid = #{uuid,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.nanotate.dao.model.DocumentExample" >
-    delete from public.document
+    delete from document
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.nanotate.dao.model.Document" >
-    insert into public.document (uuid, doi, title, 
+    insert into document (uuid, doi, title, 
       full_citation, year)
     values (#{uuid,jdbcType=VARCHAR}, #{doi,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{full_citation,jdbcType=VARCHAR}, #{year,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.nanotate.dao.model.Document" >
-    insert into public.document
+    insert into document
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="uuid != null" >
         uuid,
@@ -143,13 +143,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.nanotate.dao.model.DocumentExample" resultType="java.lang.Integer" >
-    select count(*) from public.document
+    select count(*) from document
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update public.document
+    update document
     <set >
       <if test="record.uuid != null" >
         uuid = #{record.uuid,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update public.document
+    update document
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       doi = #{record.doi,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
@@ -183,7 +183,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.nanotate.dao.model.Document" >
-    update public.document
+    update document
     <set >
       <if test="doi != null" >
         doi = #{doi,jdbcType=VARCHAR},
@@ -201,7 +201,7 @@
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.nanotate.dao.model.Document" >
-    update public.document
+    update document
     set doi = #{doi,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       full_citation = #{full_citation,jdbcType=VARCHAR},

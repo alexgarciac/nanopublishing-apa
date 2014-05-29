@@ -764,6 +764,4 @@ public class UserExample {
 		protected Criterion(String condition, Object value, Object secondValue) {
 			this(condition, value, secondValue, null);
 		}
-	}
-
-	   }
+	}}

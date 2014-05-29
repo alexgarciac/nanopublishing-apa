@@ -169,78 +169,6 @@ public class AnnotationExample {
 			return (Criteria) this;
 		}
 
-		public Criteria andOriginal_textIsNull() {
-			addCriterion("original_text is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textIsNotNull() {
-			addCriterion("original_text is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textEqualTo(String value) {
-			addCriterion("original_text =", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textNotEqualTo(String value) {
-			addCriterion("original_text <>", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textGreaterThan(String value) {
-			addCriterion("original_text >", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textGreaterThanOrEqualTo(String value) {
-			addCriterion("original_text >=", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textLessThan(String value) {
-			addCriterion("original_text <", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textLessThanOrEqualTo(String value) {
-			addCriterion("original_text <=", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textLike(String value) {
-			addCriterion("original_text like", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textNotLike(String value) {
-			addCriterion("original_text not like", value, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textIn(List<String> values) {
-			addCriterion("original_text in", values, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textNotIn(List<String> values) {
-			addCriterion("original_text not in", values, "original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textBetween(String value1, String value2) {
-			addCriterion("original_text between", value1, value2,
-					"original_text");
-			return (Criteria) this;
-		}
-
-		public Criteria andOriginal_textNotBetween(String value1, String value2) {
-			addCriterion("original_text not between", value1, value2,
-					"original_text");
-			return (Criteria) this;
-		}
-
 		public Criteria andTagsIsNull() {
 			addCriterion("tags is null");
 			return (Criteria) this;
@@ -571,76 +499,6 @@ public class AnnotationExample {
 			return (Criteria) this;
 		}
 
-		public Criteria andJson_valueIsNull() {
-			addCriterion("json_value is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueIsNotNull() {
-			addCriterion("json_value is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueEqualTo(String value) {
-			addCriterion("json_value =", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueNotEqualTo(String value) {
-			addCriterion("json_value <>", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueGreaterThan(String value) {
-			addCriterion("json_value >", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueGreaterThanOrEqualTo(String value) {
-			addCriterion("json_value >=", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueLessThan(String value) {
-			addCriterion("json_value <", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueLessThanOrEqualTo(String value) {
-			addCriterion("json_value <=", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueLike(String value) {
-			addCriterion("json_value like", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueNotLike(String value) {
-			addCriterion("json_value not like", value, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueIn(List<String> values) {
-			addCriterion("json_value in", values, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueNotIn(List<String> values) {
-			addCriterion("json_value not in", values, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueBetween(String value1, String value2) {
-			addCriterion("json_value between", value1, value2, "json_value");
-			return (Criteria) this;
-		}
-
-		public Criteria andJson_valueNotBetween(String value1, String value2) {
-			addCriterion("json_value not between", value1, value2, "json_value");
-			return (Criteria) this;
-		}
-
 		public Criteria andDoiIsNull() {
 			addCriterion("doi is null");
 			return (Criteria) this;
@@ -780,78 +638,6 @@ public class AnnotationExample {
 			addCriterion("user_name not between", value1, value2, "user_name");
 			return (Criteria) this;
 		}
-
-		public Criteria andFacebook_postsIsNull() {
-			addCriterion("facebook_posts is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsIsNotNull() {
-			addCriterion("facebook_posts is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsEqualTo(String value) {
-			addCriterion("facebook_posts =", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsNotEqualTo(String value) {
-			addCriterion("facebook_posts <>", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsGreaterThan(String value) {
-			addCriterion("facebook_posts >", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsGreaterThanOrEqualTo(String value) {
-			addCriterion("facebook_posts >=", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsLessThan(String value) {
-			addCriterion("facebook_posts <", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsLessThanOrEqualTo(String value) {
-			addCriterion("facebook_posts <=", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsLike(String value) {
-			addCriterion("facebook_posts like", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsNotLike(String value) {
-			addCriterion("facebook_posts not like", value, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsIn(List<String> values) {
-			addCriterion("facebook_posts in", values, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsNotIn(List<String> values) {
-			addCriterion("facebook_posts not in", values, "facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsBetween(String value1, String value2) {
-			addCriterion("facebook_posts between", value1, value2,
-					"facebook_posts");
-			return (Criteria) this;
-		}
-
-		public Criteria andFacebook_postsNotBetween(String value1, String value2) {
-			addCriterion("facebook_posts not between", value1, value2,
-					"facebook_posts");
-			return (Criteria) this;
-		}
 	}
 
 	public static class Criteria extends GeneratedCriteria {
@@ -938,7 +724,4 @@ public class AnnotationExample {
 		protected Criterion(String condition, Object value, Object secondValue) {
 			this(condition, value, secondValue, null);
 		}
-	}
-	
-	
-}
+	}}
