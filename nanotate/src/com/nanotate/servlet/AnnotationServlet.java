@@ -18,6 +18,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import utils.JsonEncoder;
 
@@ -151,9 +155,19 @@ public class AnnotationServlet extends HttpServlet {
 		
 		JsonResponse r = new JsonResponse();
 		log.info("executeAnnotateService request");
-		String text = servletRequest.getParameter( Settings.PARAM_TEXT );
-		String uuid = servletRequest.getParameter( Settings.PARAM_UUID );
-        String comment = servletRequest.getParameter( Settings.PARAM_COMMENT );
+		String text = "";
+		String uuid = "";
+        String comment = "";
+        
+        try {
+			String json = servletRequest.getReader().readLine();
+			text=this.getValueFromJSON(json, "quote");
+			uuid=this.getValueFromJSON(json, "uri");
+			comment=this.getValueFromJSON(json, "text");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if ( StringUtils.isEmpty(text) ) {
 			r.setCode( Settings.RESPONSE_CODE_PARAM_NOT_VALID );
@@ -195,5 +209,27 @@ public class AnnotationServlet extends HttpServlet {
 
 
     }
-
+	
+	
+	
+	public String getValueFromJSON(String result, String var)
+	{
+				String ret="";
+		 		  JSONParser parser = new JSONParser();
+		  
+			try {
+		 
+				Object obj = parser.parse(result);
+		 
+				JSONObject jsonObject = (JSONObject) obj;
+				
+				ret=(String) jsonObject.get(var);
+		 
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		   return ret;
+	   }
 }
+
+

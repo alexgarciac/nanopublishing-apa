@@ -44,7 +44,7 @@
     
     <table schema="public" tableName="annotation"  domainObjectName="Annotation" >
       <property name="useActualColumnNames" value="true"/>
-<!--         <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />   -->
+        <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />  
     </table>
     
 <!--      <table schema="public" tableName="document"  domainObjectName="Document" > -->

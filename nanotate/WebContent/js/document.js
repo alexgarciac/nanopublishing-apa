@@ -133,9 +133,9 @@ function feedNanotweets(){
 	
 	var url="";
 	if(global)
-		url="nanotate?action=list&doi=";
+		url="annotations?action=list&doi=";
 	else
-		url="nanotate?action=personallist&doi=";
+		url="annotations?action=personallist&doi=";
 	
 		$.getJSON( url + doi, function(result) {
 				if ( result.code == 0 ) {
@@ -221,8 +221,10 @@ function initViewer(iduuid){
 	
 		  	  	//on docviewer ready
 		  	    docViewer.ready(function(e) {
-		  	        $('.numpages').text(e.numpages);
-		  	    });
+		  	    
+		  	     $('.numpages').text(e.numpages);
+		  	  });
+		  	   
 	
 		  	    //docviewer events
 		  	    docViewer.bind({
@@ -230,7 +232,25 @@ function initViewer(iduuid){
 		  	        	$('.num').text(e.page);
 		  	    	}
 				});
-				
+		  	    
+		  	  $(".page-outer").annotator();
+		  	  $(".page-outer").annotator('addPlugin', 'Store', {
+		  	     // The endpoint of the store on your server.
+		  	     prefix: '/nanotate',
+
+		  	     // Attach the uri of the current page to all annotations to allow search.
+		  	     annotationData: {
+		  	       'uri': uuid
+		  	     },
+
+		  	     // This will perform a "search" action when the plugin loads. Will
+		  	     // request the last 20 annotations for the current url.
+		  	     // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
+		  	     loadFromSearch: {
+		  	       'limit': 20,
+		  	       'uri': uuid
+		  	     }
+		  	   });
 		  	    //toolbar events
 		  	    $('.zoom-in').click(function() {
 		  	        docViewer.zoom('in');
@@ -247,78 +267,78 @@ function initViewer(iduuid){
 		  	    
 		  	    // Text selection 
 				
-				if ( (/iphone|ipad|ipod/i).test(navigator.userAgent) ){
-	
-			  	    simpleTip = new Biojs.Tooltip({
-			    		targetSelector: '.page',
-			    		position: Biojs.Tooltip.MANUAL_POSITION,
-			    		arrowType: Biojs.Tooltip.ARROW_RIGHT_MIDDLE,
-			    		cbRender: function( element ) {
-			    			return getNanotweetLink();
-			    		},
-			    		showOnEvent: 'touchend',
-			    		hideOnEvent: 'touchstart'
-			  	  	});
-	
-				    function handleMouseMove(event) {
-				       event = event || window.event; // IE-ism
-				       // event.clientX and event.clientY contain the mouse position
-				    }
-			  	  
-				  	
-					/*
-				  	$('document').bind( "touchstart touchend mouseup click", function (event) {	
-				  		var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-				  		simpleTip._setPosition(
-				  			{ left: touch.pageX - 10, top: touch.pageY - 10 }, 
-				  			{ width: 20, height: 20 } 
-				  	    );
-			        });
-					
-					*/
-			  	    
-		      	  	$('.page').bind( "touchend mouseup", function (e) {  			
-				  	  	var target = jQuery(e.target);
-	
-				        if (simpleTip.timer) { 
-				            clearTimeout(simpleTip.timer); 
-				        }
-				        simpleTip.timer = 0;
-	
-				        simpleTip._body.html( getNanotweetLink() );
-	      
-				        // Show up
-				        simpleTip._show();
-						
-					  	// Tooltip in a fixed position
-						var pos = $("#Nanotweets").offset();
-				  		simpleTip._setPosition(
-				  			pos, { width: simpleTip._body.width(), height: 20 } 
-				  	    );
-				  	
-	
-		            }).bind( "touchstart click", function() {
-		                simpleTip.timer = setTimeout( 
-							'Biojs.getInstance(' + simpleTip.getId()  + ')._hide()' , simpleTip.opt.delay );
-		            });
-					
-					simpleTip._body.bind( "touchstart click", function() {
-						nanotweet();
-					});
-					
-			  	    
-				} else {
-			  	    simpleTip = new Biojs.Tooltip({
-			    		targetSelector: '.page',
-			    		position: Biojs.Tooltip.MOUSE_POSITION,
-			    		arrowType: Biojs.Tooltip.ARROW_TOP_MIDDLE,
-			    		cbRender: function( element ) {
-			    			return getNanotweetLink();
-			    		},
-			    		showOnEvent: 'mouseup',
-			    		hideOnEvent: 'mousedown'
-			  	  	});
-				}
+//				if ( (/iphone|ipad|ipod/i).test(navigator.userAgent) ){
+//	
+//			  	    simpleTip = new Biojs.Tooltip({
+//			    		targetSelector: '.page',
+//			    		position: Biojs.Tooltip.MANUAL_POSITION,
+//			    		arrowType: Biojs.Tooltip.ARROW_RIGHT_MIDDLE,
+//			    		cbRender: function( element ) {
+//			    			return getNanotweetLink();
+//			    		},
+//			    		showOnEvent: 'touchend',
+//			    		hideOnEvent: 'touchstart'
+//			  	  	});
+//	
+//				    function handleMouseMove(event) {
+//				       event = event || window.event; // IE-ism
+//				       // event.clientX and event.clientY contain the mouse position
+//				    }
+//			  	  
+//				  	
+//					/*
+//				  	$('document').bind( "touchstart touchend mouseup click", function (event) {	
+//				  		var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+//				  		simpleTip._setPosition(
+//				  			{ left: touch.pageX - 10, top: touch.pageY - 10 }, 
+//				  			{ width: 20, height: 20 } 
+//				  	    );
+//			        });
+//					
+//					*/
+//			  	    
+//		      	  	$('.page').bind( "touchend mouseup", function (e) {  			
+//				  	  	var target = jQuery(e.target);
+//	
+//				        if (simpleTip.timer) { 
+//				            clearTimeout(simpleTip.timer); 
+//				        }
+//				        simpleTip.timer = 0;
+//	
+//				        simpleTip._body.html( getNanotweetLink() );
+//	      
+//				        // Show up
+//				        simpleTip._show();
+//						
+//					  	// Tooltip in a fixed position
+//						var pos = $("#Nanotweets").offset();
+//				  		simpleTip._setPosition(
+//				  			pos, { width: simpleTip._body.width(), height: 20 } 
+//				  	    );
+//				  	
+//	
+//		            }).bind( "touchstart click", function() {
+//		                simpleTip.timer = setTimeout( 
+//							'Biojs.getInstance(' + simpleTip.getId()  + ')._hide()' , simpleTip.opt.delay );
+//		            });
+//					
+//					simpleTip._body.bind( "touchstart click", function() {
+//						nanotweet();
+//					});
+//					
+//			  	    
+//				} else {
+//			  	    simpleTip = new Biojs.Tooltip({
+//			    		targetSelector: '.page',
+//			    		position: Biojs.Tooltip.MOUSE_POSITION,
+//			    		arrowType: Biojs.Tooltip.ARROW_TOP_MIDDLE,
+//			    		cbRender: function( element ) {
+//			    			return getNanotweetLink();
+//			    		},
+//			    		showOnEvent: 'mouseup',
+//			    		hideOnEvent: 'mousedown'
+//			  	  	});
+//				}
 	
 			}
 		);

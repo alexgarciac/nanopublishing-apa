@@ -35,6 +35,7 @@ import org.json.simple.parser.ParseException;
 import com.nanotate.Settings;
 import com.nanotate.dao.custom.SequenceMapper;
 import com.nanotate.dao.model.Annotation;
+import com.nanotate.dao.model.AnnotationExample;
 import com.nanotate.dao.model.AnnotationMapper;
 import com.nanotate.dao.model.AnnotationWithBLOBs;
 import com.nanotate.dao.model.Document;
@@ -55,7 +56,7 @@ public class NanotweetWriter implements Runnable {
 		try {
 //			text = text.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
 //			text = text.replaceAll("+", "%2B");
-			this.text = URLDecoder.decode(text, "UTF-8");
+			this.text = URLDecoder.decode(text.replace("%", ""), "UTF-8");
 			this.user=user;
 			log.info(text);
 		} catch (UnsupportedEncodingException e) {
@@ -111,7 +112,7 @@ public class NanotweetWriter implements Runnable {
 			}
 			
 			annotation.setCompleted( new Timestamp(new Date().getTime()) );
-			
+			log.info("Holaaaaaaa id:"+annotation.getId());
 			updateAnnotation( annotation );
 			
 			
@@ -126,7 +127,9 @@ public class NanotweetWriter implements Runnable {
 		SqlSession session = MyBatis.getSession();
 
     	AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
-    	log.info("id:"+annotation.getId());
+    	log.info("Holaaaaaaa id:"+annotation.getId());
+    	AnnotationExample ae = new AnnotationExample();
+    	ae.createCriteria().andIdEqualTo(annotation.getId());
     	mapper.updateByPrimaryKeyWithBLOBs(annotation);
     	
     	session.commit();
@@ -156,11 +159,11 @@ public class NanotweetWriter implements Runnable {
     	annotation.setDoi(document.getDoi());
     	annotation.setStatus( "WORKING" );
     	annotation.setUser_name(user);
-     
-    	annotation.setId(mapper.insert(annotation));
+    	mapper.insert(annotation);
     	session.commit();
     	session.close();
-    	log.info(annotation.getOriginal_text());
+    	log.info("i'm working with id:"+annotation.getId());
+    	log.info("i'm working:"+annotation.getOriginal_text());
 		return annotation;
 	}
 

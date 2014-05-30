@@ -10,6 +10,11 @@
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet>
+        <servlet-name>search</servlet-name>
+        <servlet-class>com.nanotate.servlet.SearchServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet>
         <servlet-name>document</servlet-name>
         <servlet-class>com.nanotate.servlet.DocumentServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
@@ -111,10 +116,14 @@
     <servlet-name>twitterpost</servlet-name>
     <url-pattern>/twitterpost</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>search</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
     
     <servlet-mapping>
         <servlet-name>annotation</servlet-name>
-        <url-pattern>/nanotate</url-pattern>
+        <url-pattern>/annotations</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>document</servlet-name>

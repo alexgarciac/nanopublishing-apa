@@ -129,21 +129,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
-    insert into annotation (id, tags, document, 
-      status, creation, completed, 
-      doi, user_name, original_text, 
-      facebook_posts, json_value)
-    values (#{id,jdbcType=INTEGER}, #{tags,jdbcType=VARCHAR}, #{document,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{creation,jdbcType=TIMESTAMP}, #{completed,jdbcType=TIMESTAMP}, 
-      #{doi,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{original_text,jdbcType=LONGVARCHAR}, 
-      #{facebook_posts,jdbcType=LONGVARCHAR}, #{json_value,jdbcType=LONGVARCHAR})
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into annotation (tags, document, status, 
+      creation, completed, doi, 
+      user_name, original_text, facebook_posts, 
+      json_value)
+    values (#{tags,jdbcType=VARCHAR}, #{document,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{creation,jdbcType=TIMESTAMP}, #{completed,jdbcType=TIMESTAMP}, #{doi,jdbcType=VARCHAR}, 
+      #{user_name,jdbcType=VARCHAR}, #{original_text,jdbcType=LONGVARCHAR}, #{facebook_posts,jdbcType=LONGVARCHAR}, 
+      #{json_value,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into annotation
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="tags != null" >
         tags,
       </if>
@@ -176,9 +179,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="tags != null" >
         #{tags,jdbcType=VARCHAR},
       </if>
