@@ -223,6 +223,29 @@ function initViewer(iduuid){
 		  	    docViewer.ready(function(e) {
 		  	    
 		  	     $('.numpages').text(e.numpages);
+		  	     
+		  	 
+		  	   $("#DocViewer").children().annotator();
+		  	 $("#DocViewer").children( ).annotator('addPlugin', 'Store', {
+			  	 	     // The endpoint of the store on your server.
+			  	 	     prefix: '/nanotate',
+
+			  	 	     // Attach the uri of the current page to all annotations to allow search.
+			  	 	     annotationData: {
+			  	 	       'uri': uuid
+			  	 	     },
+
+			  	 	     // This will perform a "search" action when the plugin loads. Will
+			  	 	     // request the last 20 annotations for the current url.
+			  	 	     // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
+			  	 	     loadFromSearch: {
+			  	 	       'limit': 20,
+			  	 	       'uri': uuid
+			  	 	     }
+			  	 	   });
+		  		
+		  	     
+		  	  
 		  	  });
 		  	   
 	
@@ -232,25 +255,7 @@ function initViewer(iduuid){
 		  	        	$('.num').text(e.page);
 		  	    	}
 				});
-		  	    
-		  	  $(".page-outer").annotator();
-		  	  $(".page-outer").annotator('addPlugin', 'Store', {
-		  	     // The endpoint of the store on your server.
-		  	     prefix: '/nanotate',
-
-		  	     // Attach the uri of the current page to all annotations to allow search.
-		  	     annotationData: {
-		  	       'uri': uuid
-		  	     },
-
-		  	     // This will perform a "search" action when the plugin loads. Will
-		  	     // request the last 20 annotations for the current url.
-		  	     // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
-		  	     loadFromSearch: {
-		  	       'limit': 20,
-		  	       'uri': uuid
-		  	     }
-		  	   });
+		  
 		  	    //toolbar events
 		  	    $('.zoom-in').click(function() {
 		  	        docViewer.zoom('in');

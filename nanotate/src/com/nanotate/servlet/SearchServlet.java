@@ -50,7 +50,7 @@ public class SearchServlet extends HttpServlet {
     	resp.setCharacterEncoding("UTF-8");
     	resp.setContentType("application/json");
     	resp.getWriter().write("{ \"total\":1,"
-    			+ "\"rows\": [{\"id\":\"sadsada12123\", \"text\":\"\",\"ranges\":[{\"start\":\"/div/div[2]/div/span/span\",\"startOffset\":0,\"end\":\"/div/div[2]/div/span[3]/span\",\"endOffset\":28}],\"quote\":\"Rumination as a Mechanism Linking Stressful Life Events to Symptoms ofDepression and Anxiety: Longitudinal Evidence inEarly Adolescents and Adults\",\"uri\":\"4d702da3-e8c5-4402-9db6-c5cff6120f1d\"}]}");	
+    			+ "\"rows\": [{\"id\":\"sadsada12123\", \"text\":\"\",\"ranges\":[{\"start\":\"/div/div/div[2]/div[5]/span/span\",\"startOffset\":0,\"end\":\"/div/div/div[2]/div[5]/span[2]/span\",\"endOffset\":36}],\"quote\":\"Rumination is a well-established risk factor for the onset of major depression and anxiety symptomatol-ogy in both adolescents and adults.\",\"uri\":\"4d702da3-e8c5-4402-9db6-c5cff6120f1d\"}]}");	
     	
     }
 	
