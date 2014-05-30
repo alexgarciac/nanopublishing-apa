@@ -105,7 +105,7 @@ function nanotweet() {
 function getNanotweetLink() {
     // TODO: text comment for social networks
 
-    var html = '<!--<textarea id="userComment"></textarea>-->'
+    var html = '<textarea id="userComment" style="resize: none; display: inherit;"></textarea>'
         + '<a onclick="nanotweet()" class="sb circle no-shadow no-border blue twitter" href="#"></a>'+
           		   '<a onclick="nanotweet()" href="#">Send to Nanotweets</a>';
 	return html;

@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `annotation`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `annotation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `original_text` longtext,
+  `original_text` TEXT,
   `tags` varchar(200) DEFAULT NULL,
   `document` varchar(100) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
@@ -32,10 +32,10 @@ CREATE TABLE `annotation` (
   `completed` datetime DEFAULT NULL,
   `doi` varchar(40) DEFAULT NULL,
   `user_name` varchar(100) DEFAULT NULL,
-  `facebook_posts` longtext,
-  `json_value` longtext,
+  `facebook_posts` TEXT,
+  `json_value` TEXT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `document` (
   `full_citation` varchar(255) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
   PRIMARY KEY (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `user` (
   `facebook_token` varchar(255) DEFAULT NULL,
   `twitter_token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -121,13 +121,13 @@ public class NanotweetWriter implements Runnable {
 		}
 	}
 
-	private void updateAnnotation(Annotation annotation) throws Exception {
+	private void updateAnnotation(AnnotationWithBLOBs annotation) throws Exception {
 		// Create a new entry in database
 		SqlSession session = MyBatis.getSession();
 
     	AnnotationMapper mapper = session.getMapper(AnnotationMapper.class);
     	log.info("id:"+annotation.getId());
-    	mapper.updateByPrimaryKey(annotation);
+    	mapper.updateByPrimaryKeyWithBLOBs(annotation);
     	
     	session.commit();
     	session.close();
@@ -157,8 +157,7 @@ public class NanotweetWriter implements Runnable {
     	annotation.setStatus( "WORKING" );
     	annotation.setUser_name(user);
      
-    	mapper.insert(annotation);
-    	
+    	annotation.setId(mapper.insert(annotation));
     	session.commit();
     	session.close();
     	log.info(annotation.getOriginal_text());
