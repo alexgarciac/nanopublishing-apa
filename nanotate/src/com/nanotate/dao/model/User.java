@@ -9,7 +9,10 @@ public class User {
 	private String firstname;
 	private String lastname;
 	private String facebook_token;
+	private Long facebook_token_expires;
 	private String twitter_token;
+	private String profile_pic_url;
+	private String email;
 
 	public String getUsername() {
 		return username;
@@ -67,10 +70,34 @@ public class User {
 		this.facebook_token = facebook_token;
 	}
 
+	public Long getFacebook_token_expires() {
+		return facebook_token_expires;
+	}
+
+	public void setFacebook_token_expires(Long facebook_token_expires) {
+		this.facebook_token_expires = facebook_token_expires;
+	}
+
 	public String getTwitter_token() {
 		return twitter_token;
 	}
 
 	public void setTwitter_token(String twitter_token) {
 		this.twitter_token = twitter_token;
+	}
+
+	public String getProfile_pic_url() {
+		return profile_pic_url;
+	}
+
+	public void setProfile_pic_url(String profile_pic_url) {
+		this.profile_pic_url = profile_pic_url;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}}

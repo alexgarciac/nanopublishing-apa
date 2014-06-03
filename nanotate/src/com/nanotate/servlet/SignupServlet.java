@@ -21,6 +21,8 @@ import com.nanotate.dao.model.UserExample;
 import com.nanotate.dao.model.UserMapper;
 import com.nanotate.dao.util.MyBatis;
 
+import facebook4j.Facebook;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -40,8 +42,9 @@ public class SignupServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		System.out.println(name);
 		String email = request.getParameter("email");
-		String imgurl=(String) session.getAttribute("imglurl");
-		 
+		String imgurl=request.getParameter("img");
+		String authCode=request.getParameter("authcode");
+		System.out.println(imgurl);
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatis.getSession();
@@ -53,6 +56,11 @@ public class SignupServlet extends HttpServlet {
 			record.setLastname(name.substring(name.indexOf(" "),name.length()-1 ));
 			record.setPassword(pwd);
 			record.setFacebook_username(username);
+			record.setProfile_pic_url(imgurl);
+			record.setEmail(email);
+			Facebook facebook= (Facebook)request.getSession().getAttribute("facebook");
+			record.setFacebook_token(facebook.getOAuthAccessToken().getToken());
+			record.setFacebook_token_expires(facebook.getOAuthAccessToken().getExpires());
 			um.insert(record);
 			sqlSession.commit();
 			session.setMaxInactiveInterval(30*60);

@@ -21,6 +21,9 @@ public class FacebookSigninServlet extends HttpServlet {
     	  .setOAuthAppId("236285369909239")
     	  .setOAuthAppSecret("df356774233762558c63281d90d21368")
     	  .setOAuthPermissions("basic_info,email,publish_stream");
+//    	  .setOAuthAppId("1427521897511957")
+//    	  .setOAuthAppSecret("9a447eb931f93131af68176c006a1a39")
+//    	  .setOAuthPermissions("public_profile,user_friends,email,publish_stream,publish_actions");
     	Facebook facebook = new FacebookFactory(cb.build()).getInstance();
         request.getSession().setAttribute("facebook", facebook);
         StringBuffer callbackURL = request.getRequestURL();

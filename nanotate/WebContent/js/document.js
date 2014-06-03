@@ -4,6 +4,7 @@ var uuid = undefined;
 var data = undefined;
 var doi= undefined;
 var global = false;
+var viewerinit=false;
 var options = { 
         target:        '#notification',   // target element(s) to be updated with server response 
         beforeSubmit:  showRequest,  // pre-submit callback 
@@ -30,7 +31,7 @@ function showRequest(formData, jqForm, options) {
     // DOM element for the form do this: 
     // var formElement = jqForm[0]; 
  
-    alert('About to submit: \n\n' + queryString); 
+//    alert('About to submit: \n\n' + queryString); 
  
     // here we could return false to prevent the form from being submitted; 
     // returning anything other than false will allow the form submit to continue 
@@ -129,7 +130,8 @@ function formatAnnotations(str) {
 
 function feedNanotweets(){
 	
-	// Get nanotweets feed 
+	// Get nanotweets feed
+	
 	
 	var url="";
 	if(global)
@@ -163,8 +165,10 @@ function feedNanotweets(){
 								    allowEdit: false
 								});
 		
-								
-								li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form></span>');
+								var comment='';
+								if(result.data[i].comment.length!=0)
+									comment='"'+result.data[i].comment+'"';
+								li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+comment+' '+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><!--<form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form>--></span>');
 								$("#tofacebook_"+result.data[i].id).submit(function() { 
 							        // inside event callbacks 'this' is the DOM element so we first 
 							        // wrap it in a jQuery object and then invoke ajaxSubmit 
@@ -196,8 +200,10 @@ function feedNanotweets(){
 
 
 
-function initViewer(iduuid){
+function initViewer(iduuid, containerid){
 	uuid=iduuid;
+	
+	
 	$('#Nanotweets').empty();	
 	$.getJSON( "document?action=session&uuid=" + uuid, function(result) {
 		
@@ -207,9 +213,9 @@ function initViewer(iduuid){
 			$('.nanotweets-feed').toggle(); 
 			
 			if ( $('.nanotweets-feed').is(":visible") ) {
-				$("#DocViewer").css('right','20%');
+				$(containerid).css('right','20%');
 			} else {
-				$("#DocViewer").css('right','0%');
+				$(containerid).css('right','0%');
 			}
 		});
 		
@@ -217,32 +223,15 @@ function initViewer(iduuid){
 			function( data, textStatus, jqxhr ) {
 			doi=result.data.doi;
 		  	    //creates a document viewer using the "DocViewer" div
-		  	    docViewer = new DocViewer({ "id": "DocViewer" });
+		  	    docViewer = new DocViewer({ "id": containerid });
 	
 		  	  	//on docviewer ready
 		  	    docViewer.ready(function(e) {
 		  	    
 		  	     $('.numpages').text(e.numpages);
-		  	     
+
 		  	 
-		  	   $("#DocViewer").children().annotator();
-		  	 $("#DocViewer").children( ).annotator('addPlugin', 'Store', {
-			  	 	     // The endpoint of the store on your server.
-			  	 	     prefix: '/nanotate',
-
-			  	 	     // Attach the uri of the current page to all annotations to allow search.
-			  	 	     annotationData: {
-			  	 	       'uri': uuid
-			  	 	     },
-
-			  	 	     // This will perform a "search" action when the plugin loads. Will
-			  	 	     // request the last 20 annotations for the current url.
-			  	 	     // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
-			  	 	     loadFromSearch: {
-			  	 	       'limit': 20,
-			  	 	       'uri': uuid
-			  	 	     }
-			  	 	   });
+		
 		  		
 		  	     
 		  	  
@@ -255,7 +244,7 @@ function initViewer(iduuid){
 		  	        	$('.num').text(e.page);
 		  	    	}
 				});
-		  
+		  	
 		  	    //toolbar events
 		  	    $('.zoom-in').click(function() {
 		  	        docViewer.zoom('in');
@@ -302,6 +291,8 @@ function initViewer(iduuid){
 //					
 //					*/
 //			  	    
+
+		  	    
 //		      	  	$('.page').bind( "touchend mouseup", function (e) {  			
 //				  	  	var target = jQuery(e.target);
 //	
@@ -348,9 +339,78 @@ function initViewer(iduuid){
 			}
 		);
 		
+
+			
+		   $("#viewer").annotator();
+		  	$(".annotator-wrapper").attr('style', "position:inherit;");
+		  	 $("#viewer").annotator('addPlugin', 'Store', {
+		 	     // The endpoint of the store on your server.
+		 	     prefix: '/nanotate',
+
+		 	     // Attach the uri of the current page to all annotations to allow search.
+		 	     annotationData: {
+		 	       'uri': uuid
+		 	     },
+
+		 	     // This will perform a "search" action when the plugin loads. Will
+		 	     // request the last 20 annotations for the current url.
+		 	     // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
+		 	     loadFromSearch: {
+		 	       'limit': 20,
+		 	       'uri': uuid
+		 	     }
+		 	   });
+
+		  	
+		
 		feedNanotweets();
 	});	  
 	
 }
-	
+
+/* By http://jquery-manual.blogspot.com */
+
+function set_cookie(nombre, valor, dias)
+{
+/* El parámetro dias es para la expiración de la cookie */
+var fecha = new Date();
+var parametro = nombre + "=" + valor;
+//Creando la fecha de expiración
+fecha.setTime(fecha.getTime() + (dias * 24 * 60 * 60 * 1000));
+//Formato UTC para la fecha de expiración
+var UTC = fecha.toUTCString();
+//Creando la cookie
+document.cookie = parametro + "; expires=" + UTC + "; path= /";
+}
+
+function get_cookie(nombre)
+{
+/* Obtenemos todas las cookies */
+var cookies = document.cookie;
+/* Las separamos a través del ; */
+var parametros = cookies.split(";");
+var valor="";
+/*Recorremos una a una las cookies */
+for (var x = 0; x < parametros.length; x++)
+{
+/* Separamos nombre valor de la cookie a través del signo = */
+var parametro = parametros[x].split("=");
+
+/* Buscamos el valor de la cookie a través de su nombre */
+if (parametro[0].trim() == nombre)
+{
+ valor = parametro[1];
+break;
+}
+}
+/* Retornamos el valor de la cookie si es encontrada */
+
+return valor;
+}
+
+/* Crear las cookies */
+
+
+
+
 	

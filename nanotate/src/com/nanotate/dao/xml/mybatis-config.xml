@@ -21,5 +21,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<mapper resource="com/nanotate/dao/xml/AnnotationMapper.xml" />
 	<mapper resource="com/nanotate/dao/xml/UserMapper.xml" />
 	<mapper resource="com/nanotate/dao/xml/DocumentMapper.xml" />
+	<mapper resource="com/nanotate/dao/xml/FacebookPostMapper.xml" />
+	<mapper resource="com/nanotate/dao/xml/TwitterPostMapper.xml" />
 </mappers>
 </configuration>

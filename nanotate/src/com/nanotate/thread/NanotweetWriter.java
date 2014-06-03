@@ -51,13 +51,15 @@ public class NanotweetWriter implements Runnable {
 	String text;
 	String uuid;
 	String user;
+	String comment;
 	
-	public NanotweetWriter(String text, String documentUUID, String user ) {
+	public NanotweetWriter(String text, String comment, String documentUUID, String user ) {
 		try {
 //			text = text.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
 //			text = text.replaceAll("+", "%2B");
 			this.text = URLDecoder.decode(text.replace("%", ""), "UTF-8");
 			this.user=user;
+			this.comment=comment;
 			log.info(text);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +75,7 @@ public class NanotweetWriter implements Runnable {
 			
 			log.info("Using text: " + text );
 			System.out.println("Die");
-			AnnotationWithBLOBs annotation = insertNewAnnotation( text, uuid , user); 
+			AnnotationWithBLOBs annotation = insertNewAnnotation( text, comment, uuid , user); 
 			
 //			LinkedHashMap<String, Integer> annotations = new LinkedHashMap<String, Integer>();
 			
@@ -136,7 +138,7 @@ public class NanotweetWriter implements Runnable {
     	session.close();
 	}
 
-	private AnnotationWithBLOBs insertNewAnnotation(String text, String uuid, String user) throws Exception {
+	private AnnotationWithBLOBs insertNewAnnotation(String text, String comment, String uuid, String user) throws Exception {
 		// Create a new entry in database
 		SqlSession session = MyBatis.getSession();
     	
@@ -154,6 +156,7 @@ public class NanotweetWriter implements Runnable {
 //    	annotation.setId(id);
     	annotation.setOriginal_text(text);
 		annotation.setTags("");
+		annotation.setComment(comment);
 		annotation.setDocument( uuid );
     	annotation.setCreation( new Timestamp(new Date().getTime()) );
     	annotation.setDoi(document.getDoi());

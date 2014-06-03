@@ -9,7 +9,10 @@
     <result column="firstname" property="firstname" jdbcType="VARCHAR" />
     <result column="lastname" property="lastname" jdbcType="VARCHAR" />
     <result column="facebook_token" property="facebook_token" jdbcType="VARCHAR" />
+    <result column="facebook_token_expires" property="facebook_token_expires" jdbcType="BIGINT" />
     <result column="twitter_token" property="twitter_token" jdbcType="VARCHAR" />
+    <result column="profile_pic_url" property="profile_pic_url" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List" >
     username, password, twitter_username, facebook_username, firstname, lastname, facebook_token, 
-    twitter_token
+    facebook_token_expires, twitter_token, profile_pic_url, email
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.nanotate.dao.model.UserExample" >
     select
@@ -106,10 +109,14 @@
   <insert id="insert" parameterType="com.nanotate.dao.model.User" >
     insert into user (username, password, twitter_username, 
       facebook_username, firstname, lastname, 
-      facebook_token, twitter_token)
+      facebook_token, facebook_token_expires, 
+      twitter_token, profile_pic_url, email
+      )
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{twitter_username,jdbcType=VARCHAR}, 
       #{facebook_username,jdbcType=VARCHAR}, #{firstname,jdbcType=VARCHAR}, #{lastname,jdbcType=VARCHAR}, 
-      #{facebook_token,jdbcType=VARCHAR}, #{twitter_token,jdbcType=VARCHAR})
+      #{facebook_token,jdbcType=VARCHAR}, #{facebook_token_expires,jdbcType=BIGINT}, 
+      #{twitter_token,jdbcType=VARCHAR}, #{profile_pic_url,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.nanotate.dao.model.User" >
     insert into user
@@ -135,8 +142,17 @@
       <if test="facebook_token != null" >
         facebook_token,
       </if>
+      <if test="facebook_token_expires != null" >
+        facebook_token_expires,
+      </if>
       <if test="twitter_token != null" >
         twitter_token,
+      </if>
+      <if test="profile_pic_url != null" >
+        profile_pic_url,
+      </if>
+      <if test="email != null" >
+        email,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -161,8 +177,17 @@
       <if test="facebook_token != null" >
         #{facebook_token,jdbcType=VARCHAR},
       </if>
+      <if test="facebook_token_expires != null" >
+        #{facebook_token_expires,jdbcType=BIGINT},
+      </if>
       <if test="twitter_token != null" >
         #{twitter_token,jdbcType=VARCHAR},
+      </if>
+      <if test="profile_pic_url != null" >
+        #{profile_pic_url,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -196,8 +221,17 @@
       <if test="record.facebook_token != null" >
         facebook_token = #{record.facebook_token,jdbcType=VARCHAR},
       </if>
+      <if test="record.facebook_token_expires != null" >
+        facebook_token_expires = #{record.facebook_token_expires,jdbcType=BIGINT},
+      </if>
       <if test="record.twitter_token != null" >
         twitter_token = #{record.twitter_token,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profile_pic_url != null" >
+        profile_pic_url = #{record.profile_pic_url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -213,7 +247,10 @@
       firstname = #{record.firstname,jdbcType=VARCHAR},
       lastname = #{record.lastname,jdbcType=VARCHAR},
       facebook_token = #{record.facebook_token,jdbcType=VARCHAR},
-      twitter_token = #{record.twitter_token,jdbcType=VARCHAR}
+      facebook_token_expires = #{record.facebook_token_expires,jdbcType=BIGINT},
+      twitter_token = #{record.twitter_token,jdbcType=VARCHAR},
+      profile_pic_url = #{record.profile_pic_url,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -239,8 +276,17 @@
       <if test="facebook_token != null" >
         facebook_token = #{facebook_token,jdbcType=VARCHAR},
       </if>
+      <if test="facebook_token_expires != null" >
+        facebook_token_expires = #{facebook_token_expires,jdbcType=BIGINT},
+      </if>
       <if test="twitter_token != null" >
         twitter_token = #{twitter_token,jdbcType=VARCHAR},
+      </if>
+      <if test="profile_pic_url != null" >
+        profile_pic_url = #{profile_pic_url,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
       </if>
     </set>
     where username = #{username,jdbcType=VARCHAR}
@@ -253,7 +299,10 @@
       firstname = #{firstname,jdbcType=VARCHAR},
       lastname = #{lastname,jdbcType=VARCHAR},
       facebook_token = #{facebook_token,jdbcType=VARCHAR},
-      twitter_token = #{twitter_token,jdbcType=VARCHAR}
+      facebook_token_expires = #{facebook_token_expires,jdbcType=BIGINT},
+      twitter_token = #{twitter_token,jdbcType=VARCHAR},
+      profile_pic_url = #{profile_pic_url,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR}
     where username = #{username,jdbcType=VARCHAR}
   </update>
 </mapper>

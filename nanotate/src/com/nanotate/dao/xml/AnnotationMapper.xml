@@ -13,7 +13,7 @@
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.nanotate.dao.model.AnnotationWithBLOBs" extends="BaseResultMap" >
     <result column="original_text" property="original_text" jdbcType="LONGVARCHAR" />
-    <result column="facebook_posts" property="facebook_posts" jdbcType="LONGVARCHAR" />
+    <result column="comment" property="comment" jdbcType="LONGVARCHAR" />
     <result column="json_value" property="json_value" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -78,7 +78,7 @@
     id, tags, document, status, creation, completed, doi, user_name
   </sql>
   <sql id="Blob_Column_List" >
-    original_text, facebook_posts, json_value
+    original_text, comment, json_value
   </sql>
   <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.nanotate.dao.model.AnnotationExample" >
     select
@@ -134,11 +134,11 @@
     </selectKey>
     insert into annotation (tags, document, status, 
       creation, completed, doi, 
-      user_name, original_text, facebook_posts, 
+      user_name, original_text, comment, 
       json_value)
     values (#{tags,jdbcType=VARCHAR}, #{document,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{creation,jdbcType=TIMESTAMP}, #{completed,jdbcType=TIMESTAMP}, #{doi,jdbcType=VARCHAR}, 
-      #{user_name,jdbcType=VARCHAR}, #{original_text,jdbcType=LONGVARCHAR}, #{facebook_posts,jdbcType=LONGVARCHAR}, 
+      #{user_name,jdbcType=VARCHAR}, #{original_text,jdbcType=LONGVARCHAR}, #{comment,jdbcType=LONGVARCHAR}, 
       #{json_value,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.nanotate.dao.model.AnnotationWithBLOBs" >
@@ -171,8 +171,8 @@
       <if test="original_text != null" >
         original_text,
       </if>
-      <if test="facebook_posts != null" >
-        facebook_posts,
+      <if test="comment != null" >
+        comment,
       </if>
       <if test="json_value != null" >
         json_value,
@@ -203,8 +203,8 @@
       <if test="original_text != null" >
         #{original_text,jdbcType=LONGVARCHAR},
       </if>
-      <if test="facebook_posts != null" >
-        #{facebook_posts,jdbcType=LONGVARCHAR},
+      <if test="comment != null" >
+        #{comment,jdbcType=LONGVARCHAR},
       </if>
       <if test="json_value != null" >
         #{json_value,jdbcType=LONGVARCHAR},
@@ -247,8 +247,8 @@
       <if test="record.original_text != null" >
         original_text = #{record.original_text,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.facebook_posts != null" >
-        facebook_posts = #{record.facebook_posts,jdbcType=LONGVARCHAR},
+      <if test="record.comment != null" >
+        comment = #{record.comment,jdbcType=LONGVARCHAR},
       </if>
       <if test="record.json_value != null" >
         json_value = #{record.json_value,jdbcType=LONGVARCHAR},
@@ -269,7 +269,7 @@
       doi = #{record.doi,jdbcType=VARCHAR},
       user_name = #{record.user_name,jdbcType=VARCHAR},
       original_text = #{record.original_text,jdbcType=LONGVARCHAR},
-      facebook_posts = #{record.facebook_posts,jdbcType=LONGVARCHAR},
+      comment = #{record.comment,jdbcType=LONGVARCHAR},
       json_value = #{record.json_value,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -316,8 +316,8 @@
       <if test="original_text != null" >
         original_text = #{original_text,jdbcType=LONGVARCHAR},
       </if>
-      <if test="facebook_posts != null" >
-        facebook_posts = #{facebook_posts,jdbcType=LONGVARCHAR},
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=LONGVARCHAR},
       </if>
       <if test="json_value != null" >
         json_value = #{json_value,jdbcType=LONGVARCHAR},
@@ -335,7 +335,7 @@
       doi = #{doi,jdbcType=VARCHAR},
       user_name = #{user_name,jdbcType=VARCHAR},
       original_text = #{original_text,jdbcType=LONGVARCHAR},
-      facebook_posts = #{facebook_posts,jdbcType=LONGVARCHAR},
+      comment = #{comment,jdbcType=LONGVARCHAR},
       json_value = #{json_value,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -6,25 +6,27 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface DocumentMapper {
-    int countByExample(DocumentExample example);
 
-    int deleteByExample(DocumentExample example);
+	int countByExample(DocumentExample example);
 
-    int deleteByPrimaryKey(String uuid);
+	int deleteByExample(DocumentExample example);
 
-    int insert(Document record);
+	int deleteByPrimaryKey(String uuid);
 
-    int insertSelective(Document record);
+	int insert(Document record);
 
-    List<Document> selectByExample(DocumentExample example);
+	int insertSelective(Document record);
 
-    Document selectByPrimaryKey(String uuid);
+	List<Document> selectByExample(DocumentExample example);
 
-    int updateByExampleSelective(@Param("record") Document record, @Param("example") DocumentExample example);
+	Document selectByPrimaryKey(String uuid);
 
-    int updateByExample(@Param("record") Document record, @Param("example") DocumentExample example);
+	int updateByExampleSelective(@Param("record") Document record,
+			@Param("example") DocumentExample example);
 
-    int updateByPrimaryKeySelective(Document record);
+	int updateByExample(@Param("record") Document record,
+			@Param("example") DocumentExample example);
 
-    int updateByPrimaryKey(Document record);
-}
+	int updateByPrimaryKeySelective(Document record);
+
+	int updateByPrimaryKey(Document record);}

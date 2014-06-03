@@ -2,15 +2,16 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Nanotweets Demo</title>
+	<title>Nanotweets</title>
 	
 	<!--jQuery-->
 <!-- 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script> -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-	<script src="http://assets.annotateit.org/annotator/v1.1.0/annotator-full.min.js"></script>
-<!-- 	<script>var j = jQuery.noConflict();</script> -->
+	<script src="http://assets.annotateit.org/annotator/v1.2.1/annotator.min.js"></script>
+	<script src="http://assets.annotateit.org/annotator/v1.2.1/annotator.store.min.js"></script>
+<link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.2.1/annotator.min.css"><!-- 	<script>var j = jQuery.noConflict();</script> -->
 	
-	<script src="http://malsup.github.com/jquery.form.js"></script>
+<!-- 	<script src="http://malsup.github.com/jquery.form.js"></script> -->
 <script type="text/javascript" src="js/plupload.full.min.js"></script>
 <script type="text/javascript" src="js/jquery.form.min.js"></script>
 <script type="text/javascript" src="js/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
@@ -21,6 +22,7 @@
 	<script src="//static-v2.crocodoc.com/core/docviewer.js"></script>
  <link rel="stylesheet" href="css/jquery.taghandler.css" />
  <link rel="stylesheet" href="css/jquery.toastmessage.css" />
+ <link rel="stylesheet" href="css/annotator.min.css" />
 
 	
 
@@ -32,6 +34,10 @@
 	
 
 $(document).ready(function() {
+	
+	
+	
+
   $('#simple-menu').sidr();
   $('#viewer').hide();
   $('#myonoffswitch').click(function() {
@@ -66,9 +72,14 @@ $(document).ready(function() {
 	 $('#pagebegin').append('1');
 	 $('#pageend').empty();
 	 $('#pagebeend').append('1');
-	 initViewer($(this).attr("id"));
+	 var container_id="container"+$(this).attr("id").split("_")[0];
+	 $('#DocViewer').append('<div id="'+container_id+'"></div>');
+	 initViewer($(this).attr("id").split("_")[0], container_id );
 	 $('#viewer').show();
-	 
+	 doi=$(this).attr("id").split("_")[1];
+	 console.log("doi: "+doi);
+	 set_cookie("uuid", $(this).attr("id").split("_")[0], 3);
+
 	 
 	
  });
@@ -85,8 +96,14 @@ $( "#home" ).click(function() {
   $( "#pdf" ).removeClass("active");
   $( "#wrapper" ).empty();
   $('#wrapper').append('<h1>Home</h1>');
-  $('#wrapper').append('<div style="clear:both;"></div>');
-  <!-- Cargar avatar e información de usuario-->
+  
+
+  $.getJSON( "user", function(result) {
+		
+	
+	  $('#wrapper').append('<div class="mask_home"><img id="profilepic" src='+result.data.profile_pic_url+' /><span>'+result.data.firstname+' '+result.data.lastname+'<br/>Docs uploaded: '+result.data.numberdoc+'<br/>Annotations maked: '+result.data.numberan+'</span></div>');
+	});
+  
   
 });
 
@@ -104,12 +121,25 @@ $( "#pdf" ).click(function() {
 		$.getJSON( "document?action=list", function(result) {
 			if ( result.code == 0 ) {
 				var imgURL;
-				for ( var i in result.data ) {		
-					imgURL = "document?action=thumbnails&uuid=" + result.data[i].uuid;	
-					link = "document.jsp?uuid=" + result.data[i].uuid;	
-			    	$('#wrapper').append('<a id="' + result.data[i].uuid + '" class="mask"><img src="' + imgURL + '" /><span>'+result.data[i].full_citation+'</span></a>');
-			    	
-			    } 
+				if(result.data.length>0)
+				{
+					for ( var i in result.data ) {		
+						imgURL = "document?action=thumbnails&uuid=" + result.data[i].uuid;	
+						link = "document.jsp?uuid=" + result.data[i].uuid;	
+				    	$('#wrapper').append('<a id="' + result.data[i].uuid+"_"+result.data[i].doi+ '" class="mask"><img src="' + imgURL + '" /><span>'+result.data[i].full_citation+'</span></a>');
+				    	console.log(result.data[i].doi);
+				    } 	
+				}
+				else{
+					$().toastmessage({
+					    sticky   : false,
+					    position : 'middle-center',
+					    close    : function () {console.log("toast is closed ...");}
+					});
+					
+					$().toastmessage('showWarningToast', "No documents founded.");
+				}
+				
 			}
 		});
 		
@@ -146,7 +176,25 @@ $( "#upload" ).click(function() {
 	              {title : 'Document files', extensions : 'pdf'}
 	          ]
 	      },
+	      init : {
 
+	            StateChanged: function(up) {
+	                // Called when the state of the queue is changed
+	                if(up.state == plupload.STARTED ){
+						$("li").addClass("disabled");
+					}
+					
+	            },
+	  
+	   
+	 
+	            UploadComplete: function(up, files) {
+	                // Called when all files are either uploaded or failed
+	                $("li").removeClass("disabled");
+	            }
+	 
+	   
+	        },
 	      // Resize images on clientside if we can
 	      resize : {width : 320, height : 240, quality : 90}
 	  });

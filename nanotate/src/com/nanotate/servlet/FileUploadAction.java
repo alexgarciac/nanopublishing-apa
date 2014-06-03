@@ -104,6 +104,7 @@ public class FileUploadAction extends HttpServlet {
 
 						File dst = new File(dstFile.getPath()+ "/" + this.name);
 						System.out.println("Path: "+dst.getAbsolutePath());
+						user=(String) req.getSession().getAttribute("user");
 				        saveUploadFile(input, dst);
 				    }
 				}
@@ -209,6 +210,7 @@ public class FileUploadAction extends HttpServlet {
 	            System.out.println("  UUID is " + uuid);
 	            document= this.getDoiData(doi);
 	            document.setUuid(uuid);
+	            document.setUploaded_by(user);
 	            mapper.insert(document);
 	            session.commit();
 	        	session.close();

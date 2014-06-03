@@ -25,6 +25,7 @@ import org.json.simple.parser.ParseException;
 
 import utils.JsonEncoder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
@@ -129,6 +130,8 @@ public class AnnotationServlet extends HttpServlet {
 			example.setOrderByClause("creation DESC");
 			
 			List<AnnotationWithBLOBs> annotations = mapper.selectByExampleWithBLOBs(example);
+			log.info("Query: "+example.getOrderByClause());
+			log.info("Number of annotations: "+annotations.size() );
 			
 			for(Annotation annotation: annotations){
 				log.info(annotation.getUser_name());
@@ -158,11 +161,19 @@ public class AnnotationServlet extends HttpServlet {
 		String text = "";
 		String uuid = "";
         String comment = "";
+        Cookie[] cookies = servletRequest.getCookies();
+    	if(cookies != null){
+    	for(Cookie cookie : cookies){
+
+    		if(cookie.getName().equals("uuid")){
+    			uuid=cookie.getValue();
+    		}
+    	}
+    	}
         
         try {
 			String json = servletRequest.getReader().readLine();
 			text=this.getValueFromJSON(json, "quote");
-			uuid=this.getValueFromJSON(json, "uri");
 			comment=this.getValueFromJSON(json, "text");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -178,7 +189,8 @@ public class AnnotationServlet extends HttpServlet {
 			r.setMessage( "Document uuid parameter is missing" );
 			
 		} else {
-			NanotweetWriter nanotweetWriter = new NanotweetWriter( text, uuid, (String) servletRequest.getSession().getAttribute("user"));
+			log.info("Using nanowriter");
+			NanotweetWriter nanotweetWriter = new NanotweetWriter( text, comment, uuid, (String) servletRequest.getSession().getAttribute("user"));
             //FacebookWriter facebookWriter = new FacebookWriter( text, uuid, comment );
 
 			( new Thread( nanotweetWriter ) ).start();

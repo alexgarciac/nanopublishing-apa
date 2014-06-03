@@ -78,3 +78,35 @@ body {
 	margin-left: 25px;
 }
 
+.mask_home {
+	position:relative;
+	height:350px;
+	width:800px;
+	-webkit-box-shadow:0 0 1px #000;
+	border:5px solid #f6f6f6;
+	overflow:hidden;
+	float:left;
+	margin:10px;
+	background-color:rgba(255,255,255,0.5);
+}
+.mask_home img {
+	float:left;
+/* 	-webkit-transform: rotate(35deg); */
+/* 	-moz-transform:rotate(35deg); */
+/* 	-o-transform:rotate(35deg); */
+/* 	-ms-transform:rotate(35deg); */
+/* 	transform:rotate(35deg); */
+	margin-top:0px; /* half the height */
+}
+
+.mask_home span {
+	float:left;
+/* 	-webkit-transform: rotate(35deg); */
+/* 	-moz-transform:rotate(35deg); */
+/* 	-o-transform:rotate(35deg); */
+/* 	-ms-transform:rotate(35deg); */
+/* 	transform:rotate(35deg); */
+	margin-top:20px; /* half the height */
+	line-height: 40px;
+}
+

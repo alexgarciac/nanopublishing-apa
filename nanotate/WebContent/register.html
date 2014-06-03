@@ -76,6 +76,9 @@
 		$("#name").val(decodeURI(GetURLParameter("name")).replace("+", " "));
 		$("#username").val(GetURLParameter("username"));
 		$("#email").val(GetURLParameter("email"));
+		$("#img").val(GetURLParameter("img"));
+		$("#authcode").val(GetURLParameter("authcode"));
+		$("#profilepic").attr("src",GetURLParameter("img") );
 		if (getCookie("user") != "") {
 			
 			document.getElementById("signup").style.visibility = "hidden";
@@ -91,7 +94,10 @@
   <div class="container">
     <div class="login">
       <h1>Sing up!</h1>
+       <p><img id="profilepic" style="margin-left: 63px;"/></p>
       <form method="post" action="signup" id="signup">
+     	<p style="display:none;"><input type="text" name="img" value="" placeholder="img" autocomplete="off" id="img"></p>
+     	<p style="display:none;"><input type="text" name="authcode" value="" placeholder="img" autocomplete="off" id="authcode"></p>
         <p><input type="text" name="user" value="" placeholder="username" autocomplete="off" id="username"></p>
         <p><input type="text" name="name" value="" placeholder="name" autocomplete="off" id="name"></p>
         <p><input type="text" name="email" value="" placeholder="email" autocomplete="off" id="email"></p>

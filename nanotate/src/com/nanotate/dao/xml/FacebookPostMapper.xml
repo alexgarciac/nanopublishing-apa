@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nanotate.dao.model.FacebookPostMapper" >
+  <resultMap id="BaseResultMap" type="com.nanotate.dao.model.FacebookPost" >
+    <id column="idfacebook_post" property="idfacebook_post" jdbcType="INTEGER" />
+    <result column="idannotation" property="idannotation" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="url_post" property="url_post" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    idfacebook_post, idannotation, username, url_post
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.nanotate.dao.model.FacebookPostExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from facebook_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from facebook_post
+    where idfacebook_post = #{idfacebook_post,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from facebook_post
+    where idfacebook_post = #{idfacebook_post,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.nanotate.dao.model.FacebookPostExample" >
+    delete from facebook_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.nanotate.dao.model.FacebookPost" >
+    insert into facebook_post (idfacebook_post, idannotation, username, 
+      url_post)
+    values (#{idfacebook_post,jdbcType=INTEGER}, #{idannotation,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{url_post,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.nanotate.dao.model.FacebookPost" >
+    insert into facebook_post
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="idfacebook_post != null" >
+        idfacebook_post,
+      </if>
+      <if test="idannotation != null" >
+        idannotation,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="url_post != null" >
+        url_post,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="idfacebook_post != null" >
+        #{idfacebook_post,jdbcType=INTEGER},
+      </if>
+      <if test="idannotation != null" >
+        #{idannotation,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="url_post != null" >
+        #{url_post,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.nanotate.dao.model.FacebookPostExample" resultType="java.lang.Integer" >
+    select count(*) from facebook_post
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update facebook_post
+    <set >
+      <if test="record.idfacebook_post != null" >
+        idfacebook_post = #{record.idfacebook_post,jdbcType=INTEGER},
+      </if>
+      <if test="record.idannotation != null" >
+        idannotation = #{record.idannotation,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url_post != null" >
+        url_post = #{record.url_post,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update facebook_post
+    set idfacebook_post = #{record.idfacebook_post,jdbcType=INTEGER},
+      idannotation = #{record.idannotation,jdbcType=INTEGER},
+      username = #{record.username,jdbcType=VARCHAR},
+      url_post = #{record.url_post,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nanotate.dao.model.FacebookPost" >
+    update facebook_post
+    <set >
+      <if test="idannotation != null" >
+        idannotation = #{idannotation,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="url_post != null" >
+        url_post = #{url_post,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where idfacebook_post = #{idfacebook_post,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nanotate.dao.model.FacebookPost" >
+    update facebook_post
+    set idannotation = #{idannotation,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      url_post = #{url_post,jdbcType=VARCHAR}
+    where idfacebook_post = #{idfacebook_post,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -607,6 +607,78 @@ public class UserExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andFacebook_token_expiresIsNull() {
+			addCriterion("facebook_token_expires is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresIsNotNull() {
+			addCriterion("facebook_token_expires is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresEqualTo(Long value) {
+			addCriterion("facebook_token_expires =", value,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresNotEqualTo(Long value) {
+			addCriterion("facebook_token_expires <>", value,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresGreaterThan(Long value) {
+			addCriterion("facebook_token_expires >", value,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresGreaterThanOrEqualTo(Long value) {
+			addCriterion("facebook_token_expires >=", value,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresLessThan(Long value) {
+			addCriterion("facebook_token_expires <", value,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresLessThanOrEqualTo(Long value) {
+			addCriterion("facebook_token_expires <=", value,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresIn(List<Long> values) {
+			addCriterion("facebook_token_expires in", values,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresNotIn(List<Long> values) {
+			addCriterion("facebook_token_expires not in", values,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresBetween(Long value1,
+				Long value2) {
+			addCriterion("facebook_token_expires between", value1, value2,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
+		public Criteria andFacebook_token_expiresNotBetween(Long value1,
+				Long value2) {
+			addCriterion("facebook_token_expires not between", value1, value2,
+					"facebook_token_expires");
+			return (Criteria) this;
+		}
+
 		public Criteria andTwitter_tokenIsNull() {
 			addCriterion("twitter_token is null");
 			return (Criteria) this;
@@ -676,6 +748,149 @@ public class UserExample {
 		public Criteria andTwitter_tokenNotBetween(String value1, String value2) {
 			addCriterion("twitter_token not between", value1, value2,
 					"twitter_token");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlIsNull() {
+			addCriterion("profile_pic_url is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlIsNotNull() {
+			addCriterion("profile_pic_url is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlEqualTo(String value) {
+			addCriterion("profile_pic_url =", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlNotEqualTo(String value) {
+			addCriterion("profile_pic_url <>", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlGreaterThan(String value) {
+			addCriterion("profile_pic_url >", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlGreaterThanOrEqualTo(String value) {
+			addCriterion("profile_pic_url >=", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlLessThan(String value) {
+			addCriterion("profile_pic_url <", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlLessThanOrEqualTo(String value) {
+			addCriterion("profile_pic_url <=", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlLike(String value) {
+			addCriterion("profile_pic_url like", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlNotLike(String value) {
+			addCriterion("profile_pic_url not like", value, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlIn(List<String> values) {
+			addCriterion("profile_pic_url in", values, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlNotIn(List<String> values) {
+			addCriterion("profile_pic_url not in", values, "profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlBetween(String value1, String value2) {
+			addCriterion("profile_pic_url between", value1, value2,
+					"profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andProfile_pic_urlNotBetween(String value1,
+				String value2) {
+			addCriterion("profile_pic_url not between", value1, value2,
+					"profile_pic_url");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailIsNull() {
+			addCriterion("email is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailIsNotNull() {
+			addCriterion("email is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailEqualTo(String value) {
+			addCriterion("email =", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailNotEqualTo(String value) {
+			addCriterion("email <>", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailGreaterThan(String value) {
+			addCriterion("email >", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailGreaterThanOrEqualTo(String value) {
+			addCriterion("email >=", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailLessThan(String value) {
+			addCriterion("email <", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailLessThanOrEqualTo(String value) {
+			addCriterion("email <=", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailLike(String value) {
+			addCriterion("email like", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailNotLike(String value) {
+			addCriterion("email not like", value, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailIn(List<String> values) {
+			addCriterion("email in", values, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailNotIn(List<String> values) {
+			addCriterion("email not in", values, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailBetween(String value1, String value2) {
+			addCriterion("email between", value1, value2, "email");
+			return (Criteria) this;
+		}
+
+		public Criteria andEmailNotBetween(String value1, String value2) {
+			addCriterion("email not between", value1, value2, "email");
 			return (Criteria) this;
 		}
 	}

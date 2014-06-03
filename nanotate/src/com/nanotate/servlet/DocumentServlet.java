@@ -171,7 +171,9 @@ public class DocumentServlet extends HttpServlet {
 		try {
 			session = MyBatis.getSession();
 			DocumentMapper mapper = session.getMapper(DocumentMapper.class);
-			List<Document> docs = mapper.selectByExample(null);
+			DocumentExample example = new DocumentExample();
+			example.createCriteria().andUploaded_byEqualTo((String) servletRequest.getSession().getAttribute("user"));
+			List<Document> docs = mapper.selectByExample(example);
 			r.setData(docs);
 			session.close();
 

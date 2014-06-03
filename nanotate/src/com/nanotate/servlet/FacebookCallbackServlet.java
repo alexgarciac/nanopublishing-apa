@@ -24,6 +24,7 @@ import com.nanotate.message.JsonResponse;
 
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
+import facebook4j.PictureSize;
 
 
 public class FacebookCallbackServlet extends HttpServlet {
@@ -42,15 +43,15 @@ public class FacebookCallbackServlet extends HttpServlet {
             String username = user.getUsername();
             String email=user.getEmail();
             String name= user.getFirstName()+" "+user.getLastName();
+            String img=facebook.getPictureURL(facebook.getId(), PictureSize.large).toString();
 			SqlSession sqlSession = MyBatis.getSession();
 			UserMapper mapper = sqlSession.getMapper(UserMapper.class);
 			UserExample userex = new UserExample();
 			userex.createCriteria().andFacebook_usernameEqualTo(username);
 			List<User> users = mapper.selectByExample(userex);
 			if(users.size()<=0){
-				redirect="/register.html?"+"username="+username+"&email="+email+"&name="+URLEncoder.encode(name,"UTF-8");
-				r.setData(username);
-			}
+				redirect="/register.html?"+"username="+username+"&email="+email+"&name="+URLEncoder.encode(name,"UTF-8")+"&img="+img+"&authcode="+oauthCode;
+				}
 			else{
 				redirect="/index.html";
 	    		session.setAttribute("user", username);

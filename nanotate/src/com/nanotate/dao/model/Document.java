@@ -1,53 +1,58 @@
 package com.nanotate.dao.model;
 
 public class Document {
-    private String uuid;
 
-    private String doi;
+	private String uuid;
+	private String doi;
+	private String title;
+	private String full_citation;
+	private Integer year;
+	private String uploaded_by;
 
-    private String title;
+	public String getUuid() {
+		return uuid;
+	}
 
-    private String full_citation;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
-    private Integer year;
+	public String getDoi() {
+		return doi;
+	}
 
-    public String getUuid() {
-        return uuid;
-    }
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getDoi() {
-        return doi;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setDoi(String doi) {
-        this.doi = doi;
-    }
+	public String getFull_citation() {
+		return full_citation;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setFull_citation(String full_citation) {
+		this.full_citation = full_citation;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public Integer getYear() {
+		return year;
+	}
 
-    public String getFull_citation() {
-        return full_citation;
-    }
+	public void setYear(Integer year) {
+		this.year = year;
+	}
 
-    public void setFull_citation(String full_citation) {
-        this.full_citation = full_citation;
-    }
+	public String getUploaded_by() {
+		return uploaded_by;
+	}
 
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-}
+	public void setUploaded_by(String uploaded_by) {
+		this.uploaded_by = uploaded_by;
+	}}
