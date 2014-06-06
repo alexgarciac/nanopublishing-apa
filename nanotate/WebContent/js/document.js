@@ -5,6 +5,37 @@ var data = undefined;
 var doi= undefined;
 var global = false;
 var viewerinit=false;
+var data=[];
+
+
+
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }
+        
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}   ;
+
+
+
 var options = { 
         target:        '#notification',   // target element(s) to be updated with server response 
         beforeSubmit:  showRequest,  // pre-submit callback 
@@ -141,54 +172,77 @@ function feedNanotweets(){
 	
 		$.getJSON( url + doi, function(result) {
 				if ( result.code == 0 ) {
-					$("#Nanotweets").html('');
-					var ul = $('<ul style="display: initial;"></ul>').appendTo("#Nanotweets");
-					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
-						for ( var i in result.data ) {
-//							console.log("Hi: "+ result.data[i].tags);
-							if ( result.data[i].status == "COMPLETED" ) {
-//								console.log('timestamp '+result.data[i].creation);
-								var li = $("<li></li>").appendTo(ul);
-								li.append('<span class="commentnumber">' + 
-									result.data[i].creation + '</span>');
-								
-								li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
-								
-		//						li.append('<p>' + result.data[i].tags + "</p>");
-								
-		
-								$("#tagfield"+uuid+"_"+i).tagHandler({
-								    assignedTags: result.data[i].tags.split(","),
-								    availableTags: result.data[i].tags.split(","),
-								    autocomplete: false,
-								    allowAdd: false,
-								    allowEdit: false
-								});
-		
-								var comment='';
-								if(result.data[i].comment.length!=0)
-									comment='"'+result.data[i].comment+'"';
-								li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+comment+' '+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><!--<form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form>--></span>');
-								$("#tofacebook_"+result.data[i].id).submit(function() { 
-							        // inside event callbacks 'this' is the DOM element so we first 
-							        // wrap it in a jQuery object and then invoke ajaxSubmit 
-							        $(this).ajaxSubmit(options); 
-							        $().toastmessage('showSuccessToast', "Posted to facebook");
-							        // !!! Important !!! 
-							        // always return false to prevent standard browser submit and page navigation 
-							        return false; 
-							    }); 
 					
-							} else if ( result.data[i].status == "WORKING" ) {
-								var li = $("<li></li>").appendTo(ul);
-								li.append('<span class="commentnumber">'+
-									(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
-								li.append("<p>Nanotweeting:</p>");
-								li.append('<p class="blockquote" >' + result.data[i].original_text.substring(0,70) + "...</p>");
-							}
+					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
+						
+						
+							if($("#nanoul p").size()<result.data.length)
+						{
+								console.log("doing some shit: "+$("#nanoul p").size()+"more shit: "+result.data.length);
+								$("#Nanotweets").html('');
+								
+
+								
+								var ul=$('<ul style="display: initial;" id="nanoul"></ul>').appendTo("#Nanotweets");	
+						}
+								
+								
 							
-					    } 	
+							
+							
+								
+							for (var i = $("#nanoul p").size(); i < result.data.length; i++) {
+//								console.log("Hi: "+ result.data[i].tags);
+								if ( result.data[i].status == "COMPLETED" ) {
+//									console.log('timestamp '+result.data[i].creation);
+									var li = $("<li></li>").appendTo($("#nanoul"));
+									li.append('<span class="commentnumber">' + 
+										result.data[i].creation + '</span>');
+									li.append('<p class="expandable" id="comment'+uuid+'_'+i+'">' + result.data[i].original_text+"</p>");
+									li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
+									
+			//						li.append('<p>' + result.data[i].tags + "</p>");
+									
+									$('#comment'+uuid+'_'+i).expander();
+									$("#tagfield"+uuid+"_"+i).tagHandler({
+									    assignedTags: result.data[i].tags.split(","),
+									    availableTags: result.data[i].tags.split(","),
+									    autocomplete: false,
+									    allowAdd: false,
+									    allowEdit: false
+									});
+			
+									var comment='';
+									if(result.data[i].comment.length!=0)
+										comment='"'+result.data[i].comment+'"';
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+comment+' '+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><!--<form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form>--></span>');
+									$("#tofacebook_"+result.data[i].id).submit(function() { 
+								        // inside event callbacks 'this' is the DOM element so we first 
+								        // wrap it in a jQuery object and then invoke ajaxSubmit 
+								        $(this).ajaxSubmit(options); 
+								        $().toastmessage('showSuccessToast', "Posted to facebook");
+								        // !!! Important !!! 
+								        // always return false to prevent standard browser submit and page navigation 
+								        return false; 
+								    }); 
+						
+								} else if ( result.data[i].status == "WORKING" ) {
+									var li = $("<li></li>").appendTo(ul);
+									li.append('<span class="commentnumber">'+
+										(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
+									li.append("<p>Nanotweeting:</p>");
+									li.append('<p class="blockquote" >' + result.data[i].original_text.substring(0,70) + "...</p>");
+								}
+								
+						    }
+							
+						
+							
+						
+						 	
 					} else {
+						$("#Nanotweets").html('');
+						var ul = $('<ul style="display: initial;"></ul>').appendTo("#Nanotweets");
 						ul.append("<li>Nanotweets not found.</li>");
 					}
 		

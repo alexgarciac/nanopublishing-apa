@@ -133,8 +133,9 @@ public class AnnotationServlet extends HttpServlet {
 			log.info("Query: "+example.getOrderByClause());
 			log.info("Number of annotations: "+annotations.size() );
 			
-			for(Annotation annotation: annotations){
-				log.info(annotation.getUser_name());
+			for(AnnotationWithBLOBs annotation: annotations){
+				annotation.setJson_value("");
+				
 			}
 			
 			r.setData( annotations );
