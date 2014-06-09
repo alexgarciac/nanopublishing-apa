@@ -176,7 +176,7 @@ function feedNanotweets(){
 					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
 						
 						
-							if($("#nanoul p").size()<result.data.length)
+							if($("#nanoul div").size()<result.data.length)
 						{
 								console.log("doing some shit: "+$("#nanoul p").size()+" more shit: "+result.data.length);
 								$("#Nanotweets").html('');
@@ -191,7 +191,7 @@ function feedNanotweets(){
 							
 							
 								
-							for (var i = $("#nanoul p").size(); i < result.data.length; i++) {
+							for (var i = $("#nanoul div").size(); i < result.data.length; i++) {
 //								console.log("Hi: "+ result.data[i].tags);
 								if ( result.data[i].status == "COMPLETED" ) {
 //									console.log('timestamp '+result.data[i].creation);

@@ -294,8 +294,9 @@ body.loading .modal {
 /* Configure the radio buttons to hide off screen */
 .tabGroup > input[type="radio"] {
     position: absolute;
-    left:-100px;
-    top:-100px;
+/*     left:-100px; */
+/*     top:-100px; */
+	display:none;
 }
  
 /* Configure labels to look like tabs */
