@@ -176,7 +176,7 @@ function feedNanotweets(){
 					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
 						
 						
-							if($("#nanoul p").size()<result.data.length)
+							if($("#nanoul .expandable").size()<result.data.length)
 						{
 								console.log("doing some shit: "+$("#nanoul p").size()+"more shit: "+result.data.length);
 								$("#Nanotweets").html('');
@@ -198,12 +198,13 @@ function feedNanotweets(){
 									var li = $("<li></li>").appendTo($("#nanoul"));
 									li.append('<span class="commentnumber">' + 
 										result.data[i].creation + '</span>');
-									li.append('<p class="expandable" id="comment'+uuid+'_'+i+'">' + result.data[i].original_text+"</p>");
+									li.append('<p class="expandable" id="text'+uuid+'_'+i+'">' + result.data[i].original_text+"</p>");
+									li.append('<span></span>');
 									li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
 									
 			//						li.append('<p>' + result.data[i].tags + "</p>");
 									
-									$('#comment'+uuid+'_'+i).expander();
+									$('#text'+uuid+'_'+i).expander();
 									$("#tagfield"+uuid+"_"+i).tagHandler({
 									    assignedTags: result.data[i].tags.split(","),
 									    availableTags: result.data[i].tags.split(","),
