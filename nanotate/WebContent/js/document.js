@@ -176,9 +176,9 @@ function feedNanotweets(){
 					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
 						
 						
-							if($("#nanoul .expandable").size()<result.data.length)
+							if($("#nanoul p").size()<result.data.length)
 						{
-								console.log("doing some shit: "+$("#nanoul p").size()+"more shit: "+result.data.length);
+								console.log("doing some shit: "+$("#nanoul p").size()+" more shit: "+result.data.length);
 								$("#Nanotweets").html('');
 								
 
@@ -199,8 +199,26 @@ function feedNanotweets(){
 									li.append('<span class="commentnumber">' + 
 										result.data[i].creation + '</span>');
 									li.append('<p class="expandable" id="text'+uuid+'_'+i+'">' + result.data[i].original_text+"</p>");
-									li.append('<span></span>');
-									li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
+									var comment='';
+									if(result.data[i].comment=="")
+										comment='No comment found';
+									else
+										comment=result.data[i].comment;
+									
+									li.append('<div class="tabGroup">'+
+										   '<input type="radio" name="tabGroup'+i+'" id="rad1'+uuid+'_'+i+'" class="tab1" checked=true/>'+
+										    '<label for="rad1'+uuid+'_'+i+'">tags</label>'+
+										 
+										    '<input type="radio" name="tabGroup'+i+'" id="rad2'+uuid+'_'+i+'" class="tab2"/>'+
+										    '<label for="rad2'+uuid+'_'+i+'">comment</label>'+
+										     
+										     
+										    '<br/>'+
+										 
+										    '<div class="tab1"><ul id="tagfield'+uuid+'_'+i+'"></ul></div>'+
+										   ' <div class="tab2">'+comment+'</div>'+
+										'</div>');
+//									li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
 									
 			//						li.append('<p>' + result.data[i].tags + "</p>");
 									
@@ -226,8 +244,57 @@ function feedNanotweets(){
 								        // always return false to prevent standard browser submit and page navigation 
 								        return false; 
 								    }); 
-						
-								} else if ( result.data[i].status == "WORKING" ) {
+
+								} else if(result.data[i].status == "EMPTY") {
+									
+
+//									console.log('timestamp '+result.data[i].creation);
+									var li = $("<li></li>").appendTo($("#nanoul"));
+									li.append('<span class="commentnumber">' + 
+										result.data[i].creation + '</span>');
+									li.append('<p class="expandable" id="text'+uuid+'_'+i+'">' + result.data[i].original_text+"</p>");
+									var comment='';
+									if(result.data[i].comment=="")
+										comment='No comment found';
+									else
+										comment=result.data[i].comment;
+									
+									li.append('<div class="tabGroup">'+
+										   '<input type="radio" name="tabGroup'+i+'" id="rad1'+uuid+'_'+i+'" class="tab1" checked=true/>'+
+										    '<label for="rad1'+uuid+'_'+i+'">tags</label>'+
+										 
+										    '<input type="radio" name="tabGroup'+i+'" id="rad2'+uuid+'_'+i+'" class="tab2"/>'+
+										    '<label for="rad2'+uuid+'_'+i+'">comment</label>'+
+										     
+										     
+										    '<br/>'+
+										 
+										    '<div class="tab1">No tags found.</div>'+
+										   ' <div class="tab2">'+comment+'</div>'+
+										'</div>');
+//									li.append('<ul id="tagfield'+uuid+'_'+i+'"></ul>');
+									
+			//						li.append('<p>' + result.data[i].tags + "</p>");
+									
+									$('#text'+uuid+'_'+i).expander();
+											
+									var comment='';
+									if(result.data[i].comment.length!=0)
+										comment='"'+result.data[i].comment+'"';
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+comment+' '+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><!--<form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form>--></span>');
+									$("#tofacebook_"+result.data[i].id).submit(function() { 
+								        // inside event callbacks 'this' is the DOM element so we first 
+								        // wrap it in a jQuery object and then invoke ajaxSubmit 
+								        $(this).ajaxSubmit(options); 
+								        $().toastmessage('showSuccessToast', "Posted to facebook");
+								        // !!! Important !!! 
+								        // always return false to prevent standard browser submit and page navigation 
+								        return false; 
+								    }); 
+
+								
+								}
+								else if ( result.data[i].status == "WORKING" ) {
 									var li = $("<li></li>").appendTo(ul);
 									li.append('<span class="commentnumber">'+
 										(result.data[i].creation.match(/[A-Za-z]+ [0-9]+, 2[0-9][0-9][0-9]/)[0]) + '</span>');
