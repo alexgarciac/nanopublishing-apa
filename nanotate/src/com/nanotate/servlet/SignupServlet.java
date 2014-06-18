@@ -16,12 +16,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
+import twitter4j.Twitter;
+
 import com.nanotate.dao.model.User;
 import com.nanotate.dao.model.UserExample;
 import com.nanotate.dao.model.UserMapper;
 import com.nanotate.dao.util.MyBatis;
 
 import facebook4j.Facebook;
+import facebook4j.auth.AccessToken;
 
 /**
  * Servlet implementation class LoginServlet
@@ -52,15 +55,34 @@ public class SignupServlet extends HttpServlet {
 			UserMapper um=sqlSession.getMapper(UserMapper.class);
 			User record = new User();
 			record.setUsername(username);
-			record.setFirstname(name.substring(0, name.indexOf(" ")));
-			record.setLastname(name.substring(name.indexOf(" "),name.length()-1 ));
+			if(name.indexOf(" ")!=-1){
+				
+				record.setFirstname(name.substring(0, name.indexOf(" ")));
+				record.setLastname(name.substring(name.indexOf(" "),name.length() ));
+				
+			}
+			else
+			{
+				record.setFirstname(name);
+			}
+			
 			record.setPassword(pwd);
-			record.setFacebook_username(username);
+			
 			record.setProfile_pic_url(imgurl);
 			record.setEmail(email);
+			if(request.getSession().getAttribute("facebook")!=null)
+			{
 			Facebook facebook= (Facebook)request.getSession().getAttribute("facebook");
 			record.setFacebook_token(facebook.getOAuthAccessToken().getToken());
 			record.setFacebook_token_expires(facebook.getOAuthAccessToken().getExpires());
+			record.setFacebook_username(username);
+			}
+			else{
+				Twitter twitter= (Twitter)request.getSession().getAttribute("twitter");
+				record.setTwitter_token(twitter.getOAuthAccessToken().getToken());
+				record.setTwitter_username(username);
+				record.setTwitter_token_secret(twitter.getOAuthAccessToken().getTokenSecret());
+			}
 			um.insert(record);
 			sqlSession.commit();
 			session.setMaxInactiveInterval(30*60);

@@ -751,6 +751,90 @@ public class UserExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andTwitter_token_secretIsNull() {
+			addCriterion("twitter_token_secret is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretIsNotNull() {
+			addCriterion("twitter_token_secret is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretEqualTo(String value) {
+			addCriterion("twitter_token_secret =", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretNotEqualTo(String value) {
+			addCriterion("twitter_token_secret <>", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretGreaterThan(String value) {
+			addCriterion("twitter_token_secret >", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretGreaterThanOrEqualTo(String value) {
+			addCriterion("twitter_token_secret >=", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretLessThan(String value) {
+			addCriterion("twitter_token_secret <", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretLessThanOrEqualTo(String value) {
+			addCriterion("twitter_token_secret <=", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretLike(String value) {
+			addCriterion("twitter_token_secret like", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretNotLike(String value) {
+			addCriterion("twitter_token_secret not like", value,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretIn(List<String> values) {
+			addCriterion("twitter_token_secret in", values,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretNotIn(List<String> values) {
+			addCriterion("twitter_token_secret not in", values,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretBetween(String value1,
+				String value2) {
+			addCriterion("twitter_token_secret between", value1, value2,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
+		public Criteria andTwitter_token_secretNotBetween(String value1,
+				String value2) {
+			addCriterion("twitter_token_secret not between", value1, value2,
+					"twitter_token_secret");
+			return (Criteria) this;
+		}
+
 		public Criteria andProfile_pic_urlIsNull() {
 			addCriterion("profile_pic_url is null");
 			return (Criteria) this;

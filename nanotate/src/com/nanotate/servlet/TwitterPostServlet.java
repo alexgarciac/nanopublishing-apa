@@ -26,8 +26,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package com.nanotate.servlet;
 
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
+import utils.JsonEncoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -36,6 +41,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
+
+import com.nanotate.dao.model.FacebookPost;
+import com.nanotate.dao.model.FacebookPostMapper;
+import com.nanotate.dao.model.TwitterPost;
+import com.nanotate.dao.model.TwitterPostMapper;
+import com.nanotate.dao.model.User;
+import com.nanotate.dao.model.UserExample;
+import com.nanotate.dao.model.UserMapper;
+import com.nanotate.dao.util.MyBatis;
+import com.nanotate.message.JsonResponse;
+
+
+
+
+
+
+
+
+
 import java.io.IOException;
 
 public class TwitterPostServlet extends HttpServlet {
@@ -43,28 +68,85 @@ public class TwitterPostServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String text = request.getParameter("message");
-        Twitter twitter = (Twitter)request.getSession().getAttribute("twitter");
-        if(twitter!=null)
+        User us=null;
+        Status data = null;
+        if(request.getSession().getAttribute("twitter")==null)
         {
-	        try {
-	            twitter.updateStatus(text);
-	        } catch (TwitterException e) {
-	        	e.printStackTrace();
-	            throw new ServletException(e);
-	        }
-	        response.sendRedirect(request.getContextPath()+ "/"+request.getParameter("callback"));
+        	ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+            .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
+            .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
+            TwitterFactory tf = new TwitterFactory(cb.build());
+            Twitter twitter = tf.getInstance();
+            request.getSession().setAttribute("twitter", twitter);
         }
-        else
-        {
-        	ServletContext context = this.getServletContext();
-        	RequestDispatcher dispatcher = context.getRequestDispatcher("/twittersignin");
+        Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
 
-        	// change your request and response accordingly
-
-        	dispatcher.forward(request, response);
+        try{
+        	 twitter.getOAuthAccessToken();
+        }
+        catch (Exception e){
+        	SqlSession session = null;
+        	try {
+				session = MyBatis.getSession();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			UserMapper usMapper = session.getMapper(UserMapper.class);
+			UserExample usExample = new UserExample();
+			usExample.createCriteria().andUsernameEqualTo((String) request.getSession().getAttribute("user"));
+			us =  usMapper.selectByExample(usExample).get(0);
+        	twitter.setOAuthAccessToken(new AccessToken(us.getTwitter_token(),us.getTwitter_token_secret()));
+			session.close();
         }
         	
+    	
+        	request.setCharacterEncoding("UTF-8");
+        	 String message = request.getParameter("message");
+        	 String id = request.getParameter("id");
+        	 System.out.println("Hi mothherfucker!");
+        	 System.out.println("Message: " +message);
+        	 String username = (String) request.getSession().getAttribute("user");
+             JsonResponse r = new JsonResponse();
+             
+             try {
+                data = twitter.updateStatus(message);
+               
+                
+                if(!data.equals(""))
+                {
+                	SqlSession session = null;
+					try {
+						session = MyBatis.getSession();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                	TwitterPostMapper mapper=(TwitterPostMapper) session.getMapper(TwitterPostMapper.class);
+                	TwitterPost record = new TwitterPost();
+                	record.setUsername(username);
+                	record.setIdannotation(Integer.parseInt(id));
+                	record.setTweet_url("www.twitter.com/"+twitter.getScreenName()+"/"+data.getId());
+                	mapper.insert(record);
+                	session.commit();
+                	session.close();
+                }
+                r.setData(data);
+                
+             } catch (TwitterException e) {
+            	 e.printStackTrace();
+            	 r.setData(e.getErrorMessage());
+//                 throw new ServletException(e);
+             }
+             
+        
+             JsonEncoder.encode(response, r);
        
     }
-}
+    
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		this.doPost(req, resp);
+	}
+ }

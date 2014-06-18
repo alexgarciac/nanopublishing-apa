@@ -11,6 +11,7 @@ public class User {
 	private String facebook_token;
 	private Long facebook_token_expires;
 	private String twitter_token;
+	private String twitter_token_secret;
 	private String profile_pic_url;
 	private String email;
 
@@ -84,6 +85,14 @@ public class User {
 
 	public void setTwitter_token(String twitter_token) {
 		this.twitter_token = twitter_token;
+	}
+
+	public String getTwitter_token_secret() {
+		return twitter_token_secret;
+	}
+
+	public void setTwitter_token_secret(String twitter_token_secret) {
+		this.twitter_token_secret = twitter_token_secret;
 	}
 
 	public String getProfile_pic_url() {

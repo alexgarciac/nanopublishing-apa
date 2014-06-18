@@ -7,7 +7,11 @@ var global = false;
 var viewerinit=false;
 var data=[];
 
-
+$().toastmessage({
+    sticky   : false,
+    position : 'middle-center',
+    close    : function () {console.log("toast is closed ...");}
+});
 
 Array.prototype.equals = function (array) {
     // if the other array is a falsy value, return
@@ -36,10 +40,28 @@ Array.prototype.equals = function (array) {
 
 
 
-var options = { 
+var twitteroptions = { 
         target:        '#notification',   // target element(s) to be updated with server response 
         beforeSubmit:  showRequest,  // pre-submit callback 
-        success:       showResponse,  // post-submit callback 
+        complete:       showTwitterResponse,
+        error: showTwitterError,// post-submit callback 
+ 
+        // other available options: 
+        //url:       url         // override for form's 'action' attribute 
+        type:      'post'       // 'get' or 'post', override for form's 'method' attribute 
+        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
+        //clearForm: true        // clear all form fields after successful submit 
+        //resetForm: true        // reset the form after successful submit 
+ 
+        // $.ajax options can be used here too, for example: 
+        //timeout:   3000 
+        };
+
+var facebookoptions = { 
+        target:        '#notification',   // target element(s) to be updated with server response 
+        beforeSubmit:  showRequest,  // pre-submit callback 
+        complete:       showFacebookResponse,
+        error: showFacebookError,// post-submit callback 
  
         // other available options: 
         //url:       url         // override for form's 'action' attribute 
@@ -70,7 +92,7 @@ function showRequest(formData, jqForm, options) {
 }
  
 // post-submit callback 
-function showResponse(responseText, statusText, xhr, $form)  { 
+function showTwitterResponse(responseText, statusText, xhr, $form)  { 
     // for normal html responses, the first argument to the success callback 
     // is the XMLHttpRequest object's responseText property 
  
@@ -81,8 +103,62 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // if the ajaxSubmit method was passed an Options Object with the dataType 
     // property set to 'json' then the first argument to the success callback 
     // is the json data object returned by the server 
+	if(typeof(JSON.parse(responseText.responseText).data)=="object")
+	 $().toastmessage('showSuccessToast', "Posted to twitter");
+	else
+	 $().toastmessage('showErrorToast', JSON.parse(responseText.responseText).data);
+    console.log('status: ' + statusText + '\n\nresponseText: \n' + JSON.parse(responseText.responseText).data+ 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+}
+
+function showTwitterError(responseText, statusText, xhr, $form)  { 
+    // for normal html responses, the first argument to the success callback 
+    // is the XMLHttpRequest object's responseText property 
  
-    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+    // if the ajaxSubmit method was passed an Options Object with the dataType 
+    // property set to 'xml' then the first argument to the success callback 
+    // is the XMLHttpRequest object's responseXML property 
+ 
+    // if the ajaxSubmit method was passed an Options Object with the dataType 
+    // property set to 'json' then the first argument to the success callback 
+    // is the json data object returned by the server 
+	 $().toastmessage('showErrorToast', responseText.message);
+    console.log('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+}
+
+function showFacebookResponse(responseText, statusText, xhr, $form)  { 
+	 // for normal html responses, the first argument to the success callback 
+    // is the XMLHttpRequest object's responseText property 
+ 
+    // if the ajaxSubmit method was passed an Options Object with the dataType 
+    // property set to 'xml' then the first argument to the success callback 
+    // is the XMLHttpRequest object's responseXML property 
+ 
+    // if the ajaxSubmit method was passed an Options Object with the dataType 
+    // property set to 'json' then the first argument to the success callback 
+    // is the json data object returned by the server 
+	if(typeof(JSON.parse(responseText.responseText).data)=="object")
+	 $().toastmessage('showSuccessToast', "Posted to twitter");
+	else
+	 $().toastmessage('showErrorToast', JSON.parse(responseText.responseText).data);
+    console.log('status: ' + statusText + '\n\nresponseText: \n' + JSON.parse(responseText.responseText).data+ 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+}
+
+function showFacebookError(responseText, statusText, xhr, $form)  { 
+    // for normal html responses, the first argument to the success callback 
+    // is the XMLHttpRequest object's responseText property 
+ 
+    // if the ajaxSubmit method was passed an Options Object with the dataType 
+    // property set to 'xml' then the first argument to the success callback 
+    // is the XMLHttpRequest object's responseXML property 
+ 
+    // if the ajaxSubmit method was passed an Options Object with the dataType 
+    // property set to 'json' then the first argument to the success callback 
+    // is the json data object returned by the server 
+	 $().toastmessage('showErrorToast', responseText.message);
+    console.log('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
         '\n\nThe output div should have already been updated with the responseText.'); 
 }
 
@@ -176,7 +252,7 @@ function feedNanotweets(){
 					if ( result.hasOwnProperty('data') && result.data.length > 0 ) {
 						
 						
-							if($("#nanoul div").size()<result.data.length)
+							if($("#nanoul span").size()/5<result.data.length)
 						{
 								console.log("doing some shit: "+$("#nanoul p").size()+" more shit: "+result.data.length);
 								$("#Nanotweets").html('');
@@ -191,7 +267,7 @@ function feedNanotweets(){
 							
 							
 								
-							for (var i = $("#nanoul div").size(); i < result.data.length; i++) {
+							for (var i = $("#nanoul span").size()/5; i < result.data.length; i++) {
 //								console.log("Hi: "+ result.data[i].tags);
 								if ( result.data[i].status == "COMPLETED" ) {
 //									console.log('timestamp '+result.data[i].creation);
@@ -234,12 +310,22 @@ function feedNanotweets(){
 									var comment='';
 									if(result.data[i].comment.length!=0)
 										comment='"'+result.data[i].comment+'"';
-									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].original_text+'"'+'\n'+comment+'\n'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><!--<form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form>--></span>');
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].original_text+'"'+'\n'+comment+'\n'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
 									$("#tofacebook_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
 								        // wrap it in a jQuery object and then invoke ajaxSubmit 
-								        $(this).ajaxSubmit(options); 
-								        $().toastmessage('showSuccessToast', "Posted to facebook");
+								        $(this).ajaxSubmit(facebookoptions); 
+								
+								        // !!! Important !!! 
+								        // always return false to prevent standard browser submit and page navigation 
+								        return false; 
+								    }); 
+									
+									$("#totwitter_"+result.data[i].id).submit(function() { 
+								        // inside event callbacks 'this' is the DOM element so we first 
+								        // wrap it in a jQuery object and then invoke ajaxSubmit 
+								        $(this).ajaxSubmit(twitteroptions); 
+								      
 								        // !!! Important !!! 
 								        // always return false to prevent standard browser submit and page navigation 
 								        return false; 
@@ -281,12 +367,22 @@ function feedNanotweets(){
 									var comment='';
 									if(result.data[i].comment.length!=0)
 										comment='"'+result.data[i].comment+'"';
-									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">'+comment+' '+result.data[i].tags+'		'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><!--<form action="./twitterpost" method="post"><textarea name="message" style="display:none;">'+result.data[i].tags+'</textarea><textarea name="callback" style="display:none;">'+"document.jsp?uuid=" + uuid+'</textarea><button class="zocial icon twitter" name="post" type="submit">Button label here</button></form>--></span>');
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].original_text+'"'+'\n'+comment+'\n'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
 									$("#tofacebook_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
 								        // wrap it in a jQuery object and then invoke ajaxSubmit 
-								        $(this).ajaxSubmit(options); 
-								        $().toastmessage('showSuccessToast', "Posted to facebook");
+								        $(this).ajaxSubmit(facebookoptions); 
+								        
+								        // !!! Important !!! 
+								        // always return false to prevent standard browser submit and page navigation 
+								        return false; 
+								    }); 
+									
+									$("#totwitter_"+result.data[i].id).submit(function() { 
+								        // inside event callbacks 'this' is the DOM element so we first 
+								        // wrap it in a jQuery object and then invoke ajaxSubmit 
+								        $(this).ajaxSubmit(twitteroptions); 
+								      
 								        // !!! Important !!! 
 								        // always return false to prevent standard browser submit and page navigation 
 								        return false; 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
 import com.nanotate.dao.model.Annotation;
@@ -29,6 +30,8 @@ import com.nanotate.message.JsonResponse;
 
 
 
+
+
 import utils.JsonEncoder;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
@@ -42,6 +45,7 @@ public class FacebookPostServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String data=null;
         if(request.getSession().getAttribute("facebook")==null)
         {
         	ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -72,8 +76,18 @@ public class FacebookPostServlet extends HttpServlet {
 			UserExample usExample = new UserExample();
 			usExample.createCriteria().andUsernameEqualTo((String) request.getSession().getAttribute("user"));
 			User us =  usMapper.selectByExample(usExample).get(0);
-        	facebook.setOAuthAccessToken(new AccessToken(us.getFacebook_token(), us.getFacebook_token_expires()));
 			session.close();
+			if(!StringUtils.isEmpty(us.getFacebook_token()))
+			{
+				facebook.setOAuthAccessToken(new AccessToken(us.getFacebook_token(), us.getFacebook_token_expires()));
+				
+			}
+			else
+			{
+				System.out.println("No funciono");
+				response.sendRedirect(request.getContextPath() + "/facebooksignin");
+			}
+			
         }
        
     	
@@ -86,24 +100,31 @@ public class FacebookPostServlet extends HttpServlet {
              JsonResponse r = new JsonResponse();
              
              try {
-                String data = facebook.postStatusMessage(message.replace(",", " ,"));
+                data = facebook.postStatusMessage(message.replace(",", " ,"));
                 Post post = facebook.getPost(data.split("_")[1]);
                 
                 if(!data.equals(""))
                 {
-                	SqlSession session = MyBatis.getSession();
+                	SqlSession session = null;
+					try {
+						session = MyBatis.getSession();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 	FacebookPostMapper mapper=(FacebookPostMapper) session.getMapper(FacebookPostMapper.class);
                 	FacebookPost record = new FacebookPost();
                 	record.setUsername(username);
                 	record.setIdannotation(Integer.parseInt(id));
-                	record.setUrl_post("https://wwww.facebook.com/"+facebook.getUser(facebook.getId()).getUsername()+"/posts/"+post.getId());
+                	record.setUrl_post("https://www.facebook.com/"+facebook.getUser(facebook.getId()).getUsername()+"/posts/"+post.getId());
                 	mapper.insert(record);
                 	session.commit();
                 	session.close();
                 }
-                
-             } catch (Exception e) {
-                 throw new ServletException(e);
+                r.setData(post);
+             } catch (FacebookException e) {
+            	 e.printStackTrace();
+            	 r.setData(e.getErrorMessage());
              }
              JsonEncoder.encode(response, r);
         
