@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
 import com.nanotate.dao.model.FacebookPost;
@@ -61,6 +62,7 @@ import com.nanotate.message.JsonResponse;
 
 
 
+
 import java.io.IOException;
 
 public class TwitterPostServlet extends HttpServlet {
@@ -70,6 +72,7 @@ public class TwitterPostServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         User us=null;
         Status data = null;
+        boolean credentials = false;
         if(request.getSession().getAttribute("twitter")==null)
         {
         	ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -97,7 +100,12 @@ public class TwitterPostServlet extends HttpServlet {
 			UserExample usExample = new UserExample();
 			usExample.createCriteria().andUsernameEqualTo((String) request.getSession().getAttribute("user"));
 			us =  usMapper.selectByExample(usExample).get(0);
-        	twitter.setOAuthAccessToken(new AccessToken(us.getTwitter_token(),us.getTwitter_token_secret()));
+			if(!StringUtils.isEmpty(us.getTwitter_token())&&!StringUtils.isEmpty(us.getTwitter_token_secret()))
+			{
+				twitter.setOAuthAccessToken(new AccessToken(us.getTwitter_token(),us.getTwitter_token_secret()));
+				credentials=true;
+			}
+        	
 			session.close();
         }
         	
@@ -109,36 +117,41 @@ public class TwitterPostServlet extends HttpServlet {
         	 System.out.println("Message: " +message);
         	 String username = (String) request.getSession().getAttribute("user");
              JsonResponse r = new JsonResponse();
-             
-             try {
-                data = twitter.updateStatus(message);
-               
-                
-                if(!data.equals(""))
-                {
-                	SqlSession session = null;
-					try {
-						session = MyBatis.getSession();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-                	TwitterPostMapper mapper=(TwitterPostMapper) session.getMapper(TwitterPostMapper.class);
-                	TwitterPost record = new TwitterPost();
-                	record.setUsername(username);
-                	record.setIdannotation(Integer.parseInt(id));
-                	record.setTweet_url("www.twitter.com/"+twitter.getScreenName()+"/"+data.getId());
-                	mapper.insert(record);
-                	session.commit();
-                	session.close();
+           if(credentials) 
+           {
+        	   try {
+                   data = twitter.updateStatus(message);
+                  
+                   
+                   if(!data.equals(""))
+                   {
+                   	SqlSession session = null;
+   					try {
+   						session = MyBatis.getSession();
+   					} catch (Exception e) {
+   						// TODO Auto-generated catch block
+   						e.printStackTrace();
+   					}
+                   	TwitterPostMapper mapper=(TwitterPostMapper) session.getMapper(TwitterPostMapper.class);
+                   	TwitterPost record = new TwitterPost();
+                   	record.setUsername(username);
+                   	record.setIdannotation(Integer.parseInt(id));
+                   	record.setTweet_url("www.twitter.com/"+twitter.getScreenName()+"/"+data.getId());
+                   	mapper.insert(record);
+                   	session.commit();
+                   	session.close();
+                   }
+                   r.setData(data);
+                   
+                } catch (TwitterException e) {
+               	 e.printStackTrace();
+               	 r.setData(e.getErrorMessage());
+//                    throw new ServletException(e);
                 }
-                r.setData(data);
-                
-             } catch (TwitterException e) {
-            	 e.printStackTrace();
-            	 r.setData(e.getErrorMessage());
-//                 throw new ServletException(e);
-             }
+           }
+           else
+        	   r.setData(credentials);
+            
              
         
              JsonEncoder.encode(response, r);

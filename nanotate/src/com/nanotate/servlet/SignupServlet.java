@@ -75,7 +75,11 @@ public class SignupServlet extends HttpServlet {
 			Facebook facebook= (Facebook)request.getSession().getAttribute("facebook");
 			record.setFacebook_token(facebook.getOAuthAccessToken().getToken());
 			record.setFacebook_token_expires(facebook.getOAuthAccessToken().getExpires());
-			record.setFacebook_username(username);
+			 facebook4j.User user = (facebook4j.User) facebook.getUser(facebook.getId());
+			if(StringUtils.isEmpty(user.getUsername()))
+			 record.setFacebook_username(user.getId());
+			else
+				record.setFacebook_username(user.getUsername());
 			}
 			else{
 				Twitter twitter= (Twitter)request.getSession().getAttribute("twitter");
