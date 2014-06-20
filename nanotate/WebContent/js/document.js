@@ -139,7 +139,7 @@ function showFacebookResponse(responseText, statusText, xhr, $form)  {
     // property set to 'json' then the first argument to the success callback 
     // is the json data object returned by the server 
 	if(typeof(JSON.parse(responseText.responseText).data)=="object")
-	 $().toastmessage('showSuccessToast', "Posted to twitter");
+	 $().toastmessage('showSuccessToast', "Posted to facebook");
 	else
 	 $().toastmessage('showErrorToast', JSON.parse(responseText.responseText).data);
     console.log('status: ' + statusText + '\n\nresponseText: \n' + JSON.parse(responseText.responseText).data+ 
@@ -309,8 +309,8 @@ function feedNanotweets(){
 			
 									var comment='';
 									if(result.data[i].comment.length!=0)
-										comment='"'+result.data[i].comment+'"';
-									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].original_text+'"'+'\n'+comment+'\n'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
+										comment=result.data[i].comment;
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="original_text" style="display:none;">"'+result.data[i].original_text+'"'+'</textarea><textarea name="comment" style="display:none;">'+comment+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
 									$("#tofacebook_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
 								        // wrap it in a jQuery object and then invoke ajaxSubmit 

@@ -72,7 +72,7 @@ public class TwitterPostServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         User us=null;
         Status data = null;
-        boolean credentials = false;
+        boolean credentials = true;
         if(request.getSession().getAttribute("twitter")==null)
         {
         	ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -102,11 +102,13 @@ public class TwitterPostServlet extends HttpServlet {
 			UserExample usExample = new UserExample();
 			usExample.createCriteria().andUsernameEqualTo((String) request.getSession().getAttribute("user"));
 			us =  usMapper.selectByExample(usExample).get(0);
-			if(!StringUtils.isEmpty(us.getTwitter_token())&&!StringUtils.isEmpty(us.getTwitter_token_secret()))
+			if(StringUtils.isEmpty(us.getTwitter_token())||StringUtils.isEmpty(us.getTwitter_token_secret()))
 			{
-				twitter.setOAuthAccessToken(new AccessToken(us.getTwitter_token(),us.getTwitter_token_secret()));
-				credentials=true;
+				
+				credentials=false;
 			}
+			else
+				twitter.setOAuthAccessToken(new AccessToken(us.getTwitter_token(),us.getTwitter_token_secret()));
         	
 			session.close();
         }

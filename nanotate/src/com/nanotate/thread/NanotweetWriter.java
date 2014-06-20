@@ -32,7 +32,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -44,7 +46,21 @@ import com.nanotate.dao.model.AnnotationMapper;
 import com.nanotate.dao.model.AnnotationWithBLOBs;
 import com.nanotate.dao.model.Document;
 import com.nanotate.dao.model.DocumentMapper;
+import com.nanotate.dao.model.FacebookPost;
+import com.nanotate.dao.model.FacebookPostMapper;
+import com.nanotate.dao.model.TwitterPost;
+import com.nanotate.dao.model.TwitterPostMapper;
+import com.nanotate.dao.model.User;
+import com.nanotate.dao.model.UserExample;
+import com.nanotate.dao.model.UserMapper;
 import com.nanotate.dao.util.MyBatis;
+
+import facebook4j.Facebook;
+import facebook4j.FacebookException;
+import facebook4j.FacebookFactory;
+import facebook4j.Post;
+import facebook4j.auth.AccessToken;
+
 
 
 public class NanotweetWriter implements Runnable {
@@ -131,8 +147,70 @@ public class NanotweetWriter implements Runnable {
 	}
 
 	private void sendToNanotateFacebook(AnnotationWithBLOBs annotation) {
-		// TODO Auto-generated method stub
+		facebook4j.conf.ConfigurationBuilder cb = new facebook4j.conf.ConfigurationBuilder();
+    	cb.setDebugEnabled(true)
+    	  .setOAuthAppId("236285369909239")
+    	  .setOAuthAppSecret("df356774233762558c63281d90d21368")
+    	  .setOAuthPermissions("basic_info,email,publish_stream");
+//    	.setOAuthAppId("1427521897511957")
+//	  .setOAuthAppSecret("9a447eb931f93131af68176c006a1a39")
+//	  .setOAuthPermissions("public_profile,user_friends,email,publish_stream,publish_actions");
+    	Facebook facebookNanotate = new FacebookFactory(cb.build()).getInstance();
+		facebookNanotate.setOAuthAccessToken(new AccessToken("CAADW5nmJZCZCcBAIdV6nJtvvufeVlILOWvPC2h3ro6V2Nk7eOPNPufpAjZAZCkQwgVkzO82C4tIZAzjMeOFMUJm1FkgAV9I96ZCeA5azCg9JX0wmZC5QMpxDxgabKLnDHzRxZBaS5CX4EYoiAk7bCDIPV6ZBlRZCrIQ5TtiQLINO22N8ZAkyNbFZC1lK",null));
+		try{
+		String data = facebookNanotate.postStatusMessage(annotation.getOriginal_text()+"\n from: "+annotation.getDoi());
+        Post post = facebookNanotate.getPost(data.split("_")[1]);
+        
+        if(StringUtils.isEmpty(annotation.getComment()))
+        {	
+        	Facebook facebook = new FacebookFactory(cb.build()).getInstance();
+        	SqlSession session = null;
+        	try {
+				session = MyBatis.getSession();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			UserMapper usMapper = session.getMapper(UserMapper.class);
+			UserExample usExample = new UserExample();
+			usExample.createCriteria().andUsernameEqualTo(annotation.getUser_name());
+			User us =  usMapper.selectByExample(usExample).get(0);
+			session.close();
+			if(!StringUtils.isEmpty(us.getFacebook_token()))
+			{
+				
+				facebook.setOAuthAccessToken(new AccessToken(us.getFacebook_token(), us.getFacebook_token_expires()));
+				facebook.commentPost(post.getId(), annotation.getComment());
+			}
+			else
+				facebookNanotate.commentPost(post.getId(), annotation.getUser_name()+" said: "+annotation.getComment());
 		
+				
+
+        }
+        
+        if(!data.equals(""))
+        {
+        	SqlSession session = null;
+			try {
+				session = MyBatis.getSession();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	FacebookPostMapper mapper=(FacebookPostMapper) session.getMapper(FacebookPostMapper.class);
+        	FacebookPost record = new FacebookPost();
+        	record.setUsername("nanotate");
+        	record.setIdannotation(annotation.getId());
+        	record.setUrl_post("https://www.facebook.com/nanotateapp/posts/"+post.getId());
+        	mapper.insert(record);
+        	session.commit();
+        	session.close();
+        }
+	}
+		catch(FacebookException e){
+			e.printStackTrace();
+		}
 	}
 
 	private void sendToNanotateTwitter(AnnotationWithBLOBs annotation) {
@@ -144,7 +222,43 @@ public class NanotweetWriter implements Runnable {
         .setOAuthConsumerSecret("PQW9JJuN3RxVKPxyyVy4nUnTdkaEYh4RUiagw3nGt6KHNyTQJH");
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
-        
+        twitter.setOAuthAccessToken(new twitter4j.auth.AccessToken("2326910304-Dpi1MBlPBq37KyUxBmd03jkkFxhXLzffds1cG5X","iCmxAjp0XTtmgpuoV7fKItPajXzqTJkj9jetGLTcQnEOG"));
+        try {
+        	
+        	String message=annotation.getTags().replace(",", ", " );
+        	
+        	if(message.length()>105)
+        		message=message.substring(0,100)+"...";
+       
+        	
+            Status data = twitter.updateStatus(message+" #Nanotate "+annotation.getDoi());
+           
+            
+            if(!data.equals(""))
+            {
+            	SqlSession session = null;
+				try {
+					session = MyBatis.getSession();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	TwitterPostMapper mapper=(TwitterPostMapper) session.getMapper(TwitterPostMapper.class);
+            	TwitterPost record = new TwitterPost();
+            	record.setUsername("nanotate");
+            	record.setIdannotation(annotation.getId());
+            	record.setTweet_url("www.twitter.com/"+twitter.getScreenName()+"/"+data.getId());
+            	mapper.insert(record);
+            	session.commit();
+            	session.close();
+            }
+           
+            
+         } catch (TwitterException e) {
+        	 e.printStackTrace();
+        	
+//             throw new ServletException(e);
+         }
 		
 	}
 

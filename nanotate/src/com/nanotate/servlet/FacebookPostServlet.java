@@ -46,7 +46,7 @@ public class FacebookPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String data=null;
-    	boolean credentials = false;
+    	boolean credentials = true;
         if(request.getSession().getAttribute("facebook")==null)
         {
         	ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -78,19 +78,24 @@ public class FacebookPostServlet extends HttpServlet {
 			usExample.createCriteria().andUsernameEqualTo((String) request.getSession().getAttribute("user"));
 			User us =  usMapper.selectByExample(usExample).get(0);
 			session.close();
-			if(!StringUtils.isEmpty(us.getFacebook_token()))
+			if(StringUtils.isEmpty(us.getFacebook_token()))
 			{
-				facebook.setOAuthAccessToken(new AccessToken(us.getFacebook_token(), us.getFacebook_token_expires()));
-				credentials=true;
+				
+				credentials=false;
 			}
+			else
+				facebook.setOAuthAccessToken(new AccessToken(us.getFacebook_token(), us.getFacebook_token_expires()));
+			
 			
 			
         }
        
     	
         	request.setCharacterEncoding("UTF-8");
-        	 String message = request.getParameter("message");
+        	 String message = request.getParameter("original_text");
         	 String id = request.getParameter("id");
+        	 String comment = request.getParameter("comment");
+        	 String doi = request.getParameter("doi");
         	 System.out.println("Hi mothherfucker!");
         	 System.out.println("Message: " +message);
         	 String username = (String) request.getSession().getAttribute("user");
@@ -98,8 +103,10 @@ public class FacebookPostServlet extends HttpServlet {
             if(credentials) 
             {
             	try {
-                    data = facebook.postStatusMessage(message.replace(",", " ,"));
+                    data = facebook.postStatusMessage(message+"\n from: "+doi);
                     Post post = facebook.getPost(data.split("_")[1]);
+                    if(!StringUtils.isEmpty(comment))
+                    facebook.commentPost(post.getId(), comment);
                     
                     if(!data.equals(""))
                     {

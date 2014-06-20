@@ -126,7 +126,8 @@ $( "#pdf" ).click(function() {
 				var imgURL;
 				if(result.data.length>0)
 				{
-					for ( var i in result.data ) {		
+					var i;
+					for ( i=0;i<result.data.length;i++) {		
 						imgURL = "document?action=thumbnails&uuid=" + result.data[i].uuid;	
 						link = "document.jsp?uuid=" + result.data[i].uuid;	
 				    	$('#wrapper').append('<a id="' + result.data[i].uuid+"_"+result.data[i].doi+ '" class="mask"><img src="' + imgURL + '" /><span>'+result.data[i].full_citation+'</span></a>');
