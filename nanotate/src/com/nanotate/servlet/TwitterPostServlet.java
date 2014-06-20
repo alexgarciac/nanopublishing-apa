@@ -77,8 +77,10 @@ public class TwitterPostServlet extends HttpServlet {
         {
         	ConfigurationBuilder cb = new ConfigurationBuilder();
             cb.setDebugEnabled(true)
-            .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
-            .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
+       //        .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
+//        .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
+        .setOAuthConsumerKey("Sa3ficmgHpwDHXGOIJHWSysNK")
+        .setOAuthConsumerSecret("PQW9JJuN3RxVKPxyyVy4nUnTdkaEYh4RUiagw3nGt6KHNyTQJH");
             TwitterFactory tf = new TwitterFactory(cb.build());
             Twitter twitter = tf.getInstance();
             request.getSession().setAttribute("twitter", twitter);

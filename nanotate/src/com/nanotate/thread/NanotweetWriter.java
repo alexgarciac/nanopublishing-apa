@@ -32,6 +32,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
+
 import com.nanotate.Settings;
 import com.nanotate.dao.custom.SequenceMapper;
 import com.nanotate.dao.model.Annotation;
@@ -115,6 +119,8 @@ public class NanotweetWriter implements Runnable {
 			
 			annotation.setCompleted( new Timestamp(new Date().getTime()) );
 			log.info("Holaaaaaaa id:"+annotation.getId());
+			sendToNanotateTwitter(annotation);
+			sendToNanotateFacebook(annotation);
 			updateAnnotation( annotation );
 			
 			
@@ -122,6 +128,24 @@ public class NanotweetWriter implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void sendToNanotateFacebook(AnnotationWithBLOBs annotation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void sendToNanotateTwitter(AnnotationWithBLOBs annotation) {
+		ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+//        .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
+//        .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
+        .setOAuthConsumerKey("Sa3ficmgHpwDHXGOIJHWSysNK")
+        .setOAuthConsumerSecret("PQW9JJuN3RxVKPxyyVy4nUnTdkaEYh4RUiagw3nGt6KHNyTQJH");
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        Twitter twitter = tf.getInstance();
+        
+		
 	}
 
 	private void updateAnnotation(AnnotationWithBLOBs annotation) throws Exception {
