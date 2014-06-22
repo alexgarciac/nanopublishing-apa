@@ -33,6 +33,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.ConfigurationBuilder;
 import utils.JsonEncoder;
+import utils.SocialBuilder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -63,6 +64,7 @@ import com.nanotate.message.JsonResponse;
 
 
 
+
 import java.io.IOException;
 
 public class TwitterPostServlet extends HttpServlet {
@@ -75,14 +77,7 @@ public class TwitterPostServlet extends HttpServlet {
         boolean credentials = true;
         if(request.getSession().getAttribute("twitter")==null)
         {
-        	ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setDebugEnabled(true)
-       //        .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
-//        .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
-        .setOAuthConsumerKey("Sa3ficmgHpwDHXGOIJHWSysNK")
-        .setOAuthConsumerSecret("PQW9JJuN3RxVKPxyyVy4nUnTdkaEYh4RUiagw3nGt6KHNyTQJH");
-            TwitterFactory tf = new TwitterFactory(cb.build());
-            Twitter twitter = tf.getInstance();
+        	Twitter twitter = SocialBuilder.getTwitter();
             request.getSession().setAttribute("twitter", twitter);
         }
         Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");

@@ -7,6 +7,8 @@ var global = false;
 var viewerinit=false;
 var data=[];
 
+
+
 $().toastmessage({
     sticky   : false,
     position : 'middle-center',
@@ -75,6 +77,14 @@ var facebookoptions = {
         };
 
 //pre-submit callback 
+
+function tweetit(idform, doiform){
+	console.log($("#message_"+idform).val());
+	$("#message_"+idform).val($("#text_"+idform).val()+' '+doiform+' #Nanotate');
+	$("#totwitter_"+idform).ajaxSubmit(twitteroptions);
+	
+}
+
 function showRequest(formData, jqForm, options) { 
     // formData is an array; here we use $.param to convert it to a string to display it 
     // but the form plugin does this for you automatically when it submits the data 
@@ -105,6 +115,11 @@ function showTwitterResponse(responseText, statusText, xhr, $form)  {
     // is the json data object returned by the server 
 	if(typeof(JSON.parse(responseText.responseText).data)=="object")
 	 $().toastmessage('showSuccessToast', "Posted to twitter");
+	else if(JSON.parse(responseText.responseText).data==false)
+		{
+			alert("You have to connect with twitter first!");
+			window.location.href = "twittersignin?newuser=false";
+		}
 	else
 	 $().toastmessage('showErrorToast', JSON.parse(responseText.responseText).data);
     console.log('status: ' + statusText + '\n\nresponseText: \n' + JSON.parse(responseText.responseText).data+ 
@@ -140,6 +155,12 @@ function showFacebookResponse(responseText, statusText, xhr, $form)  {
     // is the json data object returned by the server 
 	if(typeof(JSON.parse(responseText.responseText).data)=="object")
 	 $().toastmessage('showSuccessToast', "Posted to facebook");
+	else if(JSON.parse(responseText.responseText).data==false)
+	{
+		alert("You have to connect with facebook first!");
+		window.location.href = "facebooksignin?newuser=false";
+	}
+		
 	else
 	 $().toastmessage('showErrorToast', JSON.parse(responseText.responseText).data);
     console.log('status: ' + statusText + '\n\nresponseText: \n' + JSON.parse(responseText.responseText).data+ 
@@ -310,7 +331,9 @@ function feedNanotweets(){
 									var comment='';
 									if(result.data[i].comment.length!=0)
 										comment=result.data[i].comment;
-									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="original_text" style="display:none;">"'+result.data[i].original_text+'"'+'</textarea><textarea name="comment" style="display:none;">'+comment+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
+									var doi = result.data[i].doi;
+									var id = result.data[i].id;
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="original_text" style="display:none;">"'+result.data[i].original_text+'"'+'</textarea><textarea name="comment" style="display:none;">'+comment+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;" id="message_'+result.data[i].id+'">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button id="test" class="zocial icon twitter" name="post" href="#inline_content">Button label here</button></form></span>');
 									$("#tofacebook_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
 								        // wrap it in a jQuery object and then invoke ajaxSubmit 
@@ -323,13 +346,21 @@ function feedNanotweets(){
 									
 									$("#totwitter_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
-								        // wrap it in a jQuery object and then invoke ajaxSubmit 
-								        $(this).ajaxSubmit(twitteroptions); 
+								        // wrap it in a jQuery object and then invoke ajaxSubmit
+										console.log($(this).attr('id'));
+										$("#inline_content").empty();
+										$("#inline_content").append('<textarea id="text_'+$(this).attr('id').substring(10)+'" cols="30" rows="5" data-minlength="0" data-maxlength="118"></textarea><span class="doi_ht" Style="margin-top: 25px; position: absolute;">'+doi+' '+'#Nanotate'+'</span><button id="tweetit_'+$(this).attr('id').substring(10)+'" class="zocial twitter" name="post" onclick="tweetit('+$(this).attr('id').substring(10)+',\''+doi+'\')" style="font: bold 80%/2.1 \'Lucida Grande\', Tahoma, sans-serif; top: -20px;">Tweet it!</button>');
+										$("#text_"+$(this).attr('id').substring(10)).wChar({message: 'left'});
+	
+										$("#colorbox_link").click();
+//										$("#text_").wChar({message: 'left'});
+//										 $( "#dialog" ).dialog( "open" );
 								      
 								        // !!! Important !!! 
 								        // always return false to prevent standard browser submit and page navigation 
 								        return false; 
 								    }); 
+									
 
 								} else if(result.data[i].status == "EMPTY") {
 									
@@ -367,7 +398,8 @@ function feedNanotweets(){
 									var comment='';
 									if(result.data[i].comment.length!=0)
 										comment='"'+result.data[i].comment+'"';
-									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].original_text+'"'+'\n'+comment+'\n'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form><form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
+									li.append('<span class="icons"><form id="tofacebook_'+result.data[i].id+'" action="./facebookpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].original_text+'"'+'\n'+comment+'\n'+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon facebook" name="post">Button label here</button></form>'
+											+'<form id="totwitter_'+result.data[i].id+'" action="./twitterpost" method="post"><textarea name="message" style="display:none;">"'+result.data[i].tags+'"'+' '+result.data[i].doi+'</textarea><textarea name="id" style="display:none;">'+result.data[i].id+'</textarea><textarea name="doi" style="display:none;">'+result.data[i].doi+'</textarea><button class="zocial icon twitter" name="post">Button label here</button></form></span>');
 									$("#tofacebook_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
 								        // wrap it in a jQuery object and then invoke ajaxSubmit 
@@ -381,7 +413,11 @@ function feedNanotweets(){
 									$("#totwitter_"+result.data[i].id).submit(function() { 
 								        // inside event callbacks 'this' is the DOM element so we first 
 								        // wrap it in a jQuery object and then invoke ajaxSubmit 
-								        $(this).ajaxSubmit(twitteroptions); 
+										$( "#dialog" ).append('<form id="tweet_'+result.data[i].id+'" action="./twitterpost" method="post">'+
+												'<textarea name="message"  id="text_'+result.data[i].id+'" data-maxlength="118">hola</textarea>'+
+												'</form>');
+										$( "#text_"+result.data[i].id).wChar({message: 'left'});
+										 $( "#dialog" ).dialog( "open" );
 								      
 								        // !!! Important !!! 
 								        // always return false to prevent standard browser submit and page navigation 

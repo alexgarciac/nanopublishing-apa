@@ -84,7 +84,7 @@ public class SignupServlet extends HttpServlet {
 			else{
 				Twitter twitter= (Twitter)request.getSession().getAttribute("twitter");
 				record.setTwitter_token(twitter.getOAuthAccessToken().getToken());
-				record.setTwitter_username(username);
+				record.setTwitter_username(twitter.getScreenName());
 				record.setTwitter_token_secret(twitter.getOAuthAccessToken().getTokenSecret());
 			}
 			um.insert(record);

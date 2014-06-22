@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
@@ -29,6 +30,7 @@ import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.PictureSize;
 import facebook4j.ResponseList;
+import facebook4j.auth.AccessToken;
 
 
 public class FacebookCallbackServlet extends HttpServlet {
@@ -41,6 +43,8 @@ public class FacebookCallbackServlet extends HttpServlet {
         String oauthCode = request.getParameter("code");
         String redirect = "";
         JsonResponse r = new JsonResponse();
+        if(StringUtils.isEmpty((CharSequence) request.getSession().getAttribute("newuser")))
+        {
         try {
             facebook.getOAuthAccessToken(oauthCode);
             ResponseList<Account> accounts = facebook.getAccounts();
@@ -80,6 +84,31 @@ public class FacebookCallbackServlet extends HttpServlet {
 			
         } catch (Exception e) {
             throw new ServletException(e);
+        }
+       
+        }
+        else
+        {
+       
+			try {
+				SqlSession sqlSession = MyBatis.getSession();
+				UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+				User record = mapper.selectByPrimaryKey((String) request.getSession().getAttribute("user"));
+				AccessToken token =  facebook.getOAuthAccessToken(oauthCode);
+				record.setFacebook_token(token.getToken());
+				record.setFacebook_token_expires(token.getExpires());
+				 facebook4j.User user = (facebook4j.User) facebook.getUser(facebook.getId());
+				if(StringUtils.isEmpty(user.getUsername()))
+					 record.setFacebook_username(user.getId());
+					else
+						record.setFacebook_username(user.getUsername());
+				mapper.updateByPrimaryKey(record);
+				sqlSession.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
         }
         response.sendRedirect(request.getContextPath() + redirect);
     }

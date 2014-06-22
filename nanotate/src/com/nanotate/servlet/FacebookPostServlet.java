@@ -32,7 +32,9 @@ import com.nanotate.message.JsonResponse;
 
 
 
+
 import utils.JsonEncoder;
+import utils.SocialBuilder;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
@@ -49,15 +51,7 @@ public class FacebookPostServlet extends HttpServlet {
     	boolean credentials = true;
         if(request.getSession().getAttribute("facebook")==null)
         {
-        	ConfigurationBuilder cb = new ConfigurationBuilder();
-        	cb.setDebugEnabled(true)
-        	  .setOAuthAppId("236285369909239")
-        	  .setOAuthAppSecret("df356774233762558c63281d90d21368")
-        	  .setOAuthPermissions("basic_info,email,publish_stream");
-//        	.setOAuthAppId("1427521897511957")
-//    	  .setOAuthAppSecret("9a447eb931f93131af68176c006a1a39")
-//    	  .setOAuthPermissions("public_profile,user_friends,email,publish_stream,publish_actions");
-        	Facebook facebook = new FacebookFactory(cb.build()).getInstance();
+        	Facebook facebook = SocialBuilder.getFacebook();
             request.getSession().setAttribute("facebook", facebook);
         }
         Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");

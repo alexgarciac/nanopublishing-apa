@@ -37,6 +37,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
+import utils.SocialBuilder;
 
 import com.nanotate.Settings;
 import com.nanotate.dao.custom.SequenceMapper;
@@ -147,15 +148,8 @@ public class NanotweetWriter implements Runnable {
 	}
 
 	private void sendToNanotateFacebook(AnnotationWithBLOBs annotation) {
-		facebook4j.conf.ConfigurationBuilder cb = new facebook4j.conf.ConfigurationBuilder();
-    	cb.setDebugEnabled(true)
-    	  .setOAuthAppId("236285369909239")
-    	  .setOAuthAppSecret("df356774233762558c63281d90d21368")
-    	  .setOAuthPermissions("basic_info,email,publish_stream");
-//    	.setOAuthAppId("1427521897511957")
-//	  .setOAuthAppSecret("9a447eb931f93131af68176c006a1a39")
-//	  .setOAuthPermissions("public_profile,user_friends,email,publish_stream,publish_actions");
-    	Facebook facebookNanotate = new FacebookFactory(cb.build()).getInstance();
+
+    	Facebook facebookNanotate = SocialBuilder.getFacebook();
 		facebookNanotate.setOAuthAccessToken(new AccessToken("CAADW5nmJZCZCcBAIdV6nJtvvufeVlILOWvPC2h3ro6V2Nk7eOPNPufpAjZAZCkQwgVkzO82C4tIZAzjMeOFMUJm1FkgAV9I96ZCeA5azCg9JX0wmZC5QMpxDxgabKLnDHzRxZBaS5CX4EYoiAk7bCDIPV6ZBlRZCrIQ5TtiQLINO22N8ZAkyNbFZC1lK",null));
 		try{
 		String data = facebookNanotate.postStatusMessage(annotation.getOriginal_text()+"\n from: "+annotation.getDoi());
@@ -163,7 +157,7 @@ public class NanotweetWriter implements Runnable {
         
         if(StringUtils.isEmpty(annotation.getComment()))
         {	
-        	Facebook facebook = new FacebookFactory(cb.build()).getInstance();
+        	Facebook facebook = SocialBuilder.getFacebook();
         	SqlSession session = null;
         	try {
 				session = MyBatis.getSession();
@@ -214,14 +208,9 @@ public class NanotweetWriter implements Runnable {
 	}
 
 	private void sendToNanotateTwitter(AnnotationWithBLOBs annotation) {
-		ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-//        .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
-//        .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
-        .setOAuthConsumerKey("Sa3ficmgHpwDHXGOIJHWSysNK")
-        .setOAuthConsumerSecret("PQW9JJuN3RxVKPxyyVy4nUnTdkaEYh4RUiagw3nGt6KHNyTQJH");
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        Twitter twitter = tf.getInstance();
+
+     
+        Twitter twitter = SocialBuilder.getTwitter();
         twitter.setOAuthAccessToken(new twitter4j.auth.AccessToken("2326910304-Dpi1MBlPBq37KyUxBmd03jkkFxhXLzffds1cG5X","iCmxAjp0XTtmgpuoV7fKItPajXzqTJkj9jetGLTcQnEOG"));
         try {
         	

@@ -37,7 +37,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import com.nanotate.dao.model.User;
 import com.nanotate.dao.model.UserExample;
@@ -49,9 +52,18 @@ import facebook4j.PictureSize;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Properties;
 
 public class TwitterCallbackServlet extends HttpServlet {
     private static final long serialVersionUID = 1657390011452788111L;
+    static Logger log;	
+	static Properties config;
+	
+	static {
+		// Debug file 
+		DOMConfigurator.configure( Thread.currentThread().getContextClassLoader().getResource("log4j.xml"));
+		log = Logger.getLogger(TwitterCallbackServlet.class);
+	}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
@@ -59,38 +71,66 @@ public class TwitterCallbackServlet extends HttpServlet {
         String verifier = request.getParameter("oauth_verifier");
         String oauthCode = request.getParameter("code");
         String redirect = "";
-        try {
-        	System.out.println(verifier+" "+requestToken);
-            twitter.getOAuthAccessToken(requestToken, verifier);
-            HttpSession session = request.getSession();
-            twitter4j.User user = (twitter4j.User) twitter.showUser(twitter.getId());
-            String username = twitter.getScreenName();
-            String email="";
-            String name= user.getName();
-            String img=user.getProfileImageURL();
-			SqlSession sqlSession = MyBatis.getSession();
-			UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-			UserExample userex = new UserExample();
-			userex.createCriteria().andTwitter_usernameEqualTo(username);
-			List<User> users = mapper.selectByExample(userex);
-			if(users.size()<=0){
-				System.out.println("Holaaaaaaaaaaaaaaaa");
-				redirect="/register.html?"+"username="+username+"&email="+email+"&name="+URLEncoder.encode(name,"UTF-8")+"&img="+img+"&authcode="+oauthCode;
-				}
-			else{
-				redirect="/index.html";
-	    		session.setAttribute("user", username);
-//	    		session.setAttribute("imgurl", user.getPicture().getURL());
-	    		//setting session to expiry in 30 mins
-	    		session.setMaxInactiveInterval(30*60);
-	    		Cookie userName = new Cookie("user", username);
-	    		userName.setMaxAge(30*60);
-	    		response.addCookie(userName);
-			}
-			
-        } catch (Exception e) {
-            throw new ServletException(e);
+  
+        if(StringUtils.isEmpty((CharSequence) request.getSession().getAttribute("newuser")))
+        {
+   
+        	try {
+            	System.out.println(verifier+" "+requestToken);
+                twitter.getOAuthAccessToken(requestToken, verifier);
+                HttpSession session = request.getSession();
+                twitter4j.User user = (twitter4j.User) twitter.showUser(twitter.getId());
+                String username = twitter.getScreenName();
+                String email="";
+                String name= user.getName();
+                String img=user.getProfileImageURL();
+    			SqlSession sqlSession = MyBatis.getSession();
+    			UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    			UserExample userex = new UserExample();
+    			userex.createCriteria().andTwitter_usernameEqualTo(username);
+    			List<User> users = mapper.selectByExample(userex);
+    			if(users.size()<=0){
+    				System.out.println("Holaaaaaaaaaaaaaaaa");
+    				redirect="/register.html?"+"username="+username+"&email="+email+"&name="+URLEncoder.encode(name,"UTF-8")+"&img="+img+"&authcode="+oauthCode;
+    				}
+    			else{
+    				
+    				redirect="/index.html";
+    				session.setAttribute("user", username);
+//    	    		session.setAttribute("imgurl", user.getPicture().getURL());
+    	    		//setting session to expiry in 30 mins
+    	    		session.setMaxInactiveInterval(30*60);
+    	    		Cookie userName = new Cookie("user", username);
+    	    		userName.setMaxAge(30*60);
+    	    		response.addCookie(userName);
+    			}
+    			
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
         }
+        else
+        {
+       
+			try {
+				SqlSession sqlSession = MyBatis.getSession();
+				UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+				User record = mapper.selectByPrimaryKey((String) request.getSession().getAttribute("user"));
+				record.setTwitter_token(twitter.getOAuthAccessToken(requestToken, verifier).getToken());
+				record.setTwitter_username(twitter.getScreenName());
+				record.setTwitter_token_secret(twitter.getOAuthAccessToken().getTokenSecret());
+				mapper.updateByPrimaryKey(record);
+				sqlSession.close();
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				
+				e.printStackTrace();
+			}
+		
+        }
+       
         response.sendRedirect(request.getContextPath() + redirect);
     }
 }

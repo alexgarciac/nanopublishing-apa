@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import facebook4j.Facebook;
+import twitter4j.Twitter;
+import utils.SocialBuilder;
+
 /**
  * Servlet implementation class LogoutServlet
  */
@@ -36,8 +40,12 @@ public class LogoutServlet extends HttpServlet {
     	//invalidate the session if exists
     	HttpSession session = request.getSession(false);
     	System.out.println("User="+session.getAttribute("user"));
+    	Twitter twitter = SocialBuilder.getTwitter();
+    	Facebook facebook = SocialBuilder.getFacebook();
     	if(session != null){
     		session.invalidate();
+    		twitter.setOAuthAccessToken(null);
+    		facebook.setOAuthAccessToken(null);
     	}
     
     	response.sendRedirect("login.html");

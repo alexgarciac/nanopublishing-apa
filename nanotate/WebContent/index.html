@@ -16,6 +16,10 @@
 <script type="text/javascript" src="js/jquery.form.min.js"></script>
 <script type="text/javascript" src="js/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
 <script type="text/javascript" src="js/jquery.expander.js"></script>
+<script src="js/jquery.colorbox.js"></script>
+<script src="js/jquery.wChar.js"></script>
+<link rel="stylesheet" href="css/wChar.css">
+<link rel="stylesheet" href="css/colorbox.css">
 
  <script type="text/javascript" src="js/jquery.toastmessage.js"></script>
   <script type="text/javascript" src="js/jquery.taghandler.min.js"></script>
@@ -38,8 +42,7 @@
 $(document).ready(function() {
 	
 	
-	
-
+	$(".inline").colorbox({inline:true, width:"50%"});
   $('#simple-menu').sidr();
   $('#viewer').hide();
   $('#myonoffswitch').click(function() {
@@ -230,7 +233,19 @@ $( "#simple-menu" ).trigger( "click" );
   	
 </head>
 <body >
+<a class='inline' href="#inline_content" style="display:none;" id="colorbox_link">Inline HTML</a>
+<div style='display:none'>
+			<div id='inline_content' style='padding:10px; background:#fff;'>
+			<p><strong>This content comes from a hidden element on this page.</strong></p>
+			<p>The inline option preserves bound JavaScript events and changes, and it puts the content back where it came from when it is closed.</p>
+			<p><a id="click" href="#" style='padding:5px; background:#ccc;'>Click me, it will be preserved!</a></p>
 
+			<p><strong>If you try to open a new Colorbox while it is already open, it will update itself with the new content.</strong></p>
+			<p>Updating Content Example:<br />
+			<a class="ajax" href="../content/ajax.html">Click here to load new content</a></p>
+			</div>
+		</div>
+ 
  <!-- Your stuff -->
  
     <!-- Include jQuery -->
@@ -290,8 +305,6 @@ $( "#simple-menu" ).trigger( "click" );
 			<div id="Nanotweets"></div>
 		  </div>
    <!--div for viewer-->
- 
-
  
 
 

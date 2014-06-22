@@ -31,11 +31,14 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+import utils.SocialBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
@@ -43,25 +46,26 @@ public class TwitterSigninServlet extends HttpServlet {
     private static final long serialVersionUID = -6205814293093350242L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	
-    	ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-//        .setOAuthConsumerKey("x8P2dt3hnTVcVDaq21smdfLf0")
-//        .setOAuthConsumerSecret("VfC0A2FiI3Uq1v4NCRJktCpElFgQT7Ri0mxu6E9YsMQuEnpigL");
-        .setOAuthConsumerKey("Sa3ficmgHpwDHXGOIJHWSysNK")
-        .setOAuthConsumerSecret("PQW9JJuN3RxVKPxyyVy4nUnTdkaEYh4RUiagw3nGt6KHNyTQJH");
-        TwitterFactory tf = new TwitterFactory(cb.build());
-    	
-        Twitter twitter = tf.getInstance();
-        request.getSession().setAttribute("twitter", twitter);
+    	Twitter twitter=null;
+    	if(request.getAttribute("twitter")==null){
+    		twitter = SocialBuilder.getTwitter();
+            request.getSession().setAttribute("twitter", twitter);
+    	}
+    	else
+    		twitter=(Twitter) request.getSession().getAttribute("twitter");
+        
         try {
             StringBuffer callbackURL = request.getRequestURL();
             int index = callbackURL.lastIndexOf("/");
-            callbackURL.replace(index, callbackURL.length(), "").append("/twittercallback");
+           
+            	callbackURL.replace(index, callbackURL.length(), "").append("/twittercallback");
+         
             
             RequestToken requestToken = twitter.getOAuthRequestToken(callbackURL.toString());
             System.out.println(requestToken.toString());
             request.getSession().setAttribute("requestToken", requestToken);
+            if(!StringUtils.isEmpty(request.getParameter("newuser")))
+            	 request.getSession().setAttribute("newuser", "false");
             response.sendRedirect(requestToken.getAuthenticationURL());
 
         } catch (TwitterException e) {
