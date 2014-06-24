@@ -24,11 +24,15 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import utils.JsonEncoder;
+import utils.SocialBuilder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse; 
+import javax.servlet.http.HttpServletResponse;
+
+import twitter4j.Twitter;
+import facebook4j.Facebook;
 
 public class AnnotationServlet extends HttpServlet {
 
@@ -191,7 +195,18 @@ public class AnnotationServlet extends HttpServlet {
 			
 		} else {
 			log.info("Using nanowriter");
-			NanotweetWriter nanotweetWriter = new NanotweetWriter( text, comment, uuid, (String) servletRequest.getSession().getAttribute("user"));
+			  if(servletRequest.getSession().getAttribute("facebook")==null)
+		        {
+		            servletRequest.getSession().setAttribute("facebook", new SocialBuilder().getFacebook());
+		        }
+		        Facebook facebook = (Facebook) servletRequest.getSession().getAttribute("facebook");
+		        
+		        if(servletRequest.getSession().getAttribute("twitter")==null)
+		        {
+		            servletRequest.getSession().setAttribute("twitter", new SocialBuilder().getTwitter());
+		        }
+		        Twitter twitter = (Twitter) servletRequest.getSession().getAttribute("twitter");
+			NanotweetWriter nanotweetWriter = new NanotweetWriter( text, comment, uuid, (String) servletRequest.getSession().getAttribute("user"),facebook, twitter);
             //FacebookWriter facebookWriter = new FacebookWriter( text, uuid, comment );
 
 			( new Thread( nanotweetWriter ) ).start();

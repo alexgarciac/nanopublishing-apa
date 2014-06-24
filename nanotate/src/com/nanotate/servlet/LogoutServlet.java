@@ -40,8 +40,17 @@ public class LogoutServlet extends HttpServlet {
     	//invalidate the session if exists
     	HttpSession session = request.getSession(false);
     	System.out.println("User="+session.getAttribute("user"));
-    	Twitter twitter = SocialBuilder.getTwitter();
-    	Facebook facebook = SocialBuilder.getFacebook();
+    	if(request.getAttribute("twitter")==null){
+            request.getSession().setAttribute("twitter", new SocialBuilder().getTwitter());
+    	}
+    	
+    		Twitter twitter=(Twitter) request.getSession().getAttribute("twitter");
+    	 if(request.getSession().getAttribute("facebook")==null)
+         {
+         	
+             request.getSession().setAttribute("facebook", new SocialBuilder().getFacebook());
+         }
+   	  Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
     	if(session != null){
     		session.invalidate();
     		twitter.setOAuthAccessToken(null);

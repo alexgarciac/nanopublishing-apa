@@ -8,10 +8,11 @@ import twitter4j.TwitterFactory;
 
 public class SocialBuilder {
 	
-	private static Twitter twitter;
-	private static Facebook facebook;
+	private Twitter twitter;
+	private Facebook facebook;
+ 
 	
-	public static Facebook getFacebook(){
+	public Facebook getFacebook(){
 		
 		if(facebook==null){
 			facebook4j.conf.ConfigurationBuilder cb = new facebook4j.conf.ConfigurationBuilder();
@@ -29,7 +30,7 @@ public class SocialBuilder {
 		
 	}
 	
-	public static Twitter getTwitter(){
+	public Twitter getTwitter(){
 		
 		if(twitter==null){
 		   	twitter4j.conf.ConfigurationBuilder cb = new 	twitter4j.conf.ConfigurationBuilder();

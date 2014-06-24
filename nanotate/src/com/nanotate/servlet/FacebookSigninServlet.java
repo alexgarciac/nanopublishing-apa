@@ -19,8 +19,12 @@ public class FacebookSigninServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-  
-    	Facebook facebook = SocialBuilder.getFacebook();
+    	  if(request.getSession().getAttribute("facebook")==null)
+          {
+          	
+              request.getSession().setAttribute("facebook", new SocialBuilder().getFacebook());
+          }
+    	  Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
         request.getSession().setAttribute("facebook", facebook);
         StringBuffer callbackURL = request.getRequestURL();
         int index = callbackURL.lastIndexOf("/");

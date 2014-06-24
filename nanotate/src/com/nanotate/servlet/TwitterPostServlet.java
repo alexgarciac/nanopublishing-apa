@@ -77,8 +77,7 @@ public class TwitterPostServlet extends HttpServlet {
         boolean credentials = true;
         if(request.getSession().getAttribute("twitter")==null)
         {
-        	Twitter twitter = SocialBuilder.getTwitter();
-            request.getSession().setAttribute("twitter", twitter);
+            request.getSession().setAttribute("twitter", new SocialBuilder().getTwitter());
         }
         Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
 

@@ -103,6 +103,7 @@ public class FacebookCallbackServlet extends HttpServlet {
 					else
 						record.setFacebook_username(user.getUsername());
 				mapper.updateByPrimaryKey(record);
+				sqlSession.commit();
 				sqlSession.close();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

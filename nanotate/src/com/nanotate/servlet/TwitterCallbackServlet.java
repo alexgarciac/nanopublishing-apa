@@ -28,6 +28,7 @@ package com.nanotate.servlet;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import javax.servlet.ServletException;
@@ -116,10 +117,12 @@ public class TwitterCallbackServlet extends HttpServlet {
 				SqlSession sqlSession = MyBatis.getSession();
 				UserMapper mapper = sqlSession.getMapper(UserMapper.class);
 				User record = mapper.selectByPrimaryKey((String) request.getSession().getAttribute("user"));
-				record.setTwitter_token(twitter.getOAuthAccessToken(requestToken, verifier).getToken());
+				AccessToken token = twitter.getOAuthAccessToken(requestToken, verifier);
+				record.setTwitter_token(token.getToken());
 				record.setTwitter_username(twitter.getScreenName());
-				record.setTwitter_token_secret(twitter.getOAuthAccessToken().getTokenSecret());
+				record.setTwitter_token_secret(token.getTokenSecret());
 				mapper.updateByPrimaryKey(record);
+				sqlSession.commit();
 				sqlSession.close();
 				
 				

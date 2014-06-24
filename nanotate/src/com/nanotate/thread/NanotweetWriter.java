@@ -19,6 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -73,15 +75,20 @@ public class NanotweetWriter implements Runnable {
 	String uuid;
 	String user;
 	String comment;
+	Facebook facebook;
+	Twitter twitter;
 	
-	public NanotweetWriter(String text, String comment, String documentUUID, String user ) {
+	public NanotweetWriter(String text, String comment, String documentUUID, String user, Facebook facebook, Twitter twitter ) {
 		try {
 //			text = text.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
 //			text = text.replaceAll("+", "%2B");
 			this.text = URLDecoder.decode(text.replace("%", ""), "UTF-8");
 			this.user=user;
 			this.comment=comment;
+			this.facebook=facebook;
+			this.twitter=twitter;
 			log.info(text);
+			
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,15 +156,15 @@ public class NanotweetWriter implements Runnable {
 
 	private void sendToNanotateFacebook(AnnotationWithBLOBs annotation) {
 
-    	Facebook facebookNanotate = SocialBuilder.getFacebook();
-		facebookNanotate.setOAuthAccessToken(new AccessToken("CAADW5nmJZCZCcBAIdV6nJtvvufeVlILOWvPC2h3ro6V2Nk7eOPNPufpAjZAZCkQwgVkzO82C4tIZAzjMeOFMUJm1FkgAV9I96ZCeA5azCg9JX0wmZC5QMpxDxgabKLnDHzRxZBaS5CX4EYoiAk7bCDIPV6ZBlRZCrIQ5TtiQLINO22N8ZAkyNbFZC1lK",null));
+		  
+		facebook.setOAuthAccessToken(new AccessToken("CAADW5nmJZCZCcBAIdV6nJtvvufeVlILOWvPC2h3ro6V2Nk7eOPNPufpAjZAZCkQwgVkzO82C4tIZAzjMeOFMUJm1FkgAV9I96ZCeA5azCg9JX0wmZC5QMpxDxgabKLnDHzRxZBaS5CX4EYoiAk7bCDIPV6ZBlRZCrIQ5TtiQLINO22N8ZAkyNbFZC1lK",null));
 		try{
-		String data = facebookNanotate.postStatusMessage(annotation.getOriginal_text()+"\n from: "+annotation.getDoi());
-        Post post = facebookNanotate.getPost(data.split("_")[1]);
+		String data = facebook.postStatusMessage(annotation.getOriginal_text()+"\n from: "+annotation.getDoi());
+        Post post = facebook.getPost(data.split("_")[1]);
         
         if(StringUtils.isEmpty(annotation.getComment()))
         {	
-        	Facebook facebook = SocialBuilder.getFacebook();
+        	
         	SqlSession session = null;
         	try {
 				session = MyBatis.getSession();
@@ -177,7 +184,7 @@ public class NanotweetWriter implements Runnable {
 				facebook.commentPost(post.getId(), annotation.getComment());
 			}
 			else
-				facebookNanotate.commentPost(post.getId(), annotation.getUser_name()+" said: "+annotation.getComment());
+				facebook.commentPost(post.getId(), annotation.getUser_name()+" said: "+annotation.getComment());
 		
 				
 
@@ -205,12 +212,14 @@ public class NanotweetWriter implements Runnable {
 		catch(FacebookException e){
 			e.printStackTrace();
 		}
+		
+		facebook.setOAuthAccessToken(null);
 	}
 
 	private void sendToNanotateTwitter(AnnotationWithBLOBs annotation) {
 
      
-        Twitter twitter = SocialBuilder.getTwitter();
+	
         twitter.setOAuthAccessToken(new twitter4j.auth.AccessToken("2326910304-Dpi1MBlPBq37KyUxBmd03jkkFxhXLzffds1cG5X","iCmxAjp0XTtmgpuoV7fKItPajXzqTJkj9jetGLTcQnEOG"));
         try {
         	
@@ -248,6 +257,7 @@ public class NanotweetWriter implements Runnable {
         	
 //             throw new ServletException(e);
          }
+        twitter.setOAuthAccessToken(null);
 		
 	}
 

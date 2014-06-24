@@ -51,8 +51,7 @@ public class FacebookPostServlet extends HttpServlet {
     	boolean credentials = true;
         if(request.getSession().getAttribute("facebook")==null)
         {
-        	Facebook facebook = SocialBuilder.getFacebook();
-            request.getSession().setAttribute("facebook", facebook);
+            request.getSession().setAttribute("facebook", new SocialBuilder().getFacebook());
         }
         Facebook facebook = (Facebook) request.getSession().getAttribute("facebook");
 

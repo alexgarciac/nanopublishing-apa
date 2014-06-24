@@ -46,13 +46,12 @@ public class TwitterSigninServlet extends HttpServlet {
     private static final long serialVersionUID = -6205814293093350242L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	Twitter twitter=null;
+    	
     	if(request.getAttribute("twitter")==null){
-    		twitter = SocialBuilder.getTwitter();
-            request.getSession().setAttribute("twitter", twitter);
+            request.getSession().setAttribute("twitter", new SocialBuilder().getTwitter());
     	}
-    	else
-    		twitter=(Twitter) request.getSession().getAttribute("twitter");
+    	
+    		Twitter twitter=(Twitter) request.getSession().getAttribute("twitter");
         
         try {
             StringBuffer callbackURL = request.getRequestURL();
