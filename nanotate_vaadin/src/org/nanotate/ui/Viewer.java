@@ -55,12 +55,12 @@ public class Viewer extends CustomComponent {
 		embedded_1.setImmediate(false);
 		embedded_1.setWidth("100.0%");
 		embedded_1.setHeight("100.0%");
-		embedded_1
-				.setSource(new ExternalResource(
-						"https://crocodoc.com/view/y5paxx8lRbV0dmTqYGeCjmeM-9CDHz70YqvagftVL1L_MbRjYL4zu6vB3J_AihaRkcBZeck9VOHjWiy4UPczJZI1ENSx8yZ_y7TLhw"));
+		embedded_1.setSource(new ExternalResource(
+				"http://coolwanglu.github.io/pdf2htmlEX/demo/geneve.html"));
 		embedded_1.setType(2);
 		embedded_1.setMimeType("image/png");
-		mainLayout.addComponent(embedded_1, "top:0.0px;right:5.0%;left:5.0%;");
+		mainLayout.addComponent(embedded_1,
+				"top:0.0px;right:5.0%;bottom:0.0px;left:5.0%;");
 		
 		// docs
 		docs = buildDocs();
@@ -105,7 +105,9 @@ public class Viewer extends CustomComponent {
 		
 		// verticalLayout_3
 		verticalLayout_3 = new VerticalLayout();
+		verticalLayout_3.setEnabled(false);
 		verticalLayout_3.setImmediate(false);
+		verticalLayout_3.setVisible(false);
 		verticalLayout_3.setWidth("100.0%");
 		verticalLayout_3.setHeight("100.0%");
 		verticalLayout_3.setMargin(false);

@@ -436,7 +436,13 @@ border: 1px solid #dcdcdc;
 	background-color:rgba(149,149,158,0.5);
 	border-radius: 0px 30px 30px 0px;
 	border:0px;
-	
+	left:-180px;
+	-webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+ 
 }
 
 .docs-panel>.v-panel-deco{
@@ -451,14 +457,40 @@ border: 1px solid #dcdcdc;
 
 .docs-panel{
 	padding-top: 0px;
+	z-index:-10;
 }
+
+.docs-panel>.v-panel-content:hover{
+	
+	background-color:rgba(149,149,158,0.5);
+	border-radius: 0px 30px 30px 0px;
+	border:0px;
+	left:0px;
+	
+	
+}
+
 
 .annotations-panel>.v-panel-content{
 	
 	background-color:rgba(149,149,158,0.5);
 	border-radius: 30px 0px 0px 30px;
 	border:0px;
+	right: -180px;
+	-webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+
+}
+
+.annotations-panel>.v-panel-content:hover{
 	
+	background-color:rgba(149,149,158,0.5);
+	border-radius: 30px 0px 0px 30px;
+	border:0px;
+	right: 0px;
 }
 
 .annotations-panel>.v-panel-deco{
@@ -473,4 +505,61 @@ border: 1px solid #dcdcdc;
 
 .annotations-panel{
 	padding-top: 0px;
+	
+}
+
+.annotations-panel:hover{
+	padding-top: 0px;
+	right: 0px;
+}
+
+
+.show-annotations-panel>.v-panel-content{
+	
+	background-color:rgba(149,149,158,0.5);
+	border-radius: 30px 0px 0px 30px;
+	border:0px;
+	
+}
+
+.show-annotations-panel>.v-panel-deco{
+ border: 0px;
+ height: 0px;
+}
+
+.show-annotations-panel>.v-panel-nocaption-content-panel{
+	border:0px;
+	height:0px;
+}
+
+.show-annotations-panel{
+	padding-top: 0px;
+}
+
+
+.show-docs-panel>.v-panel-content{
+	
+	background-color:rgba(149,149,158,0.5);
+	border-radius: 0px 30px 30px 0px;
+	border:0px;
+	
+}
+
+.show-docs-panel>.v-panel-deco{
+ border: 0px;
+ height: 0px;
+}
+
+.show-docs-panel>.v-panel-nocaption-content-panel{
+	border:0px;
+	height:0px;
+}
+
+.show-docs-panel{
+	padding-top: 0px;
+}
+
+.show-docs-panel:hover + .docs-panel{
+	padding-top: 0px;
+	display:block;
 }
