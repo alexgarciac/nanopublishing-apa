@@ -579,3 +579,5 @@ overflow:hidden;
 .v-panel-nocaption-content-panel{
 	border:0px;
 }
+
+.gwt-FileUpload+.v-button>.v-button-wrap:before {content:"\f07c";}
