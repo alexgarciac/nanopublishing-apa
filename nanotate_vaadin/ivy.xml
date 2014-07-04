@@ -43,5 +43,7 @@
 		
 		<dependency org="org.vaadin.addon" name="jfreechartwrapper" rev="3.0.1" />
 		
+		<dependency org="com.wcs.wcslib" name="wcslib-vaadin-widget-multifileupload" rev="1.8" />
+		
 	</dependencies>
 </ivy-module>

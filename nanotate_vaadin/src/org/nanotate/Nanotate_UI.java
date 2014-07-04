@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 public class Nanotate_UI extends UI {
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = Nanotate_UI.class)
+	@VaadinServletConfiguration(productionMode = false, ui = Nanotate_UI.class, widgetset="org.nanotate.widgetset.Nanotate_vaadinWidgetset")
 	public static class Servlet extends VaadinServlet {
 	}
 
