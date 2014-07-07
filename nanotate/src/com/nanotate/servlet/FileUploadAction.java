@@ -198,8 +198,13 @@ public class FileUploadAction extends HttpServlet {
 		String text=stripper.getText(pdDoc);
 		int doi_begin_index=0;
 		if(text.indexOf("DOI: ")>0)
-			doi_begin_index=text.indexOf("DOI: ");
-		else
+		{
+			if(text.indexOf("http://dx.doi.org/")>0)
+				doi_begin_index=text.indexOf("http://dx.doi.org/");
+			else
+				doi_begin_index=text.indexOf("DOI: ");
+			
+		}else
 			doi_begin_index=text.indexOf("doi: ");
 		int doi_end_index=text.indexOf("\n", doi_begin_index);
 		String doi= text.substring(doi_begin_index+5, doi_end_index);

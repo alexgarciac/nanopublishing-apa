@@ -289,7 +289,7 @@ public class CrocodocExamples {
 
         try {
             HttpEntity fileContent = CrocodocDownload.document(uuid2);
-            String filename = "./example-files/test-original.pdf";
+            String filename = "example-files/test-original.pdf";
             FileOutputStream stream = null;
 
             try {
@@ -329,7 +329,7 @@ public class CrocodocExamples {
         try {
             HttpEntity fileContent = CrocodocDownload.document(uuid2, true,
                     false);
-            String filename = "./example-files/test.pdf";
+            String filename = "example-files/test.pdf";
             FileOutputStream stream = null;
 
             try {
@@ -369,7 +369,7 @@ public class CrocodocExamples {
         try {
             HttpEntity fileContent = CrocodocDownload.document(uuid2, true,
                     true, "all");
-            String filename = "./example-files/test-with-options.pdf";
+            String filename = "example-files/test-with-options.pdf";
             FileOutputStream stream = null;
 
             try {
@@ -409,7 +409,7 @@ public class CrocodocExamples {
 
         try {
             HttpEntity fileContent = CrocodocDownload.thumbnail(uuid2);
-            String filename = "./example-files/thumbnail.png";
+            String filename = "example-files/thumbnail.png";
             FileOutputStream stream = null;
 
             try {
@@ -450,7 +450,7 @@ public class CrocodocExamples {
         try {
             HttpEntity fileContent = CrocodocDownload
                     .thumbnail(uuid2, 250, 250);
-            String filename = "./example-files/thumbnail-large.png";
+            String filename = "example-files/thumbnail-large.png";
             FileOutputStream stream = null;
 
             try {
@@ -490,7 +490,7 @@ public class CrocodocExamples {
 
         try {
             HttpEntity fileContent = CrocodocDownload.text(uuid2);
-            String filename = "./example-files/text.txt";
+            String filename = "example-files/text.txt";
             FileOutputStream stream = null;
 
             try {
@@ -602,4 +602,6 @@ public class CrocodocExamples {
             System.out.println("  Error Message: " + e.getMessage());
         }
     }
+    
+    
 }

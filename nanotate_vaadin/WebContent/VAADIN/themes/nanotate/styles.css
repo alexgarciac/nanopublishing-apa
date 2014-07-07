@@ -440,7 +440,6 @@ overflow:hidden;
 	background-color:rgba(149,149,158,0.5);
 	border-radius: 0px 30px 30px 0px;
 	border:0px;
-	left:-180px;
 	-webkit-transition: all 0.5s ease-in-out;
     -moz-transition: all 0.5s ease-in-out;
     -o-transition: all 0.5s ease-in-out;
@@ -461,7 +460,7 @@ overflow:hidden;
 
 .docs-panel{
 	padding-top: 0px;
-	left:-180px;
+	left:-180px !important;
 }
 
 .docs-panel>.v-panel-content:hover{
@@ -480,7 +479,6 @@ overflow:hidden;
 	background-color:rgba(149,149,158,0.5);
 	border-radius: 30px 0px 0px 30px;
 	border:0px;
-	right: -180px;
 	-webkit-transition: all 0.5s ease-in-out;
     -moz-transition: all 0.5s ease-in-out;
     -o-transition: all 0.5s ease-in-out;
@@ -509,8 +507,48 @@ overflow:hidden;
 
 .annotations-panel{
 	padding-top: 0px;
+
 	
 }
+
+.v-absolutelayout-wrapper-docs-panel{
+		left:-180px !important;
+		background-color:rgba(149,149,158,0.5);
+	border-radius: 0px 30px 30px 0px;
+	border:0px;
+	-webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+	
+
+ }
+ 
+ .v-absolutelayout-wrapper-annotations-panel{
+		right:-180px !important;
+		background-color:rgba(149,149,158,0.5);
+	border-radius: 30px 0px 0px 30px;
+	border:0px;
+	-webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+
+ }
+
+
+.v-absolutelayout-wrapper-docs-panel:hover{
+		left:0px !important;
+
+ }
+ 
+ .v-absolutelayout-wrapper-annotations-panel:hover{
+		right:0px !important;
+
+ }
+
 
 .annotations-panel:hover{
 	padding-top: 0px;
@@ -581,7 +619,7 @@ overflow:hidden;
 }
 
 
-.gwt-FileUpload+.v-button, .gwt-FileUpload+.v-disabled.v-button{
+.gwt-FileUpload, .gwt-FileUpload+.v-button, .gwt-FileUpload+.v-disabled.v-button{
 	background: -webkit-gradient(linear,left top,left bottom,color-stop(0, #FFFFFF),color-stop(0.05, #FAFAFA),color-stop(0.94, #EAEBEC),color-stop(1, #E2E3E4))repeat scroll 0 0 transparent;
 	background: -o-linear-gradient(top bottom, #FFFFFF 0%, #FAFAFA 5%, #EAEBEC 94%, #E2E3E4 100%)repeat scroll 0 0 transparent;
 	background: -moz-linear-gradient(center top, #FFFFFF 0%, #FAFAFA 5%, #EAEBEC 94%, #E2E3E4 100%)repeat scroll 0 0 transparent;
@@ -628,4 +666,40 @@ overflow:hidden;
 .gwt-FileUpload+.v-layout.mode-icon .v-button>*>.v-button-caption, .v-button.mode-icon>*>.v-button-caption{display: none;}
 .gwt-FileUpload+.v-layout.mode-icon .v-button>.v-button-wrap, .v-button.mode-icon>.v-button-wrap {min-width:1.6em;height:1.4em;padding:0px;font-size: 1.4em;text-align: center;}
 
-.gwt-FileUpload+.v-button>.v-button-wrap:before {content:"\f07c";}
+.gwt-FileUpload+.v-button>.v-button-wrap:before {content:"\f07c"; cursor:  pointer;
+}
+
+.gwt-FileUpload{
+	cursor:  pointer;
+	
+}
+.v-upload-immediate input {
+	z-index:-1;
+}
+.gwt-FileUpload:hover{
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#F5F5F5 ),color-stop(0.05, #F0F0F0),color-stop(0.94, #E1E1E2),color-stop(1,#D9D9DA ))repeat scroll 0 0 transparent;
+	background: -o-linear-gradient(top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: -moz-linear-gradient(center top,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: -webkit-linear-gradient(top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: -ms-linear-gradient(top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: linear-gradient(to top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+}
+
+
+
+.v-upload{
+	overflow: inherit;
+}
+
+.v-upload>*:hover{
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#F5F5F5 ),color-stop(0.05, #F0F0F0),color-stop(0.94, #E1E1E2),color-stop(1,#D9D9DA ))repeat scroll 0 0 transparent;
+	background: -o-linear-gradient(top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: -moz-linear-gradient(center top,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: -webkit-linear-gradient(top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: -ms-linear-gradient(top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+	background: linear-gradient(to top bottom,#F5F5F5 0%, #F0F0F0 5%, #E1E1E2 94%,#D9D9DA 100%) repeat scroll 0 0 transparent;
+}
+
+iframe {
+	overflow:hidden;
+}

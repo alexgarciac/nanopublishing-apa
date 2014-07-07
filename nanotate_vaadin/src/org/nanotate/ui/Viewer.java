@@ -60,7 +60,7 @@ public class Viewer extends CustomComponent {
 		embedded_1.setWidth("100.0%");
 		embedded_1.setHeight("100.0%");
 		embedded_1.setSource(new ExternalResource(
-				"http://coolwanglu.github.io/pdf2htmlEX/demo/geneve.html"));
+				"http://localhost/repository/test1.html"));
 		embedded_1.setType(2);
 		embedded_1.setMimeType("image/png");
 		mainLayout.addComponent(embedded_1,
