@@ -49,8 +49,8 @@ public class Annotation {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setId(String i) {
+		this.id = i;
 	}
 
 	public String getAnnotator_schema_version() {

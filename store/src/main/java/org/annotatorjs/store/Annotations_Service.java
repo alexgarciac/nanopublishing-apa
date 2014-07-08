@@ -17,20 +17,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.annotatorjs.database.Connector;
 import org.annotatorjs.model.Annotation;
 
 
 @Path("/annotations")
-public class Service {
+public class Annotations_Service {
+	
+		private Connector connector;
 	
 	 	@GET 
 	    @Produces("application/json")
 	    public ArrayList<Annotation> index() {
 	 		
-	 		//TODO Get annotations from database
+	 		ArrayList<Annotation> allAnnotatios = connector.getAllComplete();
 	 		
 	 		
-	        return null;
+	        return allAnnotatios;
 	    }
 	 	
 	 	@POST
@@ -60,8 +63,6 @@ public class Service {
 	 		//TODO Get annotation from database
 	 		
 	 		Annotation ret = new Annotation();
-	 		
-	 		ret.setId(ui.getBaseUri().toString());
 	 		
 	        return ret;
 	    }
