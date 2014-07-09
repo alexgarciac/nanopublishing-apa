@@ -19,7 +19,7 @@ public class Root {
      */
     @GET 
     @Produces("application/json")
-    public Store root(@Context UriInfo ui) {
-        return new Store("Java Annotator Store API "+ui.getAbsolutePath(), "2.0.0");
+    public Store root() {
+        return new Store("Java Annotator Store API ", "0.0.0");
     }
 }

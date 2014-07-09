@@ -2,6 +2,7 @@ package org.annotatorjs.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -331,7 +332,7 @@ public class Connector {
 	
 	public Annotation completeAnnotation(Annotation annotation){
 		 
-			Annotation completeAnnotation = new Annotation();
+			Annotation completeAnnotation = annotation;
 			completeAnnotation.setRanges(getRangesForAnnotation(annotation.getId()));
 			completeAnnotation.setTags(getTagsForAnnotation(annotation.getId()));
 			completeAnnotation.setPermissions(getPermissionsForAnnotation(annotation.getId()));
@@ -339,6 +340,179 @@ public class Connector {
 		
 		
 		return completeAnnotation;
+		
+	}
+
+	public Annotation getAnnotation(String annotation_id){
+			
+		Annotation annotation =  new Annotation();
+		 Statement stmt = null;
+		 ResultSet rs = null;
+		
+		 try {
+			    
+			    
+			    stmt = conn.createStatement();
+
+			    if (stmt.execute("SELECT * FROM annotation WHERE annotation_id=\""+annotation_id+"\"")) {
+			        rs = stmt.getResultSet();
+			        
+			        while(rs.next()) {
+			        	
+			        	
+			            annotation.setId(rs.getString("annotation_id"));
+			            annotation.setAnnotator_schema_version(rs.getString("annotator_schema_version"));
+			            annotation.setCreated(rs.getString("created"));
+			            annotation.setUpdated(rs.getString("updated"));
+			            annotation.setText(rs.getString("text"));
+			            annotation.setQuote(rs.getString("quote"));
+			            annotation.setUri(rs.getString("uri"));
+			            annotation.setUser(rs.getString("user"));
+			            annotation.setConsumer(rs.getString("consumer"));
+			            
+			        }
+			        
+			    }
+
+
+			    // Do something with the Connection
+
+			} catch (SQLException ex) {
+			    // handle any errors
+			    System.out.println("SQLException: " + ex.getMessage());
+			    System.out.println("SQLState: " + ex.getSQLState());
+			    System.out.println("VendorError: " + ex.getErrorCode());
+			} finally {
+			    // it is a good idea to release
+			    // resources in a finally{} block
+			    // in reverse-order of their creation
+			    // if they are no-longer needed
+
+			    if (rs != null) {
+			        try {
+			            rs.close();
+			        } catch (SQLException sqlEx) { } // ignore
+
+			        rs = null;
+			    }
+
+			    if (stmt != null) {
+			        try {
+			            stmt.close();
+			        } catch (SQLException sqlEx) { } // ignore
+
+			        stmt = null;
+			    }
+			
+			
+			}
+		
+		
+		return annotation;
+		
+	
+		
+	}
+	
+	public Annotation getCompleteAnnotation(String annotation_id){
+		
+		return completeAnnotation(getAnnotation(annotation_id));
+		
+	}
+	
+	public void deleteAnnotation(String annotation_id){
+		
+		  String query = "DELETE FROM annotations WHERE annotation_id=\"?\"";
+	      PreparedStatement preparedStmt = null;
+		
+		try
+	    {
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+		      
+			 preparedStmt.setString(1, annotation_id);
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+		
+	}
+
+	public void updateAnnotation(Annotation annotation){
+		
+		
+		 String query = "UPDATE annotations SET text=\"?\"  WHERE annotation_id=\"?\"";
+	      PreparedStatement preparedStmt = null;
+		
+		try
+	    {
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+			 preparedStmt.setString(1, annotation.getText());
+			 preparedStmt.setString(2, annotation.getId());
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+		
+		
+		
 		
 	}
 }

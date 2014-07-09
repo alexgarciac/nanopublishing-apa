@@ -60,9 +60,8 @@ public class Annotations_Service {
 	    @Produces("application/json")
 	    public Annotation read(@Context UriInfo ui, @PathParam("id") String id) {
 	 		
-	 		//TODO Get annotation from database
 	 		
-	 		Annotation ret = new Annotation();
+	 		Annotation ret = connector.getCompleteAnnotation(id);
 	 		
 	        return ret;
 	    }
@@ -72,13 +71,14 @@ public class Annotations_Service {
 	    @Consumes(MediaType.APPLICATION_JSON)
 	    public Response update(@Context UriInfo ui, Annotation annotation) {
 	 		
-	 		String uuid = "";
-	 		 URI location = null;
+	 		URI location = null;
+	 		 
+	 		connector.updateAnnotation(annotation);
 	 		
 	 		try {
-				location = new URI(ui.getBaseUri().getPath()+"annotations/"+uuid);
+				location = new URI(ui.getBaseUri().getPath()+"annotations/"+annotation.getId());
 			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 	       
@@ -87,12 +87,11 @@ public class Annotations_Service {
 	 	
 	 	@DELETE
 	 	@Path("/{id}")
-	    public Response delete() {
+	    public Response delete(@PathParam("id") String id) {
 	 		
-	 		//TODO Delete annotation from database
+	 		connector.deleteAnnotation(id);
 	 		
-	 		
-	        return Response.noContent().build();
+	 		return Response.noContent().build();
 	    }
 	
 
