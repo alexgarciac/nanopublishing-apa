@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.annotatorjs.model.Annotation;
 import org.annotatorjs.model.Permissions;
@@ -34,12 +35,15 @@ public class Connector {
 		
 		try {
 			
-			
-			conn = DriverManager.getConnection("jdbc:mysql://"+DATABASE_HOST+"/"+DATABASE_NAME+"?" +
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://"+DATABASE_HOST+":3306/"+DATABASE_NAME+"?" +
 				                                   "user="+DATABASE_USER+"&password="+DATABASE_PASS);
 			
 			
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -354,7 +358,7 @@ public class Connector {
 			    
 			    stmt = conn.createStatement();
 
-			    if (stmt.execute("SELECT * FROM annotation WHERE annotation_id=\""+annotation_id+"\"")) {
+			    if (stmt.execute("SELECT * FROM annotations WHERE annotation_id=\""+annotation_id+"\"")) {
 			        rs = stmt.getResultSet();
 			        
 			        while(rs.next()) {
@@ -513,6 +517,148 @@ public class Connector {
 		
 		
 		
+		
+	}
+	
+	public String createAnnotation(Annotation annotation){
+		
+		
+		 String query = "INSERT INTO annotations(annotation_id, annotator_schema_version, text, quote, uri, user, consumer) "
+		 		+ "VALUES (?,?,?,?,?,?,?)";
+	     PreparedStatement preparedStmt = null;
+	     String uuid = UUID.randomUUID().toString().replace("-", "");
+	     
+		
+		try
+	    {
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+			 preparedStmt.setString(1, uuid);
+			 preparedStmt.setString(2, "v0.0");
+			 preparedStmt.setString(3, annotation.getText());
+			 preparedStmt.setString(4, annotation.getQuote());
+			 preparedStmt.setString(5, annotation.getUri());
+			 preparedStmt.setString(6, annotation.getUser());
+			 preparedStmt.setString(7, "annotationjavastore");
+			 
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+		return uuid;
+		
+		
+		
+		
+	}
+
+
+	public ArrayList<Annotation> searchAnnotationsByUri(String uri, int i) {
+		
+		 ArrayList<Annotation> annotations = new ArrayList<Annotation>();
+		 Statement stmt = null;
+		 ResultSet rs = null;
+		
+		try {
+		    
+		    
+		    stmt = conn.createStatement();
+		    String query = "SELECT * FROM annotations WHERE uri=\""+uri+"\"";
+		    
+		    if(i>0)
+		    	query+=" LIMIT "+i;
+
+		    if (stmt.execute(query)) {
+		        rs = stmt.getResultSet();
+		        
+		        while(rs.next()) {
+		        	
+		        	Annotation annotation =  new Annotation();
+		            annotation.setId(rs.getString("annotation_id"));
+		            annotation.setAnnotator_schema_version(rs.getString("annotator_schema_version"));
+		            annotation.setCreated(rs.getString("created"));
+		            annotation.setUpdated(rs.getString("updated"));
+		            annotation.setText(rs.getString("text"));
+		            annotation.setQuote(rs.getString("quote"));
+		            annotation.setUri(rs.getString("uri"));
+		            annotation.setUser(rs.getString("user"));
+		            annotation.setConsumer(rs.getString("consumer"));
+		        	
+		        	annotations.add(annotation);
+		            
+		        }
+		        
+		    }
+
+
+		    // Do something with the Connection
+
+		} catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (rs != null) {
+		        try {
+		            rs.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        rs = null;
+		    }
+
+		    if (stmt != null) {
+		        try {
+		            stmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        stmt = null;
+		    }
+		
+		
+		}
+		return annotations;
+		
+		
+	}
+
+
+	public ArrayList<Annotation> searchAnnotationsByUriComplete(String uri, int i) {
+		System.out.println(uri);
+		return completeAnnotations(searchAnnotationsByUri(uri,i));
 		
 	}
 }

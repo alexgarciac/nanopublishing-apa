@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,14 +26,28 @@ import org.annotatorjs.model.Annotation;
 public class Search_Service {
 	
 		private Connector connector;
+		
+		public Search_Service () {
+			
+			connector = new Connector();
+		}
+		
+		@GET
+		@Produces("application/json")
+	    public ArrayList<Annotation> searchkjk() {
+	 		
+	 		//TODO Get annotation from database
+	 	
+	 		
+	        return  null;
+	    }
 	
 		
 		@GET
-	 	@Path("?uri={uri}")
 	    @Produces("application/json")
-	    public ArrayList<Annotation> search(@PathParam("uri") String uri) {
-	 		
-	 		//TODO Get annotation from database
+	    public ArrayList<Annotation> search(@QueryParam("uri") String uri) {
+			System.out.println(uri);
+	 		connector.searchAnnotationsByUriComplete(uri, -1);
 	 	
 	 		
 	        return  null;
@@ -42,8 +57,9 @@ public class Search_Service {
 	 	@Path("?limit={limit}&uri={uri}")
 	    @Produces("application/json")
 	    public ArrayList<Annotation> search(@PathParam("limit") int limit, @PathParam("uri") String uri) {
-	 		
-	 		//TODO Get annotation from database
+			System.out.println(uri);
+
+			connector.searchAnnotationsByUriComplete(uri, limit);
 	 	
 	 		
 	        return  null;

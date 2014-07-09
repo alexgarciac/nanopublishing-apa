@@ -25,7 +25,13 @@ import org.annotatorjs.model.Annotation;
 public class Annotations_Service {
 	
 		private Connector connector;
-	
+		
+		public Annotations_Service () {
+			
+			connector = new Connector();
+		}
+		
+		
 	 	@GET 
 	    @Produces("application/json")
 	    public ArrayList<Annotation> index() {
@@ -42,7 +48,7 @@ public class Annotations_Service {
 	 		
 	 		//TODO Create annotation in database
 	 		
-	 		String uuid = "";
+	 		String uuid = connector.createAnnotation(annotation);
 	 		 URI location = null;
 	 		
 	 		try {

@@ -20,6 +20,9 @@ public class Root {
     @GET 
     @Produces("application/json")
     public Store root() {
+    	
+		System.out.println("holi");
+
         return new Store("Java Annotator Store API ", "0.0.0");
     }
 }
