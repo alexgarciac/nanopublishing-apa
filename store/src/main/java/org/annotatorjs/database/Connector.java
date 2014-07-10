@@ -13,7 +13,8 @@ import java.util.UUID;
 import org.annotatorjs.model.Annotation;
 import org.annotatorjs.model.Permissions;
 import org.annotatorjs.model.Range;
-import org.annotatorjs.store.Store_Properties;
+import org.annotatorjs.store.StoreProperties;
+import org.apache.commons.lang3.StringUtils;
 
 
 
@@ -28,10 +29,10 @@ public class Connector {
 	
 	public Connector() {
 		
-		DATABASE_HOST = Store_Properties.getInstance().getProperty("database.host");
-		DATABASE_NAME = Store_Properties.getInstance().getProperty("database.name");
-		DATABASE_USER = Store_Properties.getInstance().getProperty("database.user");
-		DATABASE_PASS = Store_Properties.getInstance().getProperty("database.pass");
+		DATABASE_HOST = StoreProperties.getInstance().getProperty("database.host");
+		DATABASE_NAME = StoreProperties.getInstance().getProperty("database.name");
+		DATABASE_USER = StoreProperties.getInstance().getProperty("database.user");
+		DATABASE_PASS = StoreProperties.getInstance().getProperty("database.pass");
 		
 		try {
 			
@@ -270,10 +271,10 @@ public class Connector {
 			        
 			        while(rs.next()) {
 			        	
-			        	permissions.setAdmin((ArrayList<String>) Arrays.asList(rs.getString("admin_permission").split("\\s*,\\s*")));
-			        	permissions.setDelete((ArrayList<String>) Arrays.asList(rs.getString("delete_permission").split("\\s*,\\s*")));
-			        	permissions.setRead((ArrayList<String>) Arrays.asList(rs.getString("read_permission").split("\\s*,\\s*")));
-			        	permissions.setUpdate((ArrayList<String>) Arrays.asList(rs.getString("update_permission").split("\\s*,\\s*")));
+			        	permissions.setAdmin(new ArrayList<String>(Arrays.asList(rs.getString("admin_permission").split("\\s*,\\s*"))));
+			        	permissions.setDelete(new ArrayList<String>(Arrays.asList(rs.getString("delete_permission").split("\\s*,\\s*"))));
+			        	permissions.setRead(new ArrayList<String>(Arrays.asList(rs.getString("read_permission").split("\\s*,\\s*"))));
+			        	permissions.setUpdate(new ArrayList<String>(Arrays.asList(rs.getString("update_permission").split("\\s*,\\s*"))));
 			            
 			        }
 			        
@@ -426,7 +427,7 @@ public class Connector {
 	
 	public void deleteAnnotation(String annotation_id){
 		
-		  String query = "DELETE FROM annotations WHERE annotation_id=\"?\"";
+		  String query = "DELETE FROM annotations WHERE annotation_id=?";
 	      PreparedStatement preparedStmt = null;
 		
 		try
@@ -573,10 +574,177 @@ public class Connector {
 		
 		
 		}
+		
+		createRanges(uuid,annotation.getRanges());
+		if(annotation.getTags()!=null)
+		createTags(uuid, annotation.getTags());
+		if(annotation.getPermissions()!=null)
+		createPermissions(uuid, annotation.getPermissions());
 		return uuid;
 		
 		
 		
+		
+	}
+
+
+	private void createPermissions(String id, Permissions permissions) {
+
+		 String query = "INSERT INTO permissions(annotation_id, read_permission, admin_permission, update_permission, delete_permission) "
+			 		+ "VALUES (?,?,?,?,?)";
+		     PreparedStatement preparedStmt = null;
+		     
+			
+			try
+		    {
+		      // create the mysql database connection
+		       
+		      // create the mysql delete statement.
+		      // i'm deleting the row where the id is "3", which corresponds to my
+		      // "Barney Rubble" record.
+		    
+				 preparedStmt = conn.prepareStatement(query);
+				 preparedStmt.setString(1, id);
+				 preparedStmt.setString(2, StringUtils.join(permissions.getRead(),","));
+				 preparedStmt.setString(3, StringUtils.join(permissions.getAdmin(),","));
+				 preparedStmt.setString(4, StringUtils.join(permissions.getUpdate(),","));
+				 preparedStmt.setString(5, StringUtils.join(permissions.getDelete(),","));
+				 
+				
+		      // execute the preparedstatement
+		      preparedStmt.execute();
+		       
+		      
+		    }
+			catch (SQLException ex) {
+			    // handle any errors
+			    System.out.println("SQLException: " + ex.getMessage());
+			    System.out.println("SQLState: " + ex.getSQLState());
+			    System.out.println("VendorError: " + ex.getErrorCode());
+			} finally {
+			    // it is a good idea to release
+			    // resources in a finally{} block
+			    // in reverse-order of their creation
+			    // if they are no-longer needed
+
+			    if (preparedStmt != null) {
+			        try {
+			        	preparedStmt.close();
+			        } catch (SQLException sqlEx) { } // ignore
+
+			        preparedStmt = null;
+			    }
+			
+			
+			}
+		
+	}
+
+
+	private void createTags(String id, ArrayList<String> tags) {
+		 
+		     PreparedStatement preparedStmt = null;
+		     
+		for(String tag : tags)
+			try
+		    {
+				String query = "INSERT INTO tags(annotation_id, tag_label) "
+				 		+ "VALUES (?,?)";
+		      // create the mysql database connection
+		       
+		      // create the mysql delete statement.
+		      // i'm deleting the row where the id is "3", which corresponds to my
+		      // "Barney Rubble" record.
+		    
+				 preparedStmt = conn.prepareStatement(query);
+				 preparedStmt.setString(1, id);
+				 preparedStmt.setString(2, tag);
+				
+				 
+				
+		      // execute the preparedstatement
+		      preparedStmt.execute();
+		       
+		      
+		    }
+			catch (SQLException ex) {
+			    // handle any errors
+			    System.out.println("SQLException: " + ex.getMessage());
+			    System.out.println("SQLState: " + ex.getSQLState());
+			    System.out.println("VendorError: " + ex.getErrorCode());
+			} finally {
+			    // it is a good idea to release
+			    // resources in a finally{} block
+			    // in reverse-order of their creation
+			    // if they are no-longer needed
+
+			    if (preparedStmt != null) {
+			        try {
+			        	preparedStmt.close();
+			        } catch (SQLException sqlEx) { } // ignore
+
+			        preparedStmt = null;
+			    }
+			
+			
+			}
+		
+	}
+
+
+	private void createRanges(String id, ArrayList<Range> ranges) {
+
+		 
+	     PreparedStatement preparedStmt = null;
+	     
+	for(Range range: ranges)
+		try
+	    {
+			String query = "INSERT INTO ranges(annotation_id, start, end, startOffset, endOffset) "
+			 		+ "VALUES (?,?,?,?,?)";
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+			 preparedStmt.setString(1, id);
+			 preparedStmt.setString(2, range.getStart());
+			 preparedStmt.setString(3, range.getEnd());
+			 preparedStmt.setInt(4, range.getStartOffset());
+			 preparedStmt.setInt(5, range.getEndOffset());
+			
+			 
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+	
+
 		
 	}
 
@@ -661,4 +829,8 @@ public class Connector {
 		return completeAnnotations(searchAnnotationsByUri(uri,i));
 		
 	}
+	
+	
+
+	
 }

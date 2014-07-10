@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Properties;
 
 
-public class Store_Properties implements Serializable{
+public class StoreProperties implements Serializable{
 	
 	/**
 	 * 
@@ -13,7 +13,7 @@ public class Store_Properties implements Serializable{
 	private static final long serialVersionUID = -6280192507802601766L;
 	private static Properties INSTANCE = null;
 	
-	private Store_Properties(){}
+	private StoreProperties(){}
 	
 	 private synchronized static void createInstance() {
 	        if (INSTANCE == null) { 
@@ -39,7 +39,7 @@ public class Store_Properties implements Serializable{
 	
 	public static void main(String[] args){
 		
-		System.out.println(Store_Properties.getInstance().getProperty("database.host"));
+		System.out.println(StoreProperties.getInstance().getProperty("database.host"));
 		
 	}
 	

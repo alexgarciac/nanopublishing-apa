@@ -22,11 +22,11 @@ import org.annotatorjs.model.Annotation;
 
 
 @Path("/annotations")
-public class Annotations_Service {
+public class AnnotationsService {
 	
 		private Connector connector;
 		
-		public Annotations_Service () {
+		public AnnotationsService () {
 			
 			connector = new Connector();
 		}
@@ -52,7 +52,7 @@ public class Annotations_Service {
 	 		 URI location = null;
 	 		
 	 		try {
-				location = new URI(ui.getBaseUri().getPath()+"annotations/"+uuid);
+				location = new URI("http://local.host:8080/store/annotations/"+uuid);
 			} catch (URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -82,7 +82,7 @@ public class Annotations_Service {
 	 		connector.updateAnnotation(annotation);
 	 		
 	 		try {
-				location = new URI(ui.getBaseUri().getPath()+"annotations/"+annotation.getId());
+				location = new URI("http://local.host:8080/store/annotations/"+annotation.getId());
 			} catch (URISyntaxException e) {
 				
 				e.printStackTrace();

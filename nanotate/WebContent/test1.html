@@ -98,7 +98,17 @@ viewer.on('pageload', function (event) {
 		         'uri': 'http://dx.doi.org/10.1037/arc0000003'
 		       }
 		     });
+		 $('body').annotator('addPlugin','Permissions', {
+			 user: 'Alice',
+			  permissions: {
+			    'read':   [],
+			    'update': ['Alice'],
+			    'delete': ['Alice'],
+			    'admin':  ['Alice']
+			  }
+			});
 		 
+		 $('body').annotator('addPlugin', 'Filter');
 		$( 'body' ).removeClass( "loading" );
 		$( 'html' ).css({ "padding-top": "0px"});
 	
