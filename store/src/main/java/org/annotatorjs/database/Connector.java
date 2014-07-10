@@ -469,12 +469,16 @@ public class Connector {
 		
 		}
 		
+		deleteRanges(annotation_id);
+		deleteTags(annotation_id);
+		deletePermissions(annotation_id);
+		
 	}
 
 	public void updateAnnotation(Annotation annotation){
 		
 		
-		 String query = "UPDATE annotations SET text=\"?\"  WHERE annotation_id=\"?\"";
+		 String query = "UPDATE annotations SET text=?  WHERE annotation_id=?";
 	      PreparedStatement preparedStmt = null;
 		
 		try
@@ -515,6 +519,20 @@ public class Connector {
 		
 		
 		}
+		
+		
+		if(annotation.getTags()!=null)
+		{
+			deleteTags(annotation.getId());
+			createTags(annotation.getId(), annotation.getTags());
+		}
+		
+		if(annotation.getPermissions()!=null)
+		{
+			deletePermissions(annotation.getId());
+			createPermissions(annotation.getId(), annotation.getPermissions());
+		}
+		
 		
 		
 		
@@ -639,6 +657,8 @@ public class Connector {
 			}
 		
 	}
+	
+	
 
 
 	private void createTags(String id, ArrayList<String> tags) {
@@ -745,6 +765,146 @@ public class Connector {
 		}
 	
 
+		
+	}
+	
+	public void deleteTags(String annotation_id){
+		
+		 String query = "DELETE FROM tags WHERE annotation_id=?";
+	      PreparedStatement preparedStmt = null;
+		
+		try
+	    {
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+		      
+			 preparedStmt.setString(1, annotation_id);
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+		
+	}
+	
+	public void deleteRanges(String annotation_id){
+		
+		 String query = "DELETE FROM ranges WHERE annotation_id=?";
+	      PreparedStatement preparedStmt = null;
+		
+		try
+	    {
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+		      
+			 preparedStmt.setString(1, annotation_id);
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+		
+	}
+	
+	public void deletePermissions(String annotation_id){
+		
+		 String query = "DELETE FROM permissions WHERE annotation_id=?";
+	      PreparedStatement preparedStmt = null;
+		
+		try
+	    {
+	      // create the mysql database connection
+	       
+	      // create the mysql delete statement.
+	      // i'm deleting the row where the id is "3", which corresponds to my
+	      // "Barney Rubble" record.
+	    
+			 preparedStmt = conn.prepareStatement(query);
+		      
+			 preparedStmt.setString(1, annotation_id);
+			
+	      // execute the preparedstatement
+	      preparedStmt.execute();
+	       
+	      
+	    }
+		catch (SQLException ex) {
+		    // handle any errors
+		    System.out.println("SQLException: " + ex.getMessage());
+		    System.out.println("SQLState: " + ex.getSQLState());
+		    System.out.println("VendorError: " + ex.getErrorCode());
+		} finally {
+		    // it is a good idea to release
+		    // resources in a finally{} block
+		    // in reverse-order of their creation
+		    // if they are no-longer needed
+
+		    if (preparedStmt != null) {
+		        try {
+		        	preparedStmt.close();
+		        } catch (SQLException sqlEx) { } // ignore
+
+		        preparedStmt = null;
+		    }
+		
+		
+		}
+		
+	
 		
 	}
 

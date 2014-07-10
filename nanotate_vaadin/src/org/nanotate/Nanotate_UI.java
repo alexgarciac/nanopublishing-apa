@@ -7,6 +7,7 @@ import org.nanotate.ui.Main;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
@@ -21,6 +22,8 @@ public class Nanotate_UI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		
+		
 		
 		Main main = new Main();
 		

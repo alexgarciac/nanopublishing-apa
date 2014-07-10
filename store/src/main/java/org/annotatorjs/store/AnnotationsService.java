@@ -52,7 +52,7 @@ public class AnnotationsService {
 	 		 URI location = null;
 	 		
 	 		try {
-				location = new URI("http://local.host:8080/store/annotations/"+uuid);
+				location = new URI(StoreProperties.getInstance().getProperty("store.host")+"/store/annotations/"+uuid);
 			} catch (URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -82,7 +82,7 @@ public class AnnotationsService {
 	 		connector.updateAnnotation(annotation);
 	 		
 	 		try {
-				location = new URI("http://local.host:8080/store/annotations/"+annotation.getId());
+				location = new URI(StoreProperties.getInstance().getProperty("store.host")+"/store/annotations/"+annotation.getId());
 			} catch (URISyntaxException e) {
 				
 				e.printStackTrace();

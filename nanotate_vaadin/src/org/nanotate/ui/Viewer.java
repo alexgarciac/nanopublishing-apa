@@ -60,7 +60,7 @@ public class Viewer extends CustomComponent {
 		embedded_1.setWidth("100.0%");
 		embedded_1.setHeight("100.0%");
 		embedded_1.setSource(new ExternalResource(
-				"http://localhost/repository/test1.html"));
+				"http://localhost:8080/nanotate/test1.html"));
 		embedded_1.setType(2);
 		embedded_1.setMimeType("image/png");
 		mainLayout.addComponent(embedded_1,

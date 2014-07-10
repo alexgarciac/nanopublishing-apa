@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.nanotate.Nanotate_Properties;
+import org.nanotate.utils.PDF2HTML;
 import org.vostok.vaadin.addon.button.i18n.I18nButton;
 import org.vostok.vaadin.addon.button.push.PushButton;
 import org.vostok.vaadin.addon.dialog.NotificationExtension;
@@ -34,6 +34,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadFinishedHandler;
 import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
+import com.vaadin.server.VaadinService;
 
 public class Main extends CustomComponent {
 
@@ -184,10 +185,23 @@ public class Main extends CustomComponent {
 			public void buttonPush(Button.ClickEvent event, boolean pushed) {
 				if(event.getButton().getCaption().equals("Home"))
 						contentpanel.setContent(home);
-				else
+				else{
+
+					
+					String basepath = VaadinService.getCurrent()
+			                .getBaseDirectory().getAbsolutePath();
+					
+					System.out.println(basepath);
 					contentpanel.setContent(viewer);
+				}
+					
 			}
 		}, homebutton, viewerbutton){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 3866159765631265620L;
+
 			{
 				setMode(Mode.ONEMANY);
 			}
@@ -242,12 +256,15 @@ public class Main extends CustomComponent {
 		
 		OutputStream outputStream = null;
         boolean ret = true;
+        File file = null;
     	try {
     		// read this file into InputStream
      
     		// write the inputStream to a FileOutputStream
-    		outputStream = 
-                        new FileOutputStream(new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+fileName));
+    		
+    		file = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+fileName);
+    		
+    		outputStream = new FileOutputStream(file);
      
     		int read = 0;
     		byte[] bytes = new byte[1024];
@@ -280,7 +297,7 @@ public class Main extends CustomComponent {
      
     		}
     	}
-    	if(!Boolean.parseBoolean(Nanotate_Properties.getInstance().getProperty("crocodoc")))
+    	if(!Boolean.parseBoolean(Nanotate_Properties.getInstance().getProperty("use.crocodoc")))
     	{
 			try {
 				Runtime.getRuntime().exec("pdf2htmlex "+Nanotate_Properties.getInstance().getProperty("repository.dir")+fileName);
@@ -291,43 +308,9 @@ public class Main extends CustomComponent {
 			}
     	}else
     	{
-    		Crocodoc.setApiToken(Nanotate_Properties.getInstance().getProperty("crocodoc.apikey"));
-    		  String uuid = null;
-
-    	        try {
-    	            uuid = CrocodocDocument.upload(Nanotate_Properties.getInstance().getProperty("repository.dir")+fileName);
-    	            System.out.println("success :)");
-    	            System.out.println("  UUID is " + uuid);
-    	        } catch (CrocodocException e) {
-    	            System.out.println("failed :(");
-    	            System.out.println("  Error Code: " + e.getCode());
-    	            System.out.println("  Error Message: " + e.getMessage());
-    	            ret=false;
-    	        }
-    	        
- 
-
-    	        // with optional params
-    	        Map<String, Object> params = new HashMap<String, Object>();
-    	        params.put("isEditable", true);
-    	        Map<String, Object> userParams = new HashMap<String, Object>();
-    	        userParams.put("id", 1);
-    	        userParams.put("name", "John Crocodile");
-    	        params.put("user", userParams);
-    	        params.put("filter", "all");
-    	        params.put("isAdmin", true);
-    	        params.put("isDownloadable", true);
-    	        params.put("isCopyprotected", false);
-    	        params.put("isDemo", false);
-    	        params.put("sidebar", "visible");
-    	        try {
-					String sessionKey = CrocodocSession.create(uuid, params);
-				} catch (CrocodocException e) {
-					// TODO Auto-generated catch block
-					ret=false;
-					e.printStackTrace();
-				}
-    	        
+    		
+    	   String docid = PDF2HTML.sendPDFToBoxView(file);   
+    	   PDF2HTML.downloadHTML(docid,Nanotate_Properties.getInstance().getProperty("repository.dir") );
 
     	}
     	

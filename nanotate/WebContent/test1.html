@@ -8,6 +8,11 @@
 <script src="http://assets.annotateit.org/annotator/v1.2.7/annotator-full.min.js"></script>
 <link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.1.0/annotator.min.css">
 
+<!-- 	 HighlightTags Plug-in -->
+<!-- 	<script src="js/tags-annotator.min.js"></script> -->
+<!-- 	<link href="css/tags-annotator.min.css" rel="stylesheet"> -->
+
+
 <style>
 /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
@@ -58,7 +63,7 @@ body.loading .modal {
 	var pagesloaded = 0;
 	$( 'body' ).addClass( "loading" );
     var viewer = Crocodoc.createViewer('.viewer', {
-        url: 'https://view-api.box.com/1/sessions/7003eb4b5ce3403eb4e6a29ff2cec4eb/assets/'
+        url: 'http://localhost:8080/nanotate/dist/assets/'
     });
     viewer.load();
 	
@@ -98,6 +103,8 @@ viewer.on('pageload', function (event) {
 		         'uri': 'http://dx.doi.org/10.1037/arc0000003'
 		       }
 		     });
+		 
+		 
 		 $('body').annotator('addPlugin','Permissions', {
 			 user: 'Alice',
 			  permissions: {
@@ -108,8 +115,44 @@ viewer.on('pageload', function (event) {
 			  }
 			});
 		 
-		 $('body').annotator('addPlugin', 'Filter');
+		 $('body').annotator('addPlugin', 'Tags');
+		 
+		 $('body').annotator('addPlugin', 'Filter', {
+			  filters: [
+			    {
+			      label: 'Tag',
+			      property: 'tags',
+			      isFiltered: function (input, tags) {
+			        if (input && tags && tags.length) {
+			          var keywords = input.split(/\s+/g);
+			          for (var i = 0; i < keywords.length; i += 1) {
+			            for (var j = 0; j < tags.length; j += 1) {
+			              if (tags[j].indexOf(keywords[i]) !== -1) {
+			                return true;
+			              }
+			            }
+			          }
+			        }
+			        return false;
+			    }},
+			    {
+				      label: 'User',
+				      property: 'user',
+				}
+			    
+			    
+			  ]
+			});
+// 		 var optionstags = {
+// 		    		tag: "imagery:red,parallelism:blue,sound:green,anaphora:orange"
+// 				};
+
+// 			$( 'body' ).annotator('addPlugin','HighlightTags',optionstags);
 		$( 'body' ).removeClass( "loading" );
+		$( 'body' ).addClass( "theme-light ready");
+		
+
+		
 		$( 'html' ).css({ "padding-top": "0px"});
 	
 		 $('.annotator-filter-next').first().on('click',function(){
@@ -123,7 +166,7 @@ viewer.on('pageload', function (event) {
 });}, 30);
 
 });
-
+		
  $('.annotator-filter-previous').first().on('click',function(){
    //action on click
 }).mouseup(function(){
@@ -133,6 +176,9 @@ viewer.on('pageload', function (event) {
 	duration: 500,
     easing: 'linear'
 });}, 30);
+       
+       
+       
 
 });
 	}
@@ -154,5 +200,7 @@ viewer.on('pageload', function (event) {
 
 <div id="doc" class="viewer"></div>
 <div class="modal"></div>
+
+
 </body>
 </html>
