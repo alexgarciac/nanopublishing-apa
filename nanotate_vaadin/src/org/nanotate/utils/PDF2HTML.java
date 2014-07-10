@@ -91,7 +91,7 @@ public class PDF2HTML {
 						String inputLine;
  
 						//save to this filename
-						String fileName = path+"/content.zip";
+						String fileName = path+"/content1.zip";
 						File file = new File(fileName);
  
 						if (!file.exists()) {
