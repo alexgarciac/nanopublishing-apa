@@ -23,6 +23,8 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.nanotate.Nanotate_UI;
@@ -30,11 +32,12 @@ import org.nanotate.Nanotate_UI;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.ProgressBar;
  
-public class PDF2HTML implements Runnable{
+public class FileUtils implements Runnable{
 	
 	private File file;
 	private String path;
 	private String docid;
+	private String doi;
 	private Panel progress;
 	private Nanotate_UI nanotate_UI;
 	private ProgressBar progress2;
@@ -42,7 +45,7 @@ public class PDF2HTML implements Runnable{
 	
 	
 	
-	public PDF2HTML(File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
+	public FileUtils(File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
 		this.file = file;
 		this.path = path;
 		this.progress = progress;
@@ -243,6 +246,34 @@ public class PDF2HTML implements Runnable{
 	       ex.printStackTrace(); 
 	    }
 	   }
+	
+	public void getDoi(){
+		
+		PDDocument pdDoc;
+		try {
+			pdDoc = PDDocument.load(file);
+			PDFTextStripper stripper = new PDFTextStripper();
+			stripper.setStartPage(1);
+			stripper.setEndPage(1);
+			String text=stripper.getText(pdDoc);
+			int doi_begin_index=0;
+			if(text.indexOf("DOI: ")>0)
+			{
+				if(text.indexOf("http://dx.doi.org/")>0)
+					doi_begin_index=text.indexOf("http://dx.doi.org/");
+				else
+					doi_begin_index=text.indexOf("DOI: ");
+				
+			}else
+				doi_begin_index=text.indexOf("doi: ");
+			int doi_end_index=text.indexOf("\n", doi_begin_index);
+			doi= text.substring(doi_begin_index+5, doi_end_index);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
  

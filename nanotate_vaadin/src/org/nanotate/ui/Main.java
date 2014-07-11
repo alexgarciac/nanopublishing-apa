@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import org.nanotate.Nanotate_Properties;
 import org.nanotate.Nanotate_UI;
-import org.nanotate.utils.PDF2HTML;
+import org.nanotate.utils.FileUtils;
 import org.vostok.vaadin.addon.button.i18n.I18nButton;
 import org.vostok.vaadin.addon.button.push.PushButton;
 import org.vostok.vaadin.addon.dialog.NotificationExtension;
@@ -362,8 +362,8 @@ public class Main extends CustomComponent {
     	}else
     	{
     		
-    	   PDF2HTML pdf2html = new PDF2HTML(file,Nanotate_Properties.getInstance().getProperty("repository.dir")+"/"+docUUID+"/", convertionProgressPanel, progress, nanotate_UI);
-    	   Thread thread = new Thread (pdf2html);
+    	   FileUtils fileUtils = new FileUtils(file,Nanotate_Properties.getInstance().getProperty("repository.dir")+"/"+docUUID+"/", convertionProgressPanel, progress, nanotate_UI);
+    	   Thread thread = new Thread (fileUtils);
     	   thread.start();
     	   
     	}
