@@ -1,16 +1,17 @@
 package org.nanotate.utils;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,12 +25,34 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nanotate.Nanotate_UI;
+
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.ProgressBar;
  
-public class PDF2HTML {
+public class PDF2HTML implements Runnable{
 	
-	public static String sendPDFToBoxView(File file){
+	private File file;
+	private String path;
+	private String docid;
+	private Panel progress;
+	private Nanotate_UI nanotate_UI;
+	private ProgressBar progress2;
+
+	
+	
+	
+	public PDF2HTML(File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
+		this.file = file;
+		this.path = path;
+		this.progress = progress;
+		this.progress2 = progress2;
+		this.nanotate_UI = nanotate_UI;
+	}
+
+	public String sendPDFToBoxView(){
 		
-		String docid="";
+		docid="";
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost uploadFile = new HttpPost("https://upload.view-api.box.com/1/documents");
@@ -68,57 +91,48 @@ public class PDF2HTML {
 		
 	}
 	
-	public static void downloadHTML(String docid, String path){
+	public void downloadHTML(){
 		
-		URL url;
+	
 		while(true){
 			
 			
 			
 			try {
-				if(StringUtils.equalsIgnoreCase(getDocStatus(docid), "done")){
-					try {
-						// get URL content
-						url = new URL("https://view-api.box.com/1/documents/"+docid+"/content.zip");
+				if(StringUtils.equalsIgnoreCase(getDocStatus(), "done")){
+					
+					BufferedInputStream in = null;
+					FileOutputStream fout = null;
+					try
+					{                                                                                                 
+						URL url = new URL("https://view-api.box.com/1/documents/"+docid+"/content.zip");
 						URLConnection conn = url.openConnection();
-						
-						conn.setRequestProperty("Authorization","Token 7tpuie82v51mlnfemhs76f28lid4gzof");
- 
-						// open the stream and put it into BufferedReader
-						BufferedReader br = new BufferedReader(
-				                           new InputStreamReader(conn.getInputStream()));
- 
-						String inputLine;
- 
-						//save to this filename
-						String fileName = path+"/content1.zip";
-						File file = new File(fileName);
- 
-						if (!file.exists()) {
-							file.createNewFile();
+						conn.addRequestProperty("User-Agent", 
+							    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+						conn.addRequestProperty("Authorization", 
+							    "Token 7tpuie82v51mlnfemhs76f28lid4gzof");
+
+						in = new BufferedInputStream(conn.getInputStream());
+						fout = new FileOutputStream(path+"/content.zip");
+						byte data[] = new byte[1024];
+						int count;
+						while ((count = in.read(data, 0, 1024)) != -1)
+						{
+						 fout.write(data, 0, count);
 						}
- 
-						//use FileWriter to write file
-						FileWriter fw = new FileWriter(file.getAbsoluteFile());
-						BufferedWriter bw = new BufferedWriter(fw);
- 
-						while ((inputLine = br.readLine()) != null) {
-							bw.write(inputLine);
-						}
- 
-						bw.close();
-						br.close();
- 
-						System.out.println("Done");
- 
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
 					}
+					finally
+					{
+						if (in != null)
+						in.close();
+						if (fout != null)
+						fout.close();
+					}   
+					
 					break;
+					
 				}
-			else if(StringUtils.equalsIgnoreCase(getDocStatus(docid), "error"))
+			else if(StringUtils.equalsIgnoreCase(getDocStatus(), "error"))
 			{
 				break;
 			}
@@ -144,7 +158,7 @@ public class PDF2HTML {
  
 	}
 	
-	public static String getDocStatus(String docid) throws Exception {
+	public String getDocStatus() throws Exception {
 		 
 		String url = "https://view-api.box.com/1/documents/"+docid;
  
@@ -179,8 +193,84 @@ public class PDF2HTML {
 		
  
 	}
- 
 	
+	public void unZipIt(){
+		 
+	     byte[] buffer = new byte[1024];
+	 
+	     try{
+	 
+	    	//create output directory is not exists
+	    	File folder = new File(path);
+	    	if(!folder.exists()){
+	    		folder.mkdir();
+	    	}
+	 
+	    	//get the zip file content
+	    	ZipInputStream zis = 
+	    		new ZipInputStream(new FileInputStream(path+"/content.zip"));
+	    	//get the zipped file list entry
+	    	ZipEntry ze = zis.getNextEntry();
+	 
+	    	while(ze!=null){
+	 
+	    	   String fileName = ze.getName();
+	           File newFile = new File(path + File.separator + fileName);
+	 
+	           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+	 
+	            //create all non exists folders
+	            //else you will hit FileNotFoundException for compressed folder
+	            new File(newFile.getParent()).mkdirs();
+	 
+	            FileOutputStream fos = new FileOutputStream(newFile);             
+	 
+	            int len;
+	            while ((len = zis.read(buffer)) > 0) {
+	       		fos.write(buffer, 0, len);
+	            }
+	 
+	            fos.close();   
+	            ze = zis.getNextEntry();
+	    	}
+	 
+	        zis.closeEntry();
+	    	zis.close();
+	 
+	    	System.out.println("Done");
+	 
+	    }catch(IOException ex){
+	       ex.printStackTrace(); 
+	    }
+	   }
+	
+	
+ 
+	@Override
+    public void run() {
+		
+		nanotate_UI.access(new Runnable() {
+            @Override
+            public void run() {
+                // Here the UI is locked and can be updated
+            	progress2.setVisible(true);
+            	progress.setVisible(true);
+            }
+        });
+		
+		this.sendPDFToBoxView();
+		this.downloadHTML();
+		this.unZipIt();
+		nanotate_UI.access(new Runnable() {
+            @Override
+            public void run() {
+                // Here the UI is locked and can be updated
+            	progress2.setVisible(false);
+            	progress.setVisible(false);
+            }
+        });
+		
+	}
 	
 		
 		

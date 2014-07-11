@@ -5,6 +5,24 @@ Build on top of reindeer/legacy-styles.css
 
 @import "../reindeer/legacy-styles.css";
 
+
+/* .v-loading-indicator,   */
+/*  .v-loading-indicator-delay,   */
+/*  .v-loading-indicator-wait {   */
+/*    width: 100%;   */
+/*    height: 100%;   */
+/*    margin: 0;   */
+/*    background-position: 50%;   */
+/*    background-color: gray;   */
+/*    background-repeat: no-repeat;   */
+/*    background-attachment: fixed;    */
+/*    opacity: .8;   */
+/*    -ms-filter: alpha(opacity=80);   */
+/*    filter: alpha(opacity=80);   */
+/*  }   */
+
+
+
 /*
 I use fontawesome for buttons icon ; feel free to do your own way ! 
 you can get it here : http://fortawesome.github.io/Font-Awesome/cheatsheet/
@@ -702,4 +720,17 @@ overflow:hidden;
 
 iframe {
 	overflow:hidden;
+}
+
+.convertion-progress-panel>*{
+	background-color:rgba(149,149,158,0.5);
+	border-radius: 30px 30px 30px 30px;
+	border:0px;
+}
+
+.convertion-progress-panel{
+	background-color:rgba(149,149,158,0.5);
+	border-radius: 30px 30px 30px 30px;
+	border:0px;
+	color: rgb(120,120,140);
 }

@@ -49,6 +49,8 @@
 		<dependency org="org.apache.httpcomponents" name="httpmime" rev="4.3.4"/>
 		<dependency org="commons-io" name="commons-io" rev="2.4"/>
 		<dependency org="org.apache.commons" name="commons-lang3" rev="3.3.2"/>
+		<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" conf="default->default" />
+	
 		
 	</dependencies>
 </ivy-module>

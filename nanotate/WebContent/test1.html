@@ -50,6 +50,16 @@ body.loading .modal {
 
 </style>
 
+<!-- script variables here -->
+
+<script type="text/javascript">
+
+	var docurl='http://localhost:8080/repository/4a05ead7b8e74dca8a0fe829d275112b/assets/';
+	var docuri='10.1037/a0033656';
+	var username='Fede';
+
+</script>
+
 
 <script type="text/javascript" src="https://static.view-api.box.com/scripts/docviewer.c66134787e59.js" charset="utf-8"></script>
 <script type="text/javascript" src="dist/jquery-scrollto.js"></script>
@@ -63,7 +73,7 @@ body.loading .modal {
 	var pagesloaded = 0;
 	$( 'body' ).addClass( "loading" );
     var viewer = Crocodoc.createViewer('.viewer', {
-        url: 'http://localhost:8080/nanotate/dist/assets/'
+        url: docurl
     });
     viewer.load();
 	
@@ -92,7 +102,7 @@ viewer.on('pageload', function (event) {
 
 		       // Attach the uri of the current page to all annotations to allow search.
 		       annotationData: {
-		         'uri': 'http://dx.doi.org/10.1037/arc0000003'
+		         'uri': docuri
 		       },
 
 		       // This will perform a "search" action when the plugin loads. Will
@@ -100,18 +110,18 @@ viewer.on('pageload', function (event) {
 		       // eg. /store/endpoint/search?limit=20&uri=http://this/document/only
 		       loadFromSearch: {
 		         'limit': 20,
-		         'uri': 'http://dx.doi.org/10.1037/arc0000003'
+		         'uri': docuri
 		       }
 		     });
 		 
 		 
 		 $('body').annotator('addPlugin','Permissions', {
-			 user: 'Alice',
+			 user: username,
 			  permissions: {
 			    'read':   [],
-			    'update': ['Alice'],
-			    'delete': ['Alice'],
-			    'admin':  ['Alice']
+			    'update': [username],
+			    'delete': [username],
+			    'admin':  [username]
 			  }
 			});
 		 

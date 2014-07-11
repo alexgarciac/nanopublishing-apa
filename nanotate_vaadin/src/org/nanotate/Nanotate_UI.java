@@ -4,15 +4,16 @@ import javax.servlet.annotation.WebServlet;
 
 import org.nanotate.ui.Main;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
 @Theme("nanotate")
+@Push
 public class Nanotate_UI extends UI {
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -24,8 +25,7 @@ public class Nanotate_UI extends UI {
 	protected void init(VaadinRequest request) {
 		
 		
-		
-		Main main = new Main();
+		Main main = new Main(this);
 		
 		this.setContent(main);
 		
