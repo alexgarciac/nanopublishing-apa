@@ -2,6 +2,7 @@ package org.nanotate;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.nanotate.ui.Login;
 import org.nanotate.ui.Main;
 
 import com.vaadin.annotations.Push;
@@ -25,9 +26,12 @@ public class Nanotate_UI extends UI {
 	protected void init(VaadinRequest request) {
 		
 		
+		Login login = new Login();
+		
+		
 		Main main = new Main(this);
 		
-		this.setContent(main);
+		this.setContent(login);
 		
 	}
 

@@ -54,6 +54,13 @@
 		<dependency org="org.mybatis" name="mybatis" rev="3.2.7" />
 		<dependency org="org.vaadin.addons" name="animator" rev="2.0.0" />
 		<dependency org="org.vaadin.addons" name="dom" rev="0.1.0" />
+		<dependency org="org.jasypt" name="jasypt" rev="1.9.2" />
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.31" />
+		<dependency org="org.vaadin.addon" name="oauthpopup" rev="0.0.3" />
+		<dependency org="org.vaadin.addons" name="loginform" rev="0.3.3" />
+
+		
+
 		
 		
 	

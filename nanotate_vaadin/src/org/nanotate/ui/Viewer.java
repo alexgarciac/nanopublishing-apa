@@ -89,7 +89,7 @@ public class Viewer extends CustomComponent {
 		docs = new Panel();
 		docs.setStyleName("docs-panel");
 		docs.setImmediate(false);
-		docs.setWidth("200px");
+		docs.setWidth("300px");
 		docs.setHeight("100.0%");
 		
 		// verticalLayout_2
@@ -109,7 +109,7 @@ public class Viewer extends CustomComponent {
 		annotations = new Panel();
 		annotations.setStyleName("annotations-panel");
 		annotations.setImmediate(false);
-		annotations.setWidth("200px");
+		annotations.setWidth("300px");
 		annotations.setHeight("100.0%");
 		
 		// verticalLayout_3

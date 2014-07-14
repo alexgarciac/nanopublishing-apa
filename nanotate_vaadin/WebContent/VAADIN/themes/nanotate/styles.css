@@ -455,7 +455,7 @@ overflow:hidden;
 
 .docs-panel>.v-panel-content{
 	
-	background-color:rgba(149,149,158,0.5);
+	background-color:rgba(210,210,213,0.5);
 	border-radius: 0px 30px 30px 0px;
 	border:0px;
 	-webkit-transition: all 0.5s ease-in-out;
@@ -484,7 +484,7 @@ overflow:hidden;
 
 .docs-panel>.v-panel-content:hover{
 	
-	background-color:rgba(149,149,158,0.5);
+	background-color:rgba(210,210,213,0.5);
 	border-radius: 0px 30px 30px 0px;
 	border:0px;
 	left:0px;
@@ -495,7 +495,7 @@ overflow:hidden;
 
 .annotations-panel>.v-panel-content{
 	
- 	background-color:rgba(149,149,158,0.5); 
+ 	background-color:rgba(210,210,213,0.5);
 	border-radius: 30px 0px 0px 30px;
 	border:0px;
 	-webkit-transition: all 0.5s ease-in-out;
@@ -509,7 +509,7 @@ overflow:hidden;
 
 .annotations-panel>.v-panel-content:hover{
 	
-	background-color:rgba(149,149,158,0.5);
+	background-color:rgba(210,210,213,0.5);
 	border-radius: 30px 0px 0px 30px;
 	border:0px;
 	right: 0px;
@@ -532,8 +532,8 @@ overflow:hidden;
 }
 
 .v-absolutelayout-wrapper-docs-panel{
-		left:-180px !important;
-		background-color:rgba(149,149,158,0.5);
+		left:-280px !important;
+		background-color:rgba(210,210,213,0.5);
 	border-radius: 0px 30px 30px 0px;
 	border:0px;
 	-webkit-transition: all 0.5s ease-in-out;
@@ -546,8 +546,8 @@ overflow:hidden;
  }
  
  .v-absolutelayout-wrapper-annotations-panel{
-		right:-180px !important;
-		background-color:rgba(149,149,158,0.5);
+		right:-280px !important;
+		background-color:rgba(210,210,213,0.5);
 	border-radius: 30px 0px 0px 30px;
 	border:0px;
 	-webkit-transition: all 0.5s ease-in-out;
@@ -727,18 +727,57 @@ iframe {
 }
 
 .convertion-progress-panel>*{
-	background-color:rgba(149,149,158,0.5);
-	border-radius: 30px 30px 30px 30px;
+	background-color:rgba(210,210,213,0.5);
+	border-radius: 30px 0px 0px 30px;
 	border:0px;
 }
 
+.convertion-progress-panel>*>*>*>*>*>.v-progressbar-indeterminate{
+	background: url(./715.GIF) no-repeat 50%;
+	width:32px !important;
+	height: 32px !important;
+}
+
 .convertion-progress-panel{
-	background-color:rgba(149,149,158,0.5);
-	border-radius: 30px 30px 30px 30px;
+	background-color:rgba(210,210,213,0.5);
+	border-radius: 30px 0px 0px 30px;
 	border:0px;
 	color: rgb(120,120,140);
 }
 
 .date-label{
 	text-align:center;
+}
+
+.login-panel{
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left:0;
+	right:0;
+	width:500px;
+	height:500px;
+	border: 1px solid black;
+	
+}
+	
+
+.login-panel>*
+{
+	background-color:rgba(210,210,213,0.5);
+	border-radius: 30px 30px 30px 30px;
+	border:0px;
+	color: rgb(120,120,140);
+	display: block;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.v-panel-nocaption-login-panel{
+	border:0px;
+}
+
+.v-panel-deco-login-panel{
+	border:0px;
+	 height: 0px;
 }

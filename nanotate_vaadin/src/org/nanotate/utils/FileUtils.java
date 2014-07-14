@@ -51,6 +51,7 @@ public class FileUtils implements Runnable{
 		this.progress = progress;
 		this.progress2 = progress2;
 		this.nanotate_UI = nanotate_UI;
+		this.doi="";
 	}
 
 	public String sendPDFToBoxView(){
@@ -257,23 +258,28 @@ public class FileUtils implements Runnable{
 			stripper.setEndPage(1);
 			String text=stripper.getText(pdDoc);
 			int doi_begin_index=0;
-			if(text.indexOf("DOI: ")>0)
-			{
+			
 				if(text.indexOf("http://dx.doi.org/")>0)
-					doi_begin_index=text.indexOf("http://dx.doi.org/");
+					doi_begin_index=text.indexOf("http://dx.doi.org/")+18;	
+				else if(text.indexOf("DOI: ")>0)
+					doi_begin_index=text.indexOf("DOI: ")+5;
+				else if(text.indexOf("doi: ")>0)
+					doi_begin_index=text.indexOf("doi: ")+5;
 				else
-					doi_begin_index=text.indexOf("DOI: ");
+					doi_begin_index=-1;
 				
-			}else
-				doi_begin_index=text.indexOf("doi: ");
-			int doi_end_index=text.indexOf("\n", doi_begin_index);
-			doi= text.substring(doi_begin_index+5, doi_end_index);
+			if(doi_begin_index>0){
+				int doi_end_index=text.indexOf("\n", doi_begin_index);
+				doi= text.substring(doi_begin_index, doi_end_index);
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
+	
 	
 	
  
@@ -292,6 +298,7 @@ public class FileUtils implements Runnable{
 		this.sendPDFToBoxView();
 		this.downloadHTML();
 		this.unZipIt();
+		this.getDoi();
 		nanotate_UI.access(new Runnable() {
             @Override
             public void run() {

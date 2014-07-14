@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nanotate.model.DocumentMapper" >
+  <resultMap id="BaseResultMap" type="com.nanotate.model.Document" >
+    <id column="doc_uuid" property="doc_uuid" jdbcType="VARCHAR" />
+    <result column="doi" property="doi" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="full_citation" property="full_citation" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="uploaded_by" property="uploaded_by" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    doc_uuid, doi, title, full_citation, year, uploaded_by
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.nanotate.model.DocumentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from documents
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from documents
+    where doc_uuid = #{doc_uuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from documents
+    where doc_uuid = #{doc_uuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.nanotate.model.DocumentExample" >
+    delete from documents
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.nanotate.model.Document" >
+    insert into documents (doc_uuid, doi, title, 
+      full_citation, year, uploaded_by
+      )
+    values (#{doc_uuid,jdbcType=VARCHAR}, #{doi,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{full_citation,jdbcType=VARCHAR}, #{year,jdbcType=INTEGER}, #{uploaded_by,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nanotate.model.Document" >
+    insert into documents
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="doc_uuid != null" >
+        doc_uuid,
+      </if>
+      <if test="doi != null" >
+        doi,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="full_citation != null" >
+        full_citation,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="uploaded_by != null" >
+        uploaded_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="doc_uuid != null" >
+        #{doc_uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="doi != null" >
+        #{doi,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="full_citation != null" >
+        #{full_citation,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=INTEGER},
+      </if>
+      <if test="uploaded_by != null" >
+        #{uploaded_by,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.nanotate.model.DocumentExample" resultType="java.lang.Integer" >
+    select count(*) from documents
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update documents
+    <set >
+      <if test="record.doc_uuid != null" >
+        doc_uuid = #{record.doc_uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doi != null" >
+        doi = #{record.doi,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.full_citation != null" >
+        full_citation = #{record.full_citation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.year != null" >
+        year = #{record.year,jdbcType=INTEGER},
+      </if>
+      <if test="record.uploaded_by != null" >
+        uploaded_by = #{record.uploaded_by,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update documents
+    set doc_uuid = #{record.doc_uuid,jdbcType=VARCHAR},
+      doi = #{record.doi,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      full_citation = #{record.full_citation,jdbcType=VARCHAR},
+      year = #{record.year,jdbcType=INTEGER},
+      uploaded_by = #{record.uploaded_by,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nanotate.model.Document" >
+    update documents
+    <set >
+      <if test="doi != null" >
+        doi = #{doi,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="full_citation != null" >
+        full_citation = #{full_citation,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=INTEGER},
+      </if>
+      <if test="uploaded_by != null" >
+        uploaded_by = #{uploaded_by,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where doc_uuid = #{doc_uuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nanotate.model.Document" >
+    update documents
+    set doi = #{doi,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      full_citation = #{full_citation,jdbcType=VARCHAR},
+      year = #{year,jdbcType=INTEGER},
+      uploaded_by = #{uploaded_by,jdbcType=VARCHAR}
+    where doc_uuid = #{doc_uuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

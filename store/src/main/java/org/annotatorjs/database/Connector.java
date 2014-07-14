@@ -469,9 +469,6 @@ public class Connector {
 		
 		}
 		
-		deleteRanges(annotation_id);
-		deleteTags(annotation_id);
-		deletePermissions(annotation_id);
 		
 	}
 
