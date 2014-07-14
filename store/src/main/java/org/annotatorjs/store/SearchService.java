@@ -30,19 +30,22 @@ public class SearchService {
 	    		@DefaultValue("-1")@QueryParam("limit") int limit,
 	    		@QueryParam("uri") String uri
 	    		) {
+			
+			SearchResult searchResult = new SearchResult();
 	 		
-	 		System.out.println("Holi "+ uri+" "+limit);
 			ArrayList<Annotation> annotations = connector.searchAnnotationsByUriComplete(uri, limit);
-			SearchResult searchResult = new SearchResult(annotations.size(),annotations);
+			
 	 	
 	 		if(annotations!=null)
-				return  searchResult;
+	 			searchResult = new SearchResult(annotations.size(),annotations);
 			else
 			{
 	 		ArrayList<Annotation> empty = new ArrayList<Annotation>();
 	 		empty.add(new Annotation());
-				return  new SearchResult(0,empty);
+	 				searchResult = new SearchResult(0,empty);
 			}
+	 		
+	 		return searchResult;
 	    }
 	
 	

@@ -54,20 +54,51 @@ body.loading .modal {
 
 <script type="text/javascript">
 
-	var docurl='http://localhost:8080/repository/04ce1525fe344b56a796f74c66a1d636/assets';
-	var docuri='10.1027/2192-0923/a000027';
-	var username='Fede';
+var docurl='http://localhost:8080/repository/b353d0e9389b46bf967be437ed3c656c/assets/';
+var docuri='10.1037/arc0000005';
+var username='Fede';
+
 
 </script>
 
 
 <script type="text/javascript" src="https://static.view-api.box.com/scripts/docviewer.c66134787e59.js" charset="utf-8"></script>
-<script type="text/javascript" src="dist/jquery-scrollto.js"></script>
+<script type="text/javascript" src="js/jquery-scrollto.js"></script>
+<script type="text/javascript" src="js/jquery.hashchange.min.js"></script>
+<script type="text/javascript" src="js/jquery.xpath.js"></script>
 <script type="text/javascript">
 
 	
 	
 	$( document ).ready(function() {
+		
+		
+		 // Bind the event.
+		  $(window).hashchange( function(){
+			  
+
+		   if(location.hash!="")
+			  {
+			   var annotation ;
+				var domannotation;
+				  $.getJSON( "http://localhost:8080/store/annotations/"+location.hash.substring(1), function(result) {
+						annotation=result;
+
+						 domannotation=$(document).xpath('/html/body/div[1]'+result.ranges[0].start);
+						  domannotation.ScrollTo({
+							    onlyIfOutside: true,
+								duration: 500,
+							    easing: 'linear'
+							});
+					});
+				  
+				  document.location.hash = "";
+			  }
+			});
+
+		  // Trigger the event (useful on page load).
+ 		  
+		
   	var numPages = 0;
 	var first = true;
 	var pagesloaded = 0;
@@ -161,7 +192,7 @@ viewer.on('pageload', function (event) {
 		$( 'body' ).removeClass( "loading" );
 		$( 'body' ).addClass( "theme-light ready");
 		
-
+		$(window).hashchange();
 		
 		$( 'html' ).css({ "padding-top": "0px"});
 	

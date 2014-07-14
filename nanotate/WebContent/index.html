@@ -107,7 +107,7 @@ $( "#home" ).click(function() {
   $.getJSON( "user", function(result) {
 		
 	
-	  $('#wrapper').append('<div class="mask_home"><img id="profilepic" src='+result.data.profile_pic_url+' /><span>'+result.data.firstname+' '+result.data.lastname+'<br/>Docs uploaded: '+result.data.numberdoc+'<br/>Annotations maked: '+result.data.numberan+'</span></div>');
+	  $('#wrapper').append('<div class="mask_home"><img id="profilepic" src='+result.data.profile_pic_url+' /><span>'+result.data.firstname+' '+result.data.lastname+'<br/>Docs uploaded: '+result.data.numberdoc+'<br/>Annotations made: '+result.data.numberan+'</span></div>');
 	});
   
   
