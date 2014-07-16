@@ -417,6 +417,18 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.81);
 
 }
 
+.largest-profile-pic>img{
+-moz-border-radius:30px;
+-webkit-border-radius:30px;
+border-radius:52px;
+width:160px;
+height:160px;
+-webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.81);
+-moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.81);
+box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.81);
+
+}
+
 .v-slot-large-profile-image{
 	height:15% !important;
 }

@@ -18,11 +18,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</environment>
 </environments>
 <mappers>
-	<mapper resource="com/nanotate/dao/xml/AnnotationsMapper.xml" />
-	<mapper resource="com/nanotate/dao/xml/UsersMapper.xml" />
-	<mapper resource="com/nanotate/dao/xml/DocumentsMapper.xml" />
-	<mapper resource="com/nanotate/dao/xml/RangesMapper.xml" />
-	<mapper resource="com/nanotate/dao/xml/PermissionsMapper.xml" />
-	<mapper resource="com/nanotate/dao/xml/TagsMapper.xml" />
+	<mapper resource="org/nanotate/xml/AnnotationMapper.xml" />
+	<mapper resource="org/nanotate/xml/UserMapper.xml" />
+	<mapper resource="org/nanotate/xml/DocumentMapper.xml" />
+	<mapper resource="org/nanotate/xml/RangesMapper.xml" />
+	<mapper resource="org/nanotate/xml/PermissionsMapper.xml" />
+	<mapper resource="org/nanotate/xml/TagMapper.xml" />
 </mappers>
 </configuration>

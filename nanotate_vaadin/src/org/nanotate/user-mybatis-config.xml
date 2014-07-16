@@ -26,17 +26,17 @@
     </jdbcConnection>
 
      
-    <javaModelGenerator targetPackage="com.nanotate.model" targetProject="nanotate_vaadin"/>
+    <javaModelGenerator targetPackage="org.nanotate.model" targetProject="nanotate_vaadin"/>
     <!--   <property name="enableSubPackages" value="true" />
     </javaModelGenerator>-->
 
-    <sqlMapGenerator targetPackage="com.nanotate.dao.xml"  targetProject="nanotate_vaadin" />
+    <sqlMapGenerator targetPackage="org.nanotate.xml"  targetProject="nanotate_vaadin" />
    <!--    <property name="enableSubPackages" value="true" />
     </sqlMapGenerator>-->
     
     
  <!-- También podríamos indicar el tipo ANNOTATEDMAPPER -->
-    <javaClientGenerator type="XMLMAPPER" targetPackage="com.nanotate.model"  targetProject="nanotate_vaadin"/>
+    <javaClientGenerator type="XMLMAPPER" targetPackage="org.nanotate.model"  targetProject="nanotate_vaadin"/>
      <!--  <property name="enableSubPackages" value="true" />
     </javaClientGenerator>-->
   
