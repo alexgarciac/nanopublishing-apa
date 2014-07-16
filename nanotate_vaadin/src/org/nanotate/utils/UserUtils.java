@@ -1,5 +1,6 @@
 package org.nanotate.utils;
 
+import facebook4j.Facebook;
 import twitter4j.Twitter;
 
 public class UserUtils {
@@ -11,10 +12,10 @@ public class UserUtils {
 		
 	}
 	
-	public boolean existsFacebookUser(String username){
+	public static String existsFacebookUser(Facebook facebook){
 		
 		
-		return false;
+		return "";
 		
 	}
 	

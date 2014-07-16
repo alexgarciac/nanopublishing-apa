@@ -776,6 +776,7 @@ iframe {
 	display: block;
 	margin-left: auto !important;
 	margin-right: auto !important;
+	overflow:hidden;
 }
 
 .v-panel-nocaption-login-panel{
