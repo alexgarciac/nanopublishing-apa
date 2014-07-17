@@ -161,6 +161,61 @@ public class UserUtils {
 		
 		return twitter;
 	}
+
+	public static String getName(String username) {
+		String ret="";
+		try {
+			SqlSession sqlSession = MyBatis.getSession();
+			UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+			User user = mapper.selectByPrimaryKey(username);
+			ret=user.getFirstname()+" "+user.getLastname();
+			sqlSession.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+
+	public static void updateTwitter(String username, Twitter twitter) {
+
+		try {
+			SqlSession sqlSession = MyBatis.getSession();
+			UserMapper mapper = sqlSession.getMapper(UserMapper.class);		
+			User record = new User();
+			record.setUsername(username);
+			record.setTwitter_token(twitter.getOAuthAccessToken().getToken());
+			record.setTwitter_token_secret(twitter.getOAuthAccessToken().getTokenSecret());
+			record.setTwitter_id(String.valueOf(twitter.getId()));
+			mapper.updateByPrimaryKeySelective(record);
+			sqlSession.commit();
+			sqlSession.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
+		
+	}
+
+	public static void updateFacebook(String username, Facebook facebook) {
+
+		try {
+			SqlSession sqlSession = MyBatis.getSession();
+			UserMapper mapper = sqlSession.getMapper(UserMapper.class);		
+			User record = new User();
+			record.setUsername(username);
+			record.setFacebook_token(facebook.getOAuthAccessToken().getToken());
+			record.setFacebook_token_expires(facebook.getOAuthAccessToken().getExpires());
+			record.setFacebook_id(facebook.getId());
+			mapper.updateByPrimaryKeySelective(record);
+			sqlSession.commit();
+			sqlSession.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
    
 

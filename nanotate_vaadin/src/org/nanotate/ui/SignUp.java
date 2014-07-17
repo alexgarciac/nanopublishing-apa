@@ -134,7 +134,7 @@ Button.ClickListener {
 				if(StringUtils.isNotEmpty(user.getUsername()))
 					username_text.setValue(user.getUsername());
 				
-				firstname_text.setValue(user.getName().substring(0, user.getName().indexOf(" ")));
+				firstname_text.setValue(user.getFirstName());
 				lastname_text.setValue(user.getLastName());
 				
 				if(StringUtils.isNotEmpty(user.getEmail()))

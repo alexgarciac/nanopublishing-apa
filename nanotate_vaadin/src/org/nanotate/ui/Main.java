@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.nanotate.Nanotate_Properties;
 import org.nanotate.Nanotate_UI;
 import org.nanotate.util.FileUtils;
+import org.nanotate.util.UserUtils;
 import org.vostok.vaadin.addon.button.i18n.I18nButton;
 import org.vostok.vaadin.addon.button.push.PushButton;
 import org.vostok.vaadin.addon.button.push.PushButton.Mode;
@@ -405,6 +406,39 @@ public class Main extends CustomComponent implements View{
 		viewer = new Viewer();
 		home = new Home();
 		home.setImageURL((String) getSession().getAttribute("imgurl"));
+		Twitter twitter = (Twitter) getSession().getAttribute("twitter");
+		Facebook facebook = (Facebook) getSession().getAttribute("facebook");
+		if(twitter!=null){
+			try {
+				home.setTwitterURL("http://www.twitter.com/"+twitter.getScreenName(), twitter.getScreenName());
+			} catch (IllegalStateException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (TwitterException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else
+		{
+			home.setTwitterURL(null, null);
+		}
+		
+		
+		if(facebook!=null){
+			try {
+				home.setFacebookURL(facebook.getMe().getLink().toString(), facebook.getMe().getName());
+			} catch (FacebookException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else{
+			home.setFacebookURL(null, null);
+		}
+		
+		home.setName(UserUtils.getName((String) getSession().getAttribute("user")));
+		
 		contentpanel.setContent(home);
 			
 		
