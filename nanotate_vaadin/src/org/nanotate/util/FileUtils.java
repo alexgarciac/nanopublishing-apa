@@ -50,8 +50,10 @@ import org.nanotate.model.UserExample;
 import org.nanotate.model.UserMapper;
 
 import com.ibm.icu.util.Calendar;
+import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.ProgressBar;
+import com.wcs.wcslib.vaadin.widget.multifileupload.ui.MultiFileUpload;
  
 public class FileUtils implements Runnable{
 	
@@ -65,11 +67,12 @@ public class FileUtils implements Runnable{
 	private ProgressBar progress2;
 	private Document document;
 	private String username;
+	private SQLContainer container;
 
 	
 	
 	
-	public FileUtils( String docuuid, String username, File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
+	public FileUtils( SQLContainer container, String docuuid, String username, File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
 		this.file = file;
 		this.path = path;
 		this.progress = progress;
@@ -78,6 +81,8 @@ public class FileUtils implements Runnable{
 		this.doi="";
 		this.username=username;
 		this.docuuid=docuuid;
+		this.container=container;
+		this.document = new Document();
 	}
 
 	public String sendPDFToBoxView(){
@@ -321,8 +326,12 @@ public class FileUtils implements Runnable{
 			else
 			{
 				PDDocumentInformation pdinfo = pdDoc.getDocumentInformation();
-				document.setTitle(pdinfo.getTitle());
-				document.setYear(pdinfo.getCreationDate().get(Calendar.YEAR));
+				if(pdinfo!=null)
+				{
+					document.setTitle(pdinfo.getTitle());
+					document.setYear(pdinfo.getCreationDate().get(Calendar.YEAR));
+				}
+				
 			}
 			pdDoc.close();
 			
@@ -418,11 +427,11 @@ public class FileUtils implements Runnable{
 		try {
 			writer = new PrintWriter(path+"/var.part", "UTF-8");
 			writer.println("<script type=\"text/javascript\">");
-			writer.println("var docurl='http://localhost:8080/repository/"+docuuid+"/assets/';");
+			writer.println("var docurl='http://local.host:8080/repository/"+docuuid+"/assets/';");
 			if(StringUtils.isNotEmpty(doi))
 				writer.println("var docuri='"+doi+"';");
 			else
-				writer.println("var docuri='http://localhost:8080/repository/"+docuuid+"/index.html';");
+				writer.println("var docuri='http://local.host:8080/repository/"+docuuid+"/index.html';");
 			writer.println("var username='"+username+"';");
 			writer.println("</script>");
 			writer.close();
@@ -436,8 +445,8 @@ public class FileUtils implements Runnable{
 	
 		File index = new File(path+"/index.html") ;
 		File var = new File(path+"/var.part");
-		File header = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+"/index0.part");
-		File body = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+"/index1.part");
+		File header = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+"index0.part");
+		File body = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+"index1.part");
 		
 		
 			try {
@@ -503,6 +512,8 @@ public class FileUtils implements Runnable{
                 // Here the UI is locked and can be updated
             	progress2.setVisible(true);
             	progress.setVisible(true);
+            	
+            	
             }
         });
 		
@@ -519,6 +530,7 @@ public class FileUtils implements Runnable{
                 // Here the UI is locked and can be updated
             	progress2.setVisible(false);
             	progress.setVisible(false);
+            	container.refresh();
             }
         });
 		

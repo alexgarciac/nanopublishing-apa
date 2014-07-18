@@ -377,7 +377,7 @@ public class Main extends CustomComponent implements View{
     	}else
     	{
     		
-    	   FileUtils fileUtils = new FileUtils(docUUID,(String) getSession().getAttribute("user"), file,Nanotate_Properties.getInstance().getProperty("repository.dir")+"/"+docUUID+"/", convertionProgressPanel, progress, nanotate_UI);
+    	   FileUtils fileUtils = new FileUtils(viewer.container ,docUUID,(String) getSession().getAttribute("user"), file,Nanotate_Properties.getInstance().getProperty("repository.dir")+"/"+docUUID+"/", convertionProgressPanel, progress, nanotate_UI);
     	   Thread thread = new Thread (fileUtils);
     	   thread.start();
     	   
@@ -438,6 +438,7 @@ public class Main extends CustomComponent implements View{
 		}
 		
 		home.setName(UserUtils.getName((String) getSession().getAttribute("user")));
+		viewer.initContainer((String) getSession().getAttribute("user"));
 		
 		contentpanel.setContent(home);
 			
