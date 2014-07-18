@@ -1,16 +1,23 @@
 package org.nanotate.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -27,13 +34,22 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nanotate.Nanotate_Properties;
 import org.nanotate.Nanotate_UI;
-
 import org.nanotate.model.Document;
+import org.nanotate.model.DocumentMapper;
+import org.nanotate.model.User;
+import org.nanotate.model.UserExample;
+import org.nanotate.model.UserMapper;
+
+import com.ibm.icu.util.Calendar;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.ProgressBar;
  
@@ -42,21 +58,26 @@ public class FileUtils implements Runnable{
 	private File file;
 	private String path;
 	private String docid;
+	private String docuuid;
 	private String doi;
 	private Panel progress;
 	private Nanotate_UI nanotate_UI;
 	private ProgressBar progress2;
+	private Document document;
+	private String username;
 
 	
 	
 	
-	public FileUtils(File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
+	public FileUtils( String docuuid, String username, File file, String path, Panel progress, ProgressBar progress2, Nanotate_UI nanotate_UI) {
 		this.file = file;
 		this.path = path;
 		this.progress = progress;
 		this.progress2 = progress2;
 		this.nanotate_UI = nanotate_UI;
 		this.doi="";
+		this.username=username;
+		this.docuuid=docuuid;
 	}
 
 	public String sendPDFToBoxView(){
@@ -264,8 +285,12 @@ public class FileUtils implements Runnable{
 			String text=stripper.getText(pdDoc);
 			int doi_begin_index=0;
 			
-				if(text.indexOf("http://dx.doi.org/")>0)
-					doi_begin_index=text.indexOf("http://dx.doi.org/")+18;	
+				if(text.indexOf("DOI: http://dx.doi.org/")>0)
+					doi_begin_index=text.indexOf("DOI: http://dx.doi.org/")+23;
+				else if(text.indexOf("doi: http://dx.doi.org/")>0)
+					doi_begin_index=text.indexOf("doi: http://dx.doi.org/")+23;
+				else if(text.indexOf("http://dx.doi.org/")>0)
+					doi_begin_index=text.indexOf("http://dx.doi.org/")+18;
 				else if(text.indexOf("DOI: ")>0)
 					doi_begin_index=text.indexOf("DOI: ")+5;
 				else if(text.indexOf("doi: ")>0)
@@ -274,24 +299,200 @@ public class FileUtils implements Runnable{
 					doi_begin_index=-1;
 				
 			if(doi_begin_index>0){
-				int doi_end_index=text.indexOf("\n", doi_begin_index);
-				doi= text.substring(doi_begin_index, doi_end_index);
+				int doi_end_index=-1;
+				if(text.indexOf(" ", doi_begin_index)>0 ){
+					doi_end_index=text.indexOf(" ", doi_begin_index);
+				}	
+				else if(text.indexOf("\n", doi_begin_index)>0)
+					doi_end_index=text.indexOf("\n", doi_begin_index);
+				
+				
+				System.out.println("text= "+ text.substring(doi_begin_index, doi_begin_index+17));
+				System.out.println("text.indexOf"+text.indexOf("\n", doi_begin_index));
+				System.out.println("doi_begin_index= "+ doi_begin_index);
+				System.out.println("doi_end_index= "+ doi_end_index);
+				
+				doi= text.substring(doi_begin_index, doi_end_index)
+						.replace("\n", "")
+						.replace(" ", "")
+						.replace("\r", "")
+						.replace("\f", "");
 			}
+			else
+			{
+				PDDocumentInformation pdinfo = pdDoc.getDocumentInformation();
+				document.setTitle(pdinfo.getTitle());
+				document.setYear(pdinfo.getCreationDate().get(Calendar.YEAR));
+			}
+			pdDoc.close();
 			
 		} catch (IOException e) {
+			doi="";
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	private void registerDoc() {
+		SqlSession sqlSession;
+		try {
+			sqlSession = MyBatis.getSession();
+			DocumentMapper mapper = sqlSession.getMapper(DocumentMapper.class);
+			mapper.insert(document);	
+			sqlSession.commit();
+			sqlSession.close();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 		
 	}
 	
 	
 	public void getDocData(){
+		String url;
+		document = new Document();
+		document.setUploaded_by(username);
+		document.setDoc_uuid(docuuid);
+		try {
+			url = "http://search.crossref.org/dois?q="+URLEncoder.encode(doi,"UTF-8");
+			URL obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+	 
+			// optional default is GET
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Accept-Charset", "UTF-8");
+			con.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+	 
+	 
+			int responseCode = con.getResponseCode();
+			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("Response Code : " + responseCode);
+	 
+			BufferedReader in = new BufferedReader(
+			        new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+	 
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+	 
+			//print result
+			JSONArray json = new JSONArray(response.toString());
+			if(json!=null)
+			for( int i=0; i<json.length(); i++){
+				
+				JSONObject jobject = json.getJSONObject(i);
+				document.setDoi(doi);
+				document.setTitle(jobject.getString("title"));
+				document.setFull_citation(jobject.getString("fullCitation"));
+				document.setYear(jobject.getInt("year"));
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		
 		
 	}
 	
 	
+	private void generateIndex() {
+		
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(path+"/var.part", "UTF-8");
+			writer.println("<script type=\"text/javascript\">");
+			writer.println("var docurl='http://localhost:8080/repository/"+docuuid+"/assets/';");
+			if(StringUtils.isNotEmpty(doi))
+				writer.println("var docuri='"+doi+"';");
+			else
+				writer.println("var docuri='http://localhost:8080/repository/"+docuuid+"/index.html';");
+			writer.println("var username='"+username+"';");
+			writer.println("</script>");
+			writer.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	
+		File index = new File(path+"/index.html") ;
+		File var = new File(path+"/var.part");
+		File header = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+"/index0.part");
+		File body = new File(Nanotate_Properties.getInstance().getProperty("repository.dir")+"/index1.part");
+		
+		
+			try {
+				if(!index.exists())
+					index.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		File[] files = {header, var, body};
+		
+		mergeFiles(files, index);
+		
+		var.delete();
+		
+	}
+	
+	public void mergeFiles(File[] files, File mergedFile) {
+		 
+		FileWriter fstream = null;
+		BufferedWriter out = null;
+		try {
+			fstream = new FileWriter(mergedFile, true);
+			 out = new BufferedWriter(fstream);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+ 
+		for (File f : files) {
+			System.out.println("merging: " + f.getName());
+			FileInputStream fis;
+			try {
+				fis = new FileInputStream(f);
+				BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+ 
+				String aLine;
+				while ((aLine = in.readLine()) != null) {
+					out.write(aLine);
+					out.newLine();
+				}
+ 
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+ 
+		try {
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+ 
+	}
  
 	@Override
     public void run() {
@@ -309,6 +510,9 @@ public class FileUtils implements Runnable{
 		this.downloadHTML();
 		this.unZipIt();
 		this.getDoi();
+		this.getDocData();
+		this.registerDoc();
+		this.generateIndex();
 		nanotate_UI.access(new Runnable() {
             @Override
             public void run() {
@@ -319,6 +523,10 @@ public class FileUtils implements Runnable{
         });
 		
 	}
+
+	
+
+	
 	
 		
 		
